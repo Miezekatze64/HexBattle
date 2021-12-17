@@ -53,3 +53,6 @@ public class Main extends JFrame {
 		panel.currentFPS(fps);
 	}
 }
+
+
+//changed
