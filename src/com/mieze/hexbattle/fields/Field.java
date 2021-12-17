@@ -56,7 +56,7 @@ public abstract class Field {
 	
 	public abstract void render(Graphics g, int offset_x, int offset_y, double zoom);
 	
-	public void renderHex(Graphics g, int offset_x, int offset_y, double zoom, Color bg) {
+	public void renderHex(Graphics g, double zoom, Color bg) {
 		int[] point_x = new int[hexLayout.polygonCorners(hex).size()];
 		int[] point_y = new int[hexLayout.polygonCorners(hex).size()];
 		for (int i = 0; i < hexLayout.polygonCorners(hex).size(); i++) {

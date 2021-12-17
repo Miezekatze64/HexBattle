@@ -50,10 +50,10 @@ public class HexPanel extends JPanel {
 		
 					off_x = e.getX() - last_x;
 					off_y = e.getY() - last_y;
-
+					
 					last_x = e.getX();
 					last_y = e.getY();
-
+					
 					map.addOffset((int)(off_x/map.zoom), (int)(off_y/map.zoom));
 				}
 			}

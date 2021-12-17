@@ -14,7 +14,7 @@ public class ForestField extends Field {
 
 	@Override
 	public void render(Graphics g, int offset_x, int offset_y, double zoom) {
-		renderHex(g, offset_x, offset_y, zoom, Color.decode("#007f00"));
+		renderHex(g, zoom, Color.decode("#007f00"));
 	}
 
 }
