@@ -1,5 +1,9 @@
 package com.mieze.hexbattle;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
 import com.mieze.hexbattle.hex.*;
 
 public abstract class Animation {
@@ -18,20 +22,23 @@ public abstract class Animation {
 		startPoint = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(start));
 		endPoint = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(end));
 		length = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
-
-		new Thread() {
-			public void run() {
-				while (rel_pos < 1) {
-					rel_pos += (duration / 10.0) * (1.0 / length);
-
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+		
+		final long time = System.currentTimeMillis();
+		
+		new Timer(10, new ActionListener() {
+			long lastTime = System.currentTimeMillis();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (rel_pos < 1) {
+					rel_pos += 10.0 / duration;
+				} else {
+					animationFinished();
+					return;
 				}
+				System.out.println(System.currentTimeMillis()-lastTime);
+				lastTime = System.currentTimeMillis();
 			}
-		}.start();
+		}).start();
 	}
 
 	public Point getPosition() {
