@@ -16,7 +16,7 @@ public abstract class Field {
 	public static final int MOUNTAIN = 2;
 	public static final int FOREST = 3;
 
-	private Map map;
+	protected Map map;
 	private GameCharacter character = null;
 	
 	public Field(Hex hex, Map map) {
@@ -54,7 +54,7 @@ public abstract class Field {
 		this.character = null;
 	}
 	
-	public abstract void render(Graphics g, int offset_x, int offset_y, double zoom);
+	public abstract void render(Graphics g);
 	
 	public void renderHex(Graphics g, double zoom, Color bg) {
 		int[] point_x = new int[hexLayout.polygonCorners(hex).size()];

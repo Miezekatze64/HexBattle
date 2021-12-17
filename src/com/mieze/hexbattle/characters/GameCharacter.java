@@ -12,7 +12,8 @@ public abstract class GameCharacter {
 	protected Player player;
 	protected Map map;
 	protected boolean isMoved = false;
-
+	
+    protected static Image img;
 	protected boolean animating;
 
 	protected Animation animation;
@@ -34,6 +35,10 @@ public abstract class GameCharacter {
 	public Hex getPosition() {
 		return position;
 	}
+	
+    protected static void scaleImage(double w, double h) {
+        img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+    }
 
 	abstract public int getMovementLength();
 
@@ -57,6 +62,13 @@ public abstract class GameCharacter {
 		if (count < getMovementLength()) {
 			for (int n = 0; n < 6; n++) {
 				if (!h.neighbor(n).equals(position)) {
+					if (map.getField(h.neighbor(n)) instanceof WaterField) {
+						/*
+						 * TODO implement this ↓
+						if (!(this instanceof BoatCharacter)) {*/
+							continue;
+						/*}*/
+					}
 					player.activate(h.neighbor(n));
 				}
 			}
@@ -67,7 +79,7 @@ public abstract class GameCharacter {
 		}
 	}
 
-	public abstract void render(Graphics g, int offset_x, int offset_y, double zoom);
+	public abstract void render(Graphics g, double zoom);
 
 	public void moveTo(Field f) {
 		this.animating = true;

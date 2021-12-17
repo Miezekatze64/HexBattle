@@ -13,8 +13,8 @@ public class ForestField extends Field {
 	}
 
 	@Override
-	public void render(Graphics g, int offset_x, int offset_y, double zoom) {
-		renderHex(g, zoom, Color.decode("#007f00"));
+	public void render(Graphics g) {
+		renderHex(g, map.zoom, Color.decode("#007f00"));
 	}
 
 }

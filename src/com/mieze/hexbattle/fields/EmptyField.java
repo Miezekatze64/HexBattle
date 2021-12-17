@@ -11,7 +11,7 @@ public class EmptyField extends Field {
 		super(hex, map);
 	}
 
-	public void render(Graphics g, int offset_x, int offset_y, double zoom) {
-		renderHex(g, zoom, Color.decode("#00ff00"));
+	public void render(Graphics g) {
+		renderHex(g, map.zoom, Color.decode("#00ff00"));
 	}
 }

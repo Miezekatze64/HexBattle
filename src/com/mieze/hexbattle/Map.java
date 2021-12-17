@@ -10,7 +10,7 @@ public class Map {
 	protected ArrayList<Field> fields;
 	protected int offset_x = 0;
 	protected int offset_y = 0;
-	protected double zoom = 1;
+	public double zoom = 1;
 	private long seed;
 	public HexPanel panel;
 

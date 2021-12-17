@@ -9,7 +9,6 @@ import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.fields.*;
 
 public class BuilderCharacter extends GameCharacter {
-    private static Image img;
     public static int SIZE = 48;
     private ImageObserver observer;
 
@@ -19,16 +18,12 @@ public class BuilderCharacter extends GameCharacter {
         scaleImage(32, 32);
     }
 
-    private static void scaleImage(double w, double h) {
-        img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
-    }
-
     public BuilderCharacter(Field field, Layout hexLayout, Player player) {
         super(field, hexLayout, player);
     }
 
     @Override
-    public void render(Graphics g, int offset_x, int offset_y, double zoom) {
+    public void render(Graphics g, double zoom) {
     	Point pos;
     	if (!animating) {
     		pos = map.hexToDisplay(hexLayout.hexToPixel(position));

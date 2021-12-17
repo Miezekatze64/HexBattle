@@ -7,6 +7,8 @@ import com.mieze.hexbattle.fields.*;
 import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.toolbars.Toolbar;
+import com.mieze.hexbattle.toolbars.ToolbarButton;
 
 public class Player {
 	public Map map;
@@ -15,6 +17,8 @@ public class Player {
 	private ArrayList<Hex> fields;
 	private ArrayList<Field> unexplored;
 	private ArrayList<Hex> active;
+	
+	private Toolbar toolbar;
 
 	private Hex start_pos;
 	private Layout hexLayout;
@@ -24,6 +28,14 @@ public class Player {
 	public static final int STATE_NOT_IMPLEMENTED = 2;
 
 	private int state = STATE_START;
+	private static Image nextTurnImage;
+	
+    static {
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        nextTurnImage= toolkit.getImage("assets/next-turn.png");
+        scaleImage(nextTurnImage, 32, 32);
+    }
+	
 	private GameCharacter clickedCharacter;
 
 	public Player(Map map, Layout layout) {
@@ -31,34 +43,43 @@ public class Player {
 		this.unexplored = new ArrayList<Field>();
 		this.active = new ArrayList<Hex>();
 		this.characters = new ArrayList<GameCharacter>();
+		this.toolbar = new Toolbar();
 		this.map = map;
 		this.hexLayout = layout;
 		this.start_pos = new Hex(0, 0, 0);
 
+		initToolbar();
 		setStartFields();
 
 		characters.add(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
+		characters.add(new BuilderCharacter(map.getField(start_pos.neighbor(3)), hexLayout, this));
 	}
 
 	public void setStartFields() {
 		openSurroundedFields(start_pos);
 		addField(start_pos, true);
 	}
+	
+    private static void scaleImage(Image img, double w, double h) {
+        img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+    }
 
 	public void render(Graphics g) {
 		for (int i = 0; i < unexplored.size(); i++) {
-			unexplored.get(i).render(g, map.offset_x, map.offset_y, map.zoom);
+			unexplored.get(i).render(g);
 		}
 
 		for (int i = 0; i < map.fields.size(); i++) {
 			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
-				map.fields.get(i).render(g, map.offset_x, map.offset_y, map.zoom);
+				map.fields.get(i).render(g);
 			}
 		}
 
 		for (int i = 0; i < characters.size(); i++) {
-			characters.get(i).render(g, map.offset_x, map.offset_y, map.zoom);
+			characters.get(i).render(g, map.zoom);
 		}
+		
+		toolbar.render(g, map);
 
 		for (int i = 0; i < active.size(); i++) {
 
@@ -79,18 +100,30 @@ public class Player {
 			g.setColor(Color.BLACK);
 		}
 	}
+	
+	private void initToolbar() {
+		toolbar.add(new ToolbarButton("Next Turn", nextTurnImage) {
+			@Override
+			public void onClick() {
+				nextTurn();
+			}
+		});
+	}
 
 	private boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
 	}
 
 	public void onClick(Point p) {
+		if (toolbar.onClick((int)p.x, (int)p.y, map)) {
+			return;
+		}
+		
 		Point realPoint = map.displayToHex(p);
-
+				
 		Hex hex = hexLayout.pixelToHex(realPoint).hexRound();
 		Field f = map.getField(hex);
 
-		
 		switch (state) {
 		case STATE_START:
 			if (f == null) {
@@ -147,6 +180,7 @@ public class Player {
 						active.removeAll(active);
 						map.getField(clickedCharacter.getPosition()).removeCharacter();
 						f.setCharacter(clickedCharacter);
+						clickedCharacter.setMoved(true);
 						
 						openSurroundedFields(f.getHex());
 						state = STATE_START;
@@ -160,6 +194,16 @@ public class Player {
 			state = STATE_START;
 			active.removeAll(active);
 			break;
+		}
+	}
+	
+	public void nextTurn() {
+		//TODO: implement other players
+		
+		/* temporarly */
+		state = STATE_START;
+		for (int i = 0; i < characters.size(); i++) {
+			characters.get(i).setMoved(false);
 		}
 	}
 
