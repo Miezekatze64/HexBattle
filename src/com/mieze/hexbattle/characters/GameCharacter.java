@@ -21,7 +21,7 @@ public abstract class GameCharacter {
     	if (field == null) {
         	throw new RuntimeException("Player is on unexisting field!");
         } else {
-        	field.addCharacter(this);
+        	field.setCharacter(this);
         }
     	
     	this.field = field;

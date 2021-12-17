@@ -91,6 +91,7 @@ public class Player {
 		Hex hex = hexLayout.pixelToHex(realPoint).hexRound();
 		Field f = map.getField(hex);
 
+		
 		switch (state) {
 		case STATE_START:
 			if (f == null) {
@@ -100,7 +101,7 @@ public class Player {
 					if (f.hasCharacter()) {
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
-
+						System.out.println("clicked");
 						clickedCharacter = character;
 						state = STATE_CHARACTER_CLICKED;
 						break;
@@ -132,7 +133,7 @@ public class Player {
 					} else {
 						// move to next field
 						clickedCharacter.moveTo(f);
-						active.remove(clickedCharacter.getPosition());
+						active.removeAll(active);
 						state = STATE_START;
 						break;
 					}

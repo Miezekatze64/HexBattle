@@ -46,7 +46,7 @@ public abstract class Field {
 		return character;
 	}
 	
-	public void addCharacter(GameCharacter character) {
+	public void setCharacter(GameCharacter character) {
 		this.character = character;
 	}
 	
