@@ -8,15 +8,12 @@ import com.mieze.hexbattle.hex.*;
 
 public abstract class Animation {
 	private Map map;
-	private Hex start, end;
 	private float rel_pos = 0;
 	private Point startPoint;
 	private Point endPoint;
 	private double length;
 
 	public Animation(Hex start, Hex end, long duration, Map map) {
-		this.start = start;
-		this.end = end;
 		this.map = map;
 
 		startPoint = HexPanel.hexLayout.hexToPixel(start);

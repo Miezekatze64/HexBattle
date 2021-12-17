@@ -134,6 +134,14 @@ public class Player {
 						state = STATE_CHARACTER_CLICKED;
 						break;
 					} else {
+						if (f instanceof WaterField) {
+							/*
+							 * TODO implement this ↓
+							if (!(f.getCharacter() instanceof BoatCharacter)) {*/
+								break;
+							/*}*/
+						}
+						
 						// move to next field
 						clickedCharacter.moveTo(f);
 						active.removeAll(active);
