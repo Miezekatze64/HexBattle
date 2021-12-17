@@ -109,6 +109,8 @@ public class Player {
 					// TODO: handle UnexploredField click
 				}
 			}
+			clickedCharacter = null;
+			state = STATE_START;
 			break;
 		case STATE_CHARACTER_CLICKED:
 			if (clickedCharacter == null) {
@@ -119,7 +121,9 @@ public class Player {
 			} else {
 				//check if field is in range
 				if (!active.contains(f.getHex())) {
-					//wrong field
+					clickedCharacter = null;
+					state = STATE_START;
+					active.removeAll(active);
 					break;
 				}
 
@@ -144,6 +148,9 @@ public class Player {
 					// TODO: handle UnexploredField click
 				}
 			}
+			clickedCharacter = null;
+			state = STATE_START;
+			active.removeAll(active);
 			break;
 		}
 	}
@@ -187,8 +194,10 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h) && !unexplored.contains(h) && map.getField(h) != null) {
+		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null) {
 			active.add(h);
+		} else {
+			System.out.println(map.getField(h));
 		}
 	}
 
@@ -210,9 +219,8 @@ public class Player {
 		}
 	}
 
-	private void addUnexploredField(Hex h) {
-		Hex hex = h;
-		if (!map.contains(hex)) {
+	private void addUnexploredField(Hex hex) {
+		if (!isUnexplored(hex)) {
 			unexplored.add(new UnexploredField(hex, map));
 		}
 	}
