@@ -19,38 +19,40 @@ public abstract class Animation {
 		this.end = end;
 		this.map = map;
 
-		startPoint = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(start));
-		endPoint = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(end));
+		startPoint = HexPanel.hexLayout.hexToPixel(start);
+		endPoint = HexPanel.hexLayout.hexToPixel(end);
+		System.out.println(startPoint + " | " + endPoint);
+		
 		length = Math.sqrt(Math.pow(endPoint.x - startPoint.x, 2) + Math.pow(endPoint.y - startPoint.y, 2));
+		System.out.println(length);
 		
-		final long time = System.currentTimeMillis();
 		
-		new Timer(10, new ActionListener() {
-			long lastTime = System.currentTimeMillis();
+		new Timer(20, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (rel_pos < 1) {
-					rel_pos += 10.0 / duration;
+					rel_pos += 20.0 / duration;
+					System.out.println(rel_pos);
 				} else {
 					animationFinished();
+					((Timer)e.getSource()).stop();
 					return;
 				}
-				System.out.println(System.currentTimeMillis()-lastTime);
-				lastTime = System.currentTimeMillis();
 			}
 		}).start();
 	}
 
 	public Point getPosition() {
 
-		double angle = Math.atan((endPoint.x - startPoint.x) / (endPoint.y - startPoint.y));
-
+		double angle = Math.atan2(endPoint.y - startPoint.y, endPoint.x - startPoint.x);
+		System.out.println(angle);
+		
 		double newLength = length * rel_pos;
 
 		int x = (int) (startPoint.x + Math.cos(angle) * newLength);
 		int y = (int) (startPoint.y + Math.sin(angle) * newLength);
 
-		return new Point(x, y);
+		return map.hexToDisplay(new Point(x, y));
 	}
 
 	public abstract void animationFinished();

@@ -132,6 +132,9 @@ public class Player {
 					} else {
 						// move to next field
 						clickedCharacter.moveTo(f);
+						active.remove(clickedCharacter.getPosition());
+						state = STATE_START;
+						break;
 					}
 				} else {
 					// TODO: handle UnexploredField click

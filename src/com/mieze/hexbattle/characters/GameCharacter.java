@@ -52,11 +52,12 @@ public abstract class GameCharacter {
 
 	public void moveTo(Field f) {
 		this.animating = true;
-		animation = new Animation(position, f.getHex(), 500, map) {
+		animation = new Animation(position, f.getHex(), 200, map) {
 			@Override
 			public void animationFinished() {
 				animating = false;
 				animation = null;
+				position = f.getHex();
 			}
 		};
 	}
