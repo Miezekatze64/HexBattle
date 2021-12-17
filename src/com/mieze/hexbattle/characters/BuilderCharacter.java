@@ -8,7 +8,7 @@ import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.fields.*;
 
-public class BuilderCharacter extends GameCharacter{
+public class BuilderCharacter extends GameCharacter {
     private static Image img;
     public static int SIZE = 48;
     private ImageObserver observer;
@@ -44,3 +44,4 @@ public class BuilderCharacter extends GameCharacter{
 	}
 	
 }
+//
