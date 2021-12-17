@@ -50,6 +50,10 @@ public abstract class Field {
 		this.character = character;
 	}
 	
+	public void removeCharacter() {
+		this.character = null;
+	}
+	
 	public abstract void render(Graphics g, int offset_x, int offset_y, double zoom);
 	
 	public void renderHex(Graphics g, int offset_x, int offset_y, double zoom, Color bg) {

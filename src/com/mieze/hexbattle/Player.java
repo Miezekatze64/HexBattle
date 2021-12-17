@@ -40,9 +40,7 @@ public class Player {
 	}
 
 	public void setStartFields() {
-		for (int i = 0; i < 6; i++) {
-			addField(start_pos.neighbor(i), true);
-		}
+		openSurroundedFields(start_pos);
 		addField(start_pos, true);
 	}
 
@@ -123,7 +121,7 @@ public class Player {
 					//wrong field
 					break;
 				}
-				
+
 				if (!(f instanceof UnexploredField)) {
 					if (f.hasCharacter()) {
 						GameCharacter character = f.getCharacter();
@@ -134,6 +132,10 @@ public class Player {
 						// move to next field
 						clickedCharacter.moveTo(f);
 						active.removeAll(active);
+						map.getField(clickedCharacter.getPosition()).removeCharacter();
+						f.setCharacter(clickedCharacter);
+						
+						openSurroundedFields(f.getHex());
 						state = STATE_START;
 						break;
 					}
@@ -145,6 +147,12 @@ public class Player {
 		}
 	}
 
+	public void openSurroundedFields(Hex h) {
+		for (int i = 0; i < 6; i++) {
+			addField(h.neighbor(i), true);
+		}
+	}
+	
 	public void addField(Point p) {
 		addField(p, false);
 	}
