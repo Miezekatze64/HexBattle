@@ -10,6 +10,7 @@ import com.mieze.hexbattle.hex.Point;
 
 public class Player {
 	public Map map;
+	
 	private ArrayList<GameCharacter> characters;
 	private ArrayList<Hex> fields;
 	private ArrayList<Field> unexplored;
@@ -96,10 +97,10 @@ public class Player {
 				// TODO: handle empty click (maybe...)
 			} else {
 				if (!(f instanceof UnexploredField)) {
-					if (f.hasCharacter()) {
+					if (f.hasCharacter() && f.getCharacter().isFromPlayer(this) && !f.getCharacter().isMoved()) {
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
-						System.out.println("clicked");
+						//character.setMoved(true);
 						clickedCharacter = character;
 						state = STATE_CHARACTER_CLICKED;
 						break;
@@ -186,7 +187,7 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h)) {
+		if (!active.contains(h) && !unexplored.contains(h) && map.getField(h) != null) {
 			active.add(h);
 		}
 	}

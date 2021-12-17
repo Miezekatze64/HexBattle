@@ -11,6 +11,7 @@ public abstract class GameCharacter {
     protected Field field;
     protected Player player;
     protected Map map;
+    protected boolean isMoved = false;
     
     protected boolean animating;
     
@@ -40,10 +41,26 @@ public abstract class GameCharacter {
     	setPossibleFields(position, 0);
     }
     
+    public boolean isFromPlayer(Player player) {
+    	return player == this.player;
+    }
+    
+    public void setMoved(boolean bool) {
+    	isMoved = bool;
+    }
+    
+    public boolean isMoved() {
+    	return isMoved;
+    }
+    
     public void setPossibleFields(Hex h, int count) {
     	if (count < getMovementLength()) {
     		for (int n = 0; n < 6; n++) {
-    			player.activate(h.neighbor(n));
+    			if (!h.neighbor(n).equals(position)) player.activate(h.neighbor(n));
+    		}
+    		count++;
+    		for (int n = 0; n < 6; n++) {
+    			setPossibleFields(h.neighbor(n), count);
     		}
     	}
     }

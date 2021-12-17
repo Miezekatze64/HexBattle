@@ -40,7 +40,7 @@ public class BuilderCharacter extends GameCharacter {
 
 	@Override
 	public int getMovementLength() {
-		return 1;
+		return 3;
 	}
 	
 }
