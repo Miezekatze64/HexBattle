@@ -7,8 +7,7 @@ import com.mieze.hexbattle.fields.*;
 import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
+import com.mieze.hexbattle.toolbars.*;
 
 public class Player {
 	public Map map;
@@ -19,6 +18,7 @@ public class Player {
 	private ArrayList<Hex> active;
 	
 	private Toolbar toolbar;
+	private Inventory inventory;
 
 	private Hex start_pos;
 	private Layout hexLayout;
@@ -44,6 +44,7 @@ public class Player {
 		this.active = new ArrayList<Hex>();
 		this.characters = new ArrayList<GameCharacter>();
 		this.toolbar = new Toolbar();
+		this.inventory = new Inventory();
 		this.map = map;
 		this.hexLayout = layout;
 		this.start_pos = new Hex(0, 0, 0);
@@ -79,8 +80,6 @@ public class Player {
 			characters.get(i).render(g, map.zoom);
 		}
 		
-		toolbar.render(g, map);
-
 		for (int i = 0; i < active.size(); i++) {
 
 			Hex hex = active.get(i);
@@ -99,8 +98,10 @@ public class Player {
 			((Graphics2D) g).fillOval(left, top, (int) w, (int) h);
 			g.setColor(Color.BLACK);
 		}
+		toolbar.render(g, map);
+		inventory.render(g, map);
 	}
-	
+ 	
 	private void initToolbar() {
 		toolbar.add(new ToolbarButton("Next Turn", nextTurnImage) {
 			@Override
