@@ -2,10 +2,12 @@ package com.mieze.hexbattle.fields;
 
 import java.awt.*;
 
+
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.characters.*;
+import com.mieze.hexbattle.fields.building.*;
 
 public abstract class Field {
 	protected Hex hex;
@@ -15,6 +17,8 @@ public abstract class Field {
 	public static final int WATER = 1;
 	public static final int MOUNTAIN = 2;
 	public static final int FOREST = 3;
+	
+	private Building building = null;
 
 	protected Map map;
 	private GameCharacter character = null;
@@ -48,6 +52,22 @@ public abstract class Field {
 	
 	public void setCharacter(GameCharacter character) {
 		this.character = character;
+	}
+	
+	public void removeBuilding() {
+		this.building = null;
+	}
+	
+	public boolean hasBuilding() {
+		return building != null;
+	}
+	
+	public Building getBuilding() {
+		return building;
+	}
+	
+	public void setBuilding(Building building) {
+		this.building = building;
 	}
 	
 	public void removeCharacter() {

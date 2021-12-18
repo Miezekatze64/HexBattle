@@ -259,7 +259,7 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null) {
+		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && !map.getField(h).hasCharacter()) {
 			active.add(h);
 		} else {
 			System.out.println(map.getField(h));
