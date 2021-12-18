@@ -163,8 +163,10 @@ public class Player {
 
 				if (!(f instanceof UnexploredField)) {
 					if (f.hasCharacter()) {
+						active.removeAll(active);
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
+						clickedCharacter = character;
 						state = STATE_CHARACTER_CLICKED;
 						break;
 					} else {
@@ -201,11 +203,21 @@ public class Player {
 	public void nextTurn() {
 		//TODO: implement other players
 		
+		yourTurn();
+	}
+	
+	public void yourTurn() {
 		/* temporarly */
 		state = STATE_START;
 		for (int i = 0; i < characters.size(); i++) {
 			characters.get(i).setMoved(false);
 		}
+		
+		inventory.addResources(Inventory.CHARPOINTS, 0.5*getCitiyCount());
+	}
+	
+	public int getCitiyCount() {
+		return 1;
 	}
 
 	public void openSurroundedFields(Hex h) {

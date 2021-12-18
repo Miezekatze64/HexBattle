@@ -22,7 +22,7 @@ public class Toolbar {
 		
 		for (int i = 0; i < buttons.size(); i++) {
 			int bx = (int)((((double)(i+1)/((double)(buttons.size()+1))*.75)+.125)*m.getWidth())-w/2;
-			int by = m.getHeight()-(50-h/2);
+			int by = m.getHeight()-50-h/2;
 			boolean tmp = bx < x && bx + w > x && by < y && by + h > y;
 			if (tmp) {
 				rt = true;
