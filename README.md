@@ -16,7 +16,7 @@ cd PROJECT_ROOT/src/
 javac com/mieze/hexbattle/**/*.java -d ../bin/
 ```
 
-4. Go to projext root and run the game
+4. Go to project root and run the game
 ```sh
 cd ..
 java -classpath bin/ com.mieze.hexbattle.Main
