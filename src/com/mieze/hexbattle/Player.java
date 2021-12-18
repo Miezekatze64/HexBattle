@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
@@ -68,7 +69,7 @@ public class Player {
 
 	public void setStartFields() {
 		addField(start_pos, true);
-		openAndConquerSurroundedFields(start_pos);
+		conquerCity(start_pos);
 	}
 	
     private static void scaleImage(Image img, double w, double h) {
@@ -276,6 +277,11 @@ public class Player {
 				}
 			}
 		}
+	}
+	
+	public void conquerCity(Hex h) {
+		map.getField(h).setBuilding(new City(map.getField(h)));
+		openAndConquerSurroundedFields(h);
 	}
 
 	private boolean isUnexplored(Hex hex) {

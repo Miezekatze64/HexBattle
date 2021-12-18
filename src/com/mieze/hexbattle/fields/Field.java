@@ -137,6 +137,8 @@ public abstract class Field {
 		((Graphics2D) g).setStroke(new BasicStroke(1));
 		g.setColor(Color.black);
 		g.drawPolygon(point_x, point_y, point_x.length);
+		
+		if (building != null) building.render(g, zoom);
 	}
 
 	public boolean isOnScreen(int offset_x, int offset_y, double zoom) {

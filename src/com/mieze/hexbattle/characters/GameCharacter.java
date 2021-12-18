@@ -64,7 +64,7 @@ public abstract class GameCharacter {
 				if (!h.neighbor(n).equals(position)) {
 					if (map.getField(h.neighbor(n)) instanceof WaterField) {
 						/*
-						 * TODO implement this ↓
+						 * TODO implement boats ↓
 						if (!(this instanceof BoatCharacter)) {*/
 							continue;
 						/*}*/
