@@ -9,7 +9,7 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 500;
 	public static final int HEIGHT = 500;
-	public static int FPS = 240;
+	public static int FPS = 120;
 
 	private long lastTime;
 	private long frameCount = 0;
@@ -35,7 +35,7 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				repaint();
-
+				
 				frameCount++;
 				if (frameCount % 50 == 0)
 					calcFPS(System.currentTimeMillis());
@@ -46,11 +46,10 @@ public class Main extends JFrame {
 	}
 
 	private void calcFPS(long time) {
-		long dtime = time - lastTime;
-		fps = Math.round((1000.0 / dtime)*500)/10;
-		lastTime = time;
+		double fps = 1000.0 / (System.currentTimeMillis() - lastTime)*50;
+		lastTime = System.currentTimeMillis();
 		
-		panel.currentFPS(fps);
+		panel.currentFPS((int)fps);
 	}
 }
 

@@ -71,6 +71,7 @@ public class Inventory {
 	}
 	
 	public void render(Graphics g, Map m) {
-		
+		g.drawImage(imgWood, (int)(m.getWidth()*0.25), 20, 40, 40, null);
+		g.drawString(new StringBuilder().append(wood).toString(), (int)(m.getWidth()*0.25)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(wood).toString())/2, 70);
 	}
 }

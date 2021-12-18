@@ -32,7 +32,7 @@ public class Player {
 	
     static {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        nextTurnImage= toolkit.getImage("assets/next-turn.png");
+        nextTurnImage= toolkit.getImage("assets/next_turn.png");
         scaleImage(nextTurnImage, 32, 32);
     }
 	
