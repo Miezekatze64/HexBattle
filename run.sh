@@ -23,6 +23,7 @@ then
 	java -classpath bin/ com.mieze.hexbattle.Main
 else
 	echo "Starting program in background..."
-	java -classpath bin/ com.mieze.hexbattle.Main &
+	java -classpath bin/ com.mieze.hexbattle.Main > /dev/null &
+	exit 0
 fi
 
