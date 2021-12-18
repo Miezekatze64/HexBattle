@@ -117,8 +117,6 @@ public class Map {
 		double val = noise.eval(oc.row * SMOOTH_FACTOR, oc.col * SMOOTH_FACTOR);
 		int type_val = Math.round((float) val * 10);
 
-		// System.out.println(type_val);
-
 		if (type_val < -4) {
 			// lake / oceans / rivers / ...
 			return Field.WATER;

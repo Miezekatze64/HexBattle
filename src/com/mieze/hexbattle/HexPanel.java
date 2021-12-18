@@ -128,9 +128,6 @@ public class HexPanel extends JPanel {
 			((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
 			first = false;
 		}
-		for (int i = 0; i < opponents.size(); i++) {
-			opponents.get(i).render((Graphics2D)g);
-		}
 		player.render((Graphics2D)g);
 		renderFPS(g);
 	}

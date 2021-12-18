@@ -12,9 +12,9 @@ import com.mieze.hexbattle.toolbars.*;
 public class Player {
 	public Map map;
 	
-	private ArrayList<GameCharacter> characters;
-	private ArrayList<Hex> fields;
-	private ArrayList<UnexploredField> unexplored;
+	protected ArrayList<GameCharacter> characters;
+	protected ArrayList<Hex> fields;
+	protected ArrayList<UnexploredField> unexplored;
 	private ArrayList<Hex> active;
 	private ArrayList<Hex> empire;
 	
@@ -85,20 +85,23 @@ public class Player {
     }
     
 	public void render(Graphics2D g) {
-		for (int i = 0; i < unexplored.size(); i++) {
-			unexplored.get(i).render(g);
-		}
 
 		for (int i = 0; i < map.fields.size(); i++) {
 			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
 				map.fields.get(i).render(g);
 			}
 		}
-
-		for (int i = 0; i < characters.size(); i++) {
-			characters.get(i).render(g, map.zoom);
+		
+		for (int i = 0; i < map.fields.size(); i++) {
+			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
+				if (map.fields.get(i).getCharacter() != null) map.fields.get(i).getCharacter().render(g, map.zoom);
+			}
 		}
 		
+		for (int i = 0; i < unexplored.size(); i++) {
+			unexplored.get(i).render(g);
+		}
+
 		for (int i = 0; i < active.size(); i++) {
 
 			Hex hex = active.get(i);
@@ -130,7 +133,7 @@ public class Player {
 		});
 	}
  
-	private boolean isOnScreen(Field f) {
+	protected boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
 	}
 
@@ -221,7 +224,6 @@ public class Player {
 	
 	public void nextTurn() {
 		//TODO: implement other players
-		
 		yourTurn();
 	}
 	
@@ -263,13 +265,13 @@ public class Player {
 	}
 
 	public void addField(Hex hex, boolean force) {
-		if (force || isUnexplored(hex)) {
+		if ((force || isUnexplored(hex)) && !fields.contains(hex)) {
 			this.fields.add(hex);
 			removeUnexploredField(hex);
 			map.addField(hex);
 
 			for (int i = 0; i < 6; i++) {
-				if (!map.contains(hex.neighbor(i))) {
+				if (!fields.contains(hex.neighbor(i))) {
 					addUnexploredField(hex.neighbor(i));
 				}
 			}
@@ -286,7 +288,7 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && !map.getField(h).hasCharacter()) {
+		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter())) {
 			active.add(h);
 		} else {
 			System.out.println(map.getField(h));
