@@ -25,7 +25,7 @@ public class HexPanel extends JPanel {
 	private float off_x;
 	private float off_y;
 	
-	private static final Color[] COLORS = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.GRAY};
+	private static final Color[] COLORS = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.GRAY};
 	private int colorIndex = 0;
 	private boolean first = true;
 

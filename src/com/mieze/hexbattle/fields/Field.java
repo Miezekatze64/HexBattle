@@ -112,20 +112,21 @@ public abstract class Field {
 			g.setColor(color);
 			g.setStroke(new BasicStroke(5));
 			
-			Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+			Stroke dashed = new BasicStroke(5, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
                     0, new float[]{9}, 0);
-			Stroke dashed2 = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                    0, new float[]{9}, 1);
+			Stroke dashed2 = new BasicStroke(5, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                    0, new float[]{9}, 9);
 			
 			for (int i = 0; i < 6; i++) {
 				if (map.getField(hex.neighbor(i)) != null && map.getField(hex.neighbor(i)).getOwner() != getOwner()) {
 					if (map.getField(hex.neighbor(i)).getOwner() != null) {
 						g.setStroke(dashed);
 						g.setColor(map.getField(hex.neighbor(i)).getOwner().getColor());
-						g.drawLine(point_x[0], point_y[0], point_x[1], point_y[1]);
+						g.drawLine(point_x[i], point_y[i], point_x[(i+1) % 6], point_y[(i+1) % 6]);
 						g.setStroke(dashed2);
 						g.setColor(color);
-						g.drawLine(point_x[0], point_y[0], point_x[1], point_y[1]);
+						g.drawLine(point_x[i], point_y[i], point_x[(i+1) % 6], point_y[(i+1) % 6]);
+						g.setStroke(new BasicStroke(5));
 					} else {
 						g.drawLine(point_x[i], point_y[i], point_x[(i+1) % 6], point_y[(i+1) % 6]);
 					}
