@@ -1,7 +1,7 @@
 # HexBattle
 
 ## Requirements
-- Java Runtime Environment (with javac) 1.8.0 or newer.
+Java Runtime Environment (with javac) 1.8.0 or newer.
 
 ## Compile and run
 1. Install jre (version 16.0.2 or newer recommended)
