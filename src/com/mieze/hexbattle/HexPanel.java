@@ -43,6 +43,8 @@ public class HexPanel extends JPanel {
 	}
 
 	public HexPanel() {
+		opponents = new ArrayList<Player>();
+		
 		off_x = -Main.WIDTH/2f;
 		off_y = -Main.HEIGHT/2f;
 		
@@ -109,7 +111,7 @@ public class HexPanel extends JPanel {
 		createMap();
 		player = new Player(map, hexLayout, getNextColor());
 		
-		player2 = new Player(map, hexLayout, getNextColor());
+		opponents.add(new Player(map, hexLayout, getNextColor());
 	}
 
 	public void createMap() {
