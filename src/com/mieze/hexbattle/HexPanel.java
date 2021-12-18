@@ -23,8 +23,21 @@ public class HexPanel extends JPanel {
 	private float off_x;
 	private float off_y;
 	
+	private static final Color[] COLORS = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.GRAY};
+	private int colorIndex = 0;
+	
+	private boolean first = true;
+	
 	static {
 		hexLayout = new Layout(Layout.pointy, new Point(40, 40), new Point(0, 0));
+	}
+	
+	private Color getNextColor() {
+		try {
+			return COLORS[colorIndex++];
+		} catch(ArrayIndexOutOfBoundsException e) {
+			throw new RuntimeException("Too many players!");
+		}
 	}
 
 	public HexPanel() {
@@ -92,7 +105,8 @@ public class HexPanel extends JPanel {
 			}
 		});
 		createMap();
-		player = new Player(map, hexLayout);
+		player = new Player(map, hexLayout, getNextColor());
+	
 	}
 
 	public void createMap() {
@@ -105,7 +119,11 @@ public class HexPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		player.render(g);
+		if (first) {
+			((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
+			first = false;
+		}
+		player.render((Graphics2D)g);
 		renderFPS(g);
 	}
 	

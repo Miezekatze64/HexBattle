@@ -14,8 +14,9 @@ public class Player {
 	
 	private ArrayList<GameCharacter> characters;
 	private ArrayList<Hex> fields;
-	private ArrayList<Field> unexplored;
+	private ArrayList<UnexploredField> unexplored;
 	private ArrayList<Hex> active;
+	private ArrayList<Hex> empire;
 	
 	private Toolbar toolbar;
 	private Inventory inventory;
@@ -30,6 +31,8 @@ public class Player {
 	private int state = STATE_START;
 	private static Image nextTurnImage;
 	
+	private Color playerColor;
+	
     static {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         nextTurnImage= toolkit.getImage("assets/next_turn.png");
@@ -38,14 +41,17 @@ public class Player {
 	
 	private GameCharacter clickedCharacter;
 
-	public Player(Map map, Layout layout) {
+	public Player(Map map, Layout layout, Color color) {
 		this.fields = new ArrayList<Hex>();
-		this.unexplored = new ArrayList<Field>();
+		this.unexplored = new ArrayList<UnexploredField>();
 		this.active = new ArrayList<Hex>();
 		this.characters = new ArrayList<GameCharacter>();
+		this.empire = new ArrayList<Hex>();
+		
 		this.toolbar = new Toolbar();
 		this.inventory = new Inventory();
 		this.map = map;
+		this.playerColor = color;
 		this.hexLayout = layout;
 		this.start_pos = new Hex(0, 0, 0);
 
@@ -53,19 +59,28 @@ public class Player {
 		setStartFields();
 
 		characters.add(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
-		characters.add(new BuilderCharacter(map.getField(start_pos.neighbor(3)), hexLayout, this));
 	}
 
 	public void setStartFields() {
-		openSurroundedFields(start_pos);
+		openAndConquerSurroundedFields(start_pos);
 		addField(start_pos, true);
+		
 	}
 	
     private static void scaleImage(Image img, double w, double h) {
         img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
     }
-
-	public void render(Graphics g) {
+    
+    private void addToEmpire(Hex hex) {
+    	empire.add(hex);
+    	map.getField(hex).setOwner(this);
+    }
+    
+    public Color getColor() {
+    	return this.playerColor;
+    }
+    
+	public void render(Graphics2D g) {
 		for (int i = 0; i < unexplored.size(); i++) {
 			unexplored.get(i).render(g);
 		}
@@ -110,7 +125,7 @@ public class Player {
 			}
 		});
 	}
-
+ 
 	private boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
 	}
@@ -223,6 +238,13 @@ public class Player {
 	public void openSurroundedFields(Hex h) {
 		for (int i = 0; i < 6; i++) {
 			addField(h.neighbor(i), true);
+		}
+	}
+	
+	public void openAndConquerSurroundedFields(Hex h) {
+		for (int i = 0; i < 6; i++) {
+			addField(h.neighbor(i), true);
+			addToEmpire(h.neighbor(i));
 		}
 	}
 	
