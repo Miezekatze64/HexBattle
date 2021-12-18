@@ -53,7 +53,12 @@ public class Player {
 		this.map = map;
 		this.playerColor = color;
 		this.hexLayout = layout;
-		this.start_pos = new Hex(0, 0, 0);
+		
+		int q = (int)(Math.random()*10);
+		int r = (int)(Math.random()*10);
+		int s = -q-r;
+		
+		this.start_pos = new Hex(q, r, s);
 
 		initToolbar();
 		setStartFields();
@@ -62,9 +67,8 @@ public class Player {
 	}
 
 	public void setStartFields() {
-		openAndConquerSurroundedFields(start_pos);
 		addField(start_pos, true);
-		
+		openAndConquerSurroundedFields(start_pos);
 	}
 	
     private static void scaleImage(Image img, double w, double h) {
@@ -246,6 +250,7 @@ public class Player {
 			addField(h.neighbor(i), true);
 			addToEmpire(h.neighbor(i));
 		}
+		addToEmpire(h);
 	}
 	
 	public void addField(Point p) {

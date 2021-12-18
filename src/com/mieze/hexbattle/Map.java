@@ -36,32 +36,33 @@ public class Map {
 		// addField(new Point(0, 0), true);
 
 	}
-	
+
 	public Point hexToDisplay(Point p) {
-		int x = (int) ((p.x - offset_x - panel.getWidth()/2) * zoom + panel.getWidth()/2);
-		int y = (int) ((p.y - offset_y - panel.getHeight()/2) * zoom + panel.getHeight()/2);
-		return new Point(x, y);
-	}
-	
-	public Point displayToHex(Point p) {
-		
-		int x = (int)((p.x - panel.getWidth()/2)/zoom+panel.getWidth()/2+offset_x);
-		int y = (int)((p.y - panel.getHeight()/2)/zoom+panel.getHeight()/2+offset_y);
-				
+		int x = (int) ((p.x - offset_x - panel.getWidth() / 2) * zoom + panel.getWidth() / 2);
+		int y = (int) ((p.y - offset_y - panel.getHeight() / 2) * zoom + panel.getHeight() / 2);
 		return new Point(x, y);
 	}
 
-	/*public Point offsetPoint(Point p) {
-		return new Point((p.x + offset_x) / zoom, (p.y + offset_y) / zoom);
-	}*/
+	public Point displayToHex(Point p) {
+
+		int x = (int) ((p.x - panel.getWidth() / 2) / zoom + panel.getWidth() / 2 + offset_x);
+		int y = (int) ((p.y - panel.getHeight() / 2) / zoom + panel.getHeight() / 2 + offset_y);
+
+		return new Point(x, y);
+	}
+
+	/*
+	 * public Point offsetPoint(Point p) { return new Point((p.x + offset_x) / zoom,
+	 * (p.y + offset_y) / zoom); }
+	 */
 
 	public Field getField(Point p) {
 		return getField(hexLayout.pixelToHex(p).hexRound());
 	}
-	
+
 	public Field getField(Hex hex) {
-		//System.out.println(hex);
-		
+		// System.out.println(hex);
+
 		for (int i = 0; i < fields.size(); i++) {
 			if (fields.get(i).getHex().equals(hex)) {
 				return fields.get(i);
@@ -90,8 +91,8 @@ public class Map {
 
 	public void addField(Hex hex) {
 		Field add;
-
-		switch (getType(hex)) {
+		if (!contains(hex)) {
+			switch (getType(hex)) {
 			default:
 			case Field.EMPTY:
 				add = new EmptyField(hex, this);
@@ -105,9 +106,10 @@ public class Map {
 			case Field.FOREST:
 				add = new ForestField(hex, this);
 				break;
-		}
+			}
 
-		this.fields.add(add);
+			this.fields.add(add);
+		}
 	}
 
 	public int getType(Hex hex) {

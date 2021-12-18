@@ -1,7 +1,8 @@
 package com.mieze.hexbattle;
 
-import java.awt.*;
+import java.util.ArrayList;
 
+import java.awt.*;
 import java.awt.event.*;
 
 import com.mieze.hexbattle.hex.*;
@@ -12,6 +13,7 @@ public class HexPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Map map;
 	private Player player;
+	private ArrayList<Player> opponents;
 
 	private int last_x = 0, last_y = 0;
 	private boolean drag = false;
@@ -25,8 +27,8 @@ public class HexPanel extends JPanel {
 	
 	private static final Color[] COLORS = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.GRAY};
 	private int colorIndex = 0;
-	
 	private boolean first = true;
+
 	
 	static {
 		hexLayout = new Layout(Layout.pointy, new Point(40, 40), new Point(0, 0));
@@ -106,7 +108,8 @@ public class HexPanel extends JPanel {
 		});
 		createMap();
 		player = new Player(map, hexLayout, getNextColor());
-	
+		
+		player2 = new Player(map, hexLayout, getNextColor());
 	}
 
 	public void createMap() {
@@ -122,6 +125,9 @@ public class HexPanel extends JPanel {
 		if (first) {
 			((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
 			first = false;
+		}
+		for (int i = 0; i < opponents.size(); i++) {
+			opponents.get(i).render((Graphics2D)g);
 		}
 		player.render((Graphics2D)g);
 		renderFPS(g);

@@ -91,7 +91,7 @@ public abstract class Field {
 	public void setOwner(Player owner) {
 		this.owner = owner;
 		Color c = owner.getColor();
-		this.color =  new Color(c.getRed(), c.getGreen(), c.getBlue(), 50);
+		this.color = c;
 	}
 
 	public abstract void render(Graphics2D g);
@@ -110,9 +110,29 @@ public abstract class Field {
 
 		if (hasOwner()) {
 			g.setColor(color);
+			g.setStroke(new BasicStroke(5));
+			
+			Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                    0, new float[]{9}, 0);
+			Stroke dashed2 = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                    0, new float[]{9}, 1);
+			
+			for (int i = 0; i < 6; i++) {
+				if (map.getField(hex.neighbor(i)) != null && map.getField(hex.neighbor(i)).getOwner() != getOwner()) {
+					if (map.getField(hex.neighbor(i)).getOwner() != null) {
+						g.setStroke(dashed);
+						g.setColor(map.getField(hex.neighbor(i)).getOwner().getColor());
+						g.drawLine(point_x[0], point_y[0], point_x[1], point_y[1]);
+						g.setStroke(dashed2);
+						g.setColor(color);
+						g.drawLine(point_x[0], point_y[0], point_x[1], point_y[1]);
+					} else {
+						g.drawLine(point_x[i], point_y[i], point_x[(i+1) % 6], point_y[(i+1) % 6]);
+					}
+				}
+			}
 		}
-		g.fillPolygon(point_x, point_y, point_x.length);
-
+		
 		((Graphics2D) g).setStroke(new BasicStroke(1));
 		g.setColor(Color.black);
 		g.drawPolygon(point_x, point_y, point_x.length);
