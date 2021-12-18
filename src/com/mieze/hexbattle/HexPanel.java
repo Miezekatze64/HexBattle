@@ -111,7 +111,7 @@ public class HexPanel extends JPanel {
 		createMap();
 		player = new Player(map, hexLayout, getNextColor());
 		
-		opponents.add(new Player(map, hexLayout, getNextColor());
+		opponents.add(new Player(map, hexLayout, getNextColor()));
 	}
 
 	public void createMap() {
