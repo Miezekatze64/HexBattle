@@ -30,15 +30,7 @@ public class Player {
 	public static final int STATE_NOT_IMPLEMENTED = 2;
 
 	private int state = STATE_START;
-	private static Image nextTurnImage;
-
 	private Color playerColor;
-
-	static {
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		nextTurnImage = toolkit.getImage("assets/next_turn.png");
-		scaleImage(nextTurnImage, 32, 32);
-	}
 
 	private GameCharacter clickedCharacter;
 
@@ -55,7 +47,6 @@ public class Player {
 		this.playerColor = color;
 		this.hexLayout = layout;
 
-		initToolbar();
 		setStartFields();
 
 		characters.add(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
@@ -70,7 +61,7 @@ public class Player {
 			int s = -q - r;
 
 			this.start_pos = new Hex(q, r, s);
-			
+
 			if (map.getType(start_pos) == Field.WATER) {
 				continue;
 			}
@@ -84,10 +75,6 @@ public class Player {
 
 		addField(start_pos, true);
 		conquerCity(start_pos);
-	}
-
-	private static void scaleImage(Image img, double w, double h) {
-		img = img.getScaledInstance((int) w, (int) h, Image.SCALE_DEFAULT);
 	}
 
 	private void addToEmpire(Hex hex) {
@@ -136,17 +123,15 @@ public class Player {
 			((Graphics2D) g).fillOval(left, top, (int) w, (int) h);
 			g.setColor(Color.BLACK);
 		}
+
+		if (clickedCharacter == null)
+			toolbar.reset();
+		else if (!clickedCharacter.isMoved() && state == STATE_CHARACTER_CLICKED) {
+			clickedCharacter.checkAndAddTools(toolbar);
+			clickedCharacter.setMoved(true);
+		}
 		toolbar.render(g, map);
 		inventory.render(g, map);
-	}
-
-	private void initToolbar() {
-		toolbar.add(new ToolbarButton("Next Turn", nextTurnImage) {
-			@Override
-			public void onClick() {
-				nextTurn();
-			}
-		});
 	}
 
 	protected boolean isOnScreen(Field f) {
@@ -172,7 +157,6 @@ public class Player {
 					if (f.hasCharacter() && f.getCharacter().isFromPlayer(this) && !f.getCharacter().isMoved()) {
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
-						// character.setMoved(true);
 						clickedCharacter = character;
 						state = STATE_CHARACTER_CLICKED;
 						break;
@@ -236,11 +220,6 @@ public class Player {
 			active.removeAll(active);
 			break;
 		}
-	}
-
-	public void nextTurn() {
-		// TODO: implement other players
-		yourTurn();
 	}
 
 	public void yourTurn() {
@@ -311,8 +290,6 @@ public class Player {
 	public void activate(Hex h) {
 		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter())) {
 			active.add(h);
-		} else {
-			System.out.println(map.getField(h));
 		}
 	}
 

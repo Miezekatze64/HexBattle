@@ -3,6 +3,7 @@ package com.mieze.hexbattle.characters;
 import java.awt.*;
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.fields.*;
 
 public abstract class GameCharacter {
@@ -92,4 +93,6 @@ public abstract class GameCharacter {
 			}
 		};
 	}
+
+	public abstract void checkAndAddTools(Toolbar toolbar);
 }

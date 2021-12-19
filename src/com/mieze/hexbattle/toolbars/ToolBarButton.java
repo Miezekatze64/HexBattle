@@ -5,7 +5,7 @@ import com.mieze.hexbattle.*;
 import java.awt.*;
 
 public abstract class ToolbarButton {
-	private String name;
+	protected String name;
 	private Image image;
 	
 	public ToolbarButton(String name, Image img) {

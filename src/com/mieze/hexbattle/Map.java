@@ -98,13 +98,16 @@ public class Map {
 			default:
 			case Field.EMPTY:
 				add = new EmptyField(hex, this);
-				if (Math.random()*100 < 7) {
+				if (Math.random()*100 < 20) {
+					boolean village = true;
 					for (int i = 0; i < 6; i++) {
 						if (getField(hex.neighbor(i)) != null && getField(hex.neighbor(i)).hasBuilding() && (getField(hex.neighbor(i)).getBuilding() instanceof City || getField(hex.neighbor(i)).getBuilding() instanceof Village)) {
-							break;
+							village = false;
 						}
 					}
-					add.setBuilding(new Village(add));
+					if (village) {
+						add.setBuilding(new Village(add));
+					}
 				}
 				break;
 			case Field.WATER:

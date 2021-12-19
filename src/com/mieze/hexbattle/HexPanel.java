@@ -121,6 +121,11 @@ public class HexPanel extends JPanel {
 	public void currentFPS(double fps) {
 		this.fps = fps;
 	}
+	
+	public void nextTurn() {
+		// TODO: implement other players
+		player.yourTurn();
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {

@@ -1,6 +1,8 @@
 package com.mieze.hexbattle.toolbars;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import com.mieze.hexbattle.*;
@@ -8,10 +10,46 @@ import com.mieze.hexbattle.*;
 
 public class Toolbar {
 	
-	private ArrayList<ToolbarButton> buttons = new ArrayList<>();
+	private ArrayList<ToolbarButton> buttons;
+	private boolean isStandard = true;
+	
+	private static Image nextTurnImage;
+
+	static {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		nextTurnImage = toolkit.getImage("assets/next_turn.png");
+		scaleImage(nextTurnImage, 32, 32);
+	}
+
+	private static void scaleImage(Image img, double w, double h) {
+		img = img.getScaledInstance((int) w, (int) h, Image.SCALE_DEFAULT);
+	}
+
+	public Toolbar() {
+		initToolbar();
+	}
 	
 	public void add(ToolbarButton btn) {
 		buttons.add(btn);
+		isStandard = false;
+	}
+	
+	private void initToolbar() {
+		buttons = new ArrayList<>();
+		buttons.add(new ToolbarButton("Next Turn", nextTurnImage) {
+			@Override
+			public void onClick() {
+				Main.getPanel().nextTurn();
+			}
+		});
+	}
+	
+	public boolean isStandard() {
+		return isStandard;
+	}
+	
+	public void reset() {
+		initToolbar();
 	}
 	
 	public boolean onClick(int x, int y, Map m) {
@@ -38,5 +76,14 @@ public class Toolbar {
 			int y = m.getHeight()-50;
 			buttons.get(i).render(g, m, x, y);
 		}
+	}
+
+	public boolean hasButton(String string) {
+		for (int i = 0; i < buttons.size(); i++) {
+			if (buttons.get(i).name.equals(string)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

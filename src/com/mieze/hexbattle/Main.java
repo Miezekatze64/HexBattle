@@ -13,7 +13,7 @@ public class Main extends JFrame {
 
 	private long lastTime;
 	private long frameCount = 0;
-	private HexPanel panel;
+	private static HexPanel panel;
 
 	public static void main(String[] args) {
 		new Main();
@@ -41,6 +41,10 @@ public class Main extends JFrame {
 		});
 
 		gameLoop.start();
+	}
+	
+	public static HexPanel getPanel() {
+		return panel;
 	}
 
 	private void calcFPS(long time) {
