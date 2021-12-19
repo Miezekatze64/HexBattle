@@ -12,13 +12,13 @@ import com.mieze.hexbattle.toolbars.*;
 
 public class Player {
 	public Map map;
-	
+
 	protected ArrayList<GameCharacter> characters;
 	protected ArrayList<Hex> fields;
 	protected ArrayList<UnexploredField> unexplored;
 	private ArrayList<Hex> active;
 	private ArrayList<Hex> empire;
-	
+
 	private Toolbar toolbar;
 	private Inventory inventory;
 
@@ -31,15 +31,15 @@ public class Player {
 
 	private int state = STATE_START;
 	private static Image nextTurnImage;
-	
+
 	private Color playerColor;
-	
-    static {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        nextTurnImage= toolkit.getImage("assets/next_turn.png");
-        scaleImage(nextTurnImage, 32, 32);
-    }
-	
+
+	static {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		nextTurnImage = toolkit.getImage("assets/next_turn.png");
+		scaleImage(nextTurnImage, 32, 32);
+	}
+
 	private GameCharacter clickedCharacter;
 
 	public Player(Map map, Layout layout, Color color) {
@@ -48,18 +48,12 @@ public class Player {
 		this.active = new ArrayList<Hex>();
 		this.characters = new ArrayList<GameCharacter>();
 		this.empire = new ArrayList<Hex>();
-		
+
 		this.toolbar = new Toolbar();
 		this.inventory = new Inventory();
 		this.map = map;
 		this.playerColor = color;
 		this.hexLayout = layout;
-		
-		int q = (int)(Math.random()*10);
-		int r = (int)(Math.random()*10);
-		int s = -q-r;
-		
-		this.start_pos = new Hex(q, r, s);
 
 		initToolbar();
 		setStartFields();
@@ -68,23 +62,43 @@ public class Player {
 	}
 
 	public void setStartFields() {
+		boolean found = false;
+
+		while (!found) {
+			int q = (int) (Math.random() * 10);
+			int r = (int) (Math.random() * 10);
+			int s = -q - r;
+
+			this.start_pos = new Hex(q, r, s);
+			
+			if (map.getType(start_pos) == Field.WATER) {
+				continue;
+			}
+			found = true;
+			for (int i = 0; i < 6; i++) {
+				if (map.getField(start_pos.neighbor(i)) != null && map.getField(start_pos.neighbor(i)).hasOwner()) {
+					found = false;
+				}
+			}
+		}
+
 		addField(start_pos, true);
 		conquerCity(start_pos);
 	}
-	
-    private static void scaleImage(Image img, double w, double h) {
-        img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
-    }
-    
-    private void addToEmpire(Hex hex) {
-    	empire.add(hex);
-    	map.getField(hex).setOwner(this);
-    }
-    
-    public Color getColor() {
-    	return this.playerColor;
-    }
-    
+
+	private static void scaleImage(Image img, double w, double h) {
+		img = img.getScaledInstance((int) w, (int) h, Image.SCALE_DEFAULT);
+	}
+
+	private void addToEmpire(Hex hex) {
+		empire.add(hex);
+		map.getField(hex).setOwner(this);
+	}
+
+	public Color getColor() {
+		return this.playerColor;
+	}
+
 	public void render(Graphics2D g) {
 
 		for (int i = 0; i < map.fields.size(); i++) {
@@ -92,13 +106,14 @@ public class Player {
 				map.fields.get(i).render(g);
 			}
 		}
-		
+
 		for (int i = 0; i < map.fields.size(); i++) {
 			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
-				if (map.fields.get(i).getCharacter() != null) map.fields.get(i).getCharacter().render(g, map.zoom);
+				if (map.fields.get(i).getCharacter() != null)
+					map.fields.get(i).getCharacter().render(g, map.zoom);
 			}
 		}
-		
+
 		for (int i = 0; i < unexplored.size(); i++) {
 			unexplored.get(i).render(g);
 		}
@@ -124,7 +139,7 @@ public class Player {
 		toolbar.render(g, map);
 		inventory.render(g, map);
 	}
- 	
+
 	private void initToolbar() {
 		toolbar.add(new ToolbarButton("Next Turn", nextTurnImage) {
 			@Override
@@ -133,18 +148,18 @@ public class Player {
 			}
 		});
 	}
- 
+
 	protected boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
 	}
 
 	public void onClick(Point p) {
-		if (toolbar.onClick((int)p.x, (int)p.y, map)) {
+		if (toolbar.onClick((int) p.x, (int) p.y, map)) {
 			return;
 		}
-		
+
 		Point realPoint = map.displayToHex(p);
-				
+
 		Hex hex = hexLayout.pixelToHex(realPoint).hexRound();
 		Field f = map.getField(hex);
 
@@ -157,7 +172,7 @@ public class Player {
 					if (f.hasCharacter() && f.getCharacter().isFromPlayer(this) && !f.getCharacter().isMoved()) {
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
-						//character.setMoved(true);
+						// character.setMoved(true);
 						clickedCharacter = character;
 						state = STATE_CHARACTER_CLICKED;
 						break;
@@ -176,7 +191,7 @@ public class Player {
 			} else if (f == null) {
 				// TODO: handle empty click (maybe...)
 			} else {
-				//check if field is in range
+				// check if field is in range
 				if (!active.contains(f.getHex())) {
 					clickedCharacter = null;
 					state = STATE_START;
@@ -195,19 +210,19 @@ public class Player {
 					} else {
 						if (f instanceof WaterField) {
 							/*
-							 * TODO implement this ↓
-							if (!(f.getCharacter() instanceof BoatCharacter)) {*/
-								break;
-							/*}*/
+							 * TODO implement this ↓ if (!(f.getCharacter() instanceof BoatCharacter)) {
+							 */
+							break;
+							/* } */
 						}
-						
+
 						// move to next field
 						clickedCharacter.moveTo(f);
 						active.removeAll(active);
 						map.getField(clickedCharacter.getPosition()).removeCharacter();
 						f.setCharacter(clickedCharacter);
 						clickedCharacter.setMoved(true);
-						
+
 						openSurroundedFields(f.getHex());
 						state = STATE_START;
 						break;
@@ -222,22 +237,22 @@ public class Player {
 			break;
 		}
 	}
-	
+
 	public void nextTurn() {
-		//TODO: implement other players
+		// TODO: implement other players
 		yourTurn();
 	}
-	
+
 	public void yourTurn() {
 		/* temporarly */
 		state = STATE_START;
 		for (int i = 0; i < characters.size(); i++) {
 			characters.get(i).setMoved(false);
 		}
-		
-		inventory.addResources(Inventory.CHARPOINTS, 0.5*getCitiyCount());
+
+		inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCitiyCount());
 	}
-	
+
 	public int getCitiyCount() {
 		return 1;
 	}
@@ -247,7 +262,7 @@ public class Player {
 			addField(h.neighbor(i), true);
 		}
 	}
-	
+
 	public void openAndConquerSurroundedFields(Hex h) {
 		for (int i = 0; i < 6; i++) {
 			addField(h.neighbor(i), true);
@@ -255,7 +270,7 @@ public class Player {
 		}
 		addToEmpire(h);
 	}
-	
+
 	public void addField(Point p) {
 		addField(p, false);
 	}
@@ -278,7 +293,7 @@ public class Player {
 			}
 		}
 	}
-	
+
 	public void conquerCity(Hex h) {
 		map.getField(h).setBuilding(new City(map.getField(h)));
 		openAndConquerSurroundedFields(h);
