@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Starting compilation..."
 cd ./src/
 javac com/mieze/hexbattle/**/*.java -d ../bin/

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 foreground=''
 
 print_usage() {
