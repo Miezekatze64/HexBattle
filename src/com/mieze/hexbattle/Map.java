@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.building.Village;
 import com.mieze.hexbattle.hex.*;
 
 public class Map {
@@ -96,6 +97,9 @@ public class Map {
 			default:
 			case Field.EMPTY:
 				add = new EmptyField(hex, this);
+				if (Math.random()*100 < 10) {
+					add.setBuilding(new Village(add));
+				}
 				break;
 			case Field.WATER:
 				add = new WaterField(hex, this);
@@ -112,7 +116,7 @@ public class Map {
 		}
 	}
 
-	public int getType(Hex hex) {
+	private int getType(Hex hex) {
 		OffsetCoord oc = OffsetCoord.qoffsetFromCube(OffsetCoord.EVEN, hex);
 		double val = noise.eval(oc.row * SMOOTH_FACTOR, oc.col * SMOOTH_FACTOR);
 		int type_val = Math.round((float) val * 10);

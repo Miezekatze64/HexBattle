@@ -19,7 +19,7 @@ public abstract class Field {
 
 	private Building building = null;
 
-	protected Map map;
+	public Map map;
 	private GameCharacter character = null;
 
 	private Player owner = null;

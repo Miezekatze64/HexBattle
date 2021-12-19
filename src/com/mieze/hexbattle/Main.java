@@ -13,8 +13,6 @@ public class Main extends JFrame {
 
 	private long lastTime;
 	private long frameCount = 0;
-	private double fps;
-	
 	private HexPanel panel;
 
 	public static void main(String[] args) {
