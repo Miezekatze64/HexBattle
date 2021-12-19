@@ -14,7 +14,7 @@ public abstract class GameCharacter {
 	protected Map map;
 	protected boolean isMoved = false;
 	
-    protected static Image img;
+    public static Image img;
 	protected boolean animating;
 
 	protected Animation animation;

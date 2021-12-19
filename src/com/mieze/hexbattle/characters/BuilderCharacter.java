@@ -58,9 +58,7 @@ public class BuilderCharacter extends GameCharacter {
 						player.reset();
 					}
 				});
-				return;
 			}
 		}
-		toolbar.reset();
 	}
 }

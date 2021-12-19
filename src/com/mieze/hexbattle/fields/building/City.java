@@ -8,8 +8,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.toolbars.Toolbar;
+import com.mieze.hexbattle.toolbars.ToolbarButton;
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Map;
+import com.mieze.hexbattle.characters.BuilderCharacter;
 import com.mieze.hexbattle.fields.Field;
 
 public class City extends Building {
@@ -42,10 +45,10 @@ public class City extends Building {
 		if (!color.equals(this.color)) {
 			int w = image.getWidth();
 			int h = image.getHeight();
-			
+
 			BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
-			
+
 			for (int x = 0; x < w; x++) {
 				for (int y = 0; y < h; y++) {
 					Color c = new Color(image.getRGB(x, y), true);
@@ -70,7 +73,17 @@ public class City extends Building {
 
 	@Override
 	public void onClick() {
-		// TODO Implement city options
+		System.out.println("clicked");
+		Toolbar toolbar = field.getOwner().getToolbar();
+		if (!toolbar.hasButton("New builder")) {
+			System.out.println("created");
+			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img) {
+				@Override
+				public void onClick() {
+					field.setCharacter(new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner()));
+				}
+			});
+		}
 	}
 
 	@Override

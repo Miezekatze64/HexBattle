@@ -76,6 +76,10 @@ public class Player {
 		addField(start_pos, true);
 		conquerCity(start_pos);
 	}
+	
+	public Toolbar getToolbar() {
+		return toolbar;
+	}
 
 	private void addToEmpire(Hex hex) {
 		empire.add(hex);
@@ -87,7 +91,7 @@ public class Player {
 	}
 
 	public void render(Graphics2D g) {
-
+		
 		for (int i = 0; i < map.fields.size(); i++) {
 			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
 				map.fields.get(i).render(g);
@@ -123,12 +127,6 @@ public class Player {
 			((Graphics2D) g).fillOval(left, top, (int) w, (int) h);
 			g.setColor(Color.BLACK);
 		}
-
-		if (clickedCharacter == null)
-			toolbar.reset();
-		else if (!clickedCharacter.isMoved() && state == STATE_CHARACTER_CLICKED) {
-			clickedCharacter.checkAndAddTools(toolbar);
-		}
 		toolbar.render(g, map);
 		inventory.render(g, map);
 	}
@@ -136,9 +134,11 @@ public class Player {
 	protected boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
 	}
-	
+
 	public void reset() {
-		clickedCharacter.setMoved(true);
+		if (clickedCharacter != null) {
+			clickedCharacter.setMoved(true);
+		}
 		clickedCharacter = null;
 		state = STATE_START;
 		active.removeAll(active);
@@ -146,13 +146,23 @@ public class Player {
 
 	public void onClick(Point p) {
 		if (toolbar.onClick((int) p.x, (int) p.y, map)) {
+			toolbar.reset();
 			return;
 		}
+		toolbar.reset();
 
 		Point realPoint = map.displayToHex(p);
 
 		Hex hex = hexLayout.pixelToHex(realPoint).hexRound();
 		Field f = map.getField(hex);
+
+		if (f != null) {
+			if (f.hasBuilding()) {
+				if (!f.hasCharacter()) {
+					f.getBuilding().onClick();
+				}
+			}
+		}
 
 		switch (state) {
 		case STATE_START:
@@ -164,6 +174,9 @@ public class Player {
 						GameCharacter character = f.getCharacter();
 						character.setPossibleFields();
 						clickedCharacter = character;
+						
+						clickedCharacter.checkAndAddTools(toolbar);
+						
 						state = STATE_CHARACTER_CLICKED;
 						break;
 					}
