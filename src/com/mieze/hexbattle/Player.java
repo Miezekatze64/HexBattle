@@ -128,7 +128,6 @@ public class Player {
 			toolbar.reset();
 		else if (!clickedCharacter.isMoved() && state == STATE_CHARACTER_CLICKED) {
 			clickedCharacter.checkAndAddTools(toolbar);
-			clickedCharacter.setMoved(true);
 		}
 		toolbar.render(g, map);
 		inventory.render(g, map);
@@ -136,6 +135,13 @@ public class Player {
 
 	protected boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
+	}
+	
+	public void reset() {
+		clickedCharacter.setMoved(true);
+		clickedCharacter = null;
+		state = STATE_START;
+		active.removeAll(active);
 	}
 
 	public void onClick(Point p) {

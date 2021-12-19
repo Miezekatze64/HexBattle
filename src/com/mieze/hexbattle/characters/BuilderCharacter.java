@@ -55,6 +55,7 @@ public class BuilderCharacter extends GameCharacter {
 					@Override
 					public void onClick() {
 						player.conquerCity(position);
+						player.reset();
 					}
 				});
 				return;
