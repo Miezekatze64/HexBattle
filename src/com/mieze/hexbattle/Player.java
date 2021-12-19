@@ -48,8 +48,13 @@ public class Player {
 		this.hexLayout = layout;
 
 		setStartFields();
-
-		characters.add(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
+		
+		//First character (builder)
+		addCharacter(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
+	}
+	
+	public void addCharacter(GameCharacter c) {
+		characters.add(c);
 	}
 
 	public void setStartFields() {
