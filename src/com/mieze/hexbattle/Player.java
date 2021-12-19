@@ -255,6 +255,15 @@ public class Player {
 
 		inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCitiyCount());
 	}
+	
+	public boolean buyCharacter(int amount) {
+		if (inventory.getCharacterPoints() < amount) {
+			return false;
+		} else {
+			inventory.setCharacterPoints(inventory.getCharacterPoints()-amount);
+			return true;
+		}
+	}
 
 	public int getCitiyCount() {
 		return 1;

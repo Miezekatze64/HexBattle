@@ -65,7 +65,7 @@ public class Inventory {
 			diamonds += count;
 			break;
 		case CHARPOINTS:
-			characterPoints += count;
+			setCharacterPoints(getCharacterPoints() + count);
 			break;
 		}
 	}
@@ -78,12 +78,20 @@ public class Inventory {
 		g.drawString(new StringBuilder().append(wood).toString(), (int)(m.getWidth()*0.33)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(coal).toString())/2, 80);
 		
 		g.drawImage(imgCharPoints, (int)(m.getWidth()*0.5), 20, 40, 40, null);
-		g.drawString(new StringBuilder().append(characterPoints).toString(), (int)(m.getWidth()*0.5)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(characterPoints).toString())/2, 80);
+		g.drawString(new StringBuilder().append(getCharacterPoints()).toString(), (int)(m.getWidth()*0.5)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(getCharacterPoints()).toString())/2, 80);
 		
 		g.drawImage(imgIron, (int)(m.getWidth()*0.67), 20, 40, 40, null);
 		g.drawString(new StringBuilder().append(iron).toString(), (int)(m.getWidth()*0.67)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(iron).toString())/2, 80);
 		
 		g.drawImage(imgDiamonds, (int)(m.getWidth()*0.83), 20, 40, 40, null);
 		g.drawString(new StringBuilder().append(diamonds).toString(), (int)(m.getWidth()*0.83)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(diamonds).toString())/2, 80);
+	}
+
+	public double getCharacterPoints() {
+		return characterPoints;
+	}
+
+	public void setCharacterPoints(double characterPoints) {
+		this.characterPoints = characterPoints;
 	}
 }

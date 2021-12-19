@@ -6,18 +6,21 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Map;
+import com.mieze.hexbattle.Player;
 import com.mieze.hexbattle.characters.BuilderCharacter;
 import com.mieze.hexbattle.characters.GameCharacter;
 import com.mieze.hexbattle.fields.Field;
 
 public class City extends Building {
 	private static final double SIZE = 50;
+	protected static final int PRICE = 2;
 	private static BufferedImage[] img = new BufferedImage[4];
 	private int lvl = 1;
 	private Color color = null;
@@ -79,10 +82,15 @@ public class City extends Building {
 			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img) {
 				@Override
 				public void onClick() {
-					GameCharacter newCharacter = new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner());
-					newCharacter.setMoved(true);
-					field.setCharacter(newCharacter);
-					field.getOwner().addCharacter(newCharacter);
+					Player player = field.getOwner();
+					if (player.buyCharacter(PRICE)) {
+						GameCharacter newCharacter = new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner());
+						newCharacter.setMoved(true);
+						field.setCharacter(newCharacter);
+						field.getOwner().addCharacter(newCharacter);
+					} else {
+						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			});
 		}
