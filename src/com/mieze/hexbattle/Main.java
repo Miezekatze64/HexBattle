@@ -20,6 +20,7 @@ public class Main extends JFrame {
 	}
 
 	public Main() {
+		super("Hexbattle");
 
 		panel = new HexPanel();
 		add(panel);
