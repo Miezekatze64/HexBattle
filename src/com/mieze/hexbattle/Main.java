@@ -9,7 +9,7 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 500;
 	public static final int HEIGHT = 500;
-	public static int FPS = 120;
+	public static int FPS = 60;
 
 	private long lastTime;
 	private long frameCount = 0;
