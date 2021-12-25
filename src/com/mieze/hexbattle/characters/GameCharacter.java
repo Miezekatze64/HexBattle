@@ -18,6 +18,7 @@ public abstract class GameCharacter {
 	
     public static Image img;
 	protected boolean animating;
+	protected double health = 0;
 
 	public static int SIZE = 48;
 
@@ -35,6 +36,7 @@ public abstract class GameCharacter {
 		this.position = field.getHex();
 		this.hexLayout = hexLayout;
 		this.player = player;
+		this.health = getInitialLife();
 	}
 
 	public Hex getPosition() {
@@ -94,6 +96,9 @@ public abstract class GameCharacter {
     		pos = animation.getPosition();
     	}
         g.drawImage(img, (int)(pos.x - (SIZE*zoom)/2), (int)(pos.y - (SIZE*zoom)/2), (int)(SIZE*zoom), (int)(SIZE*zoom), null);
+
+		g.setColor(player.getColor());
+		g.fillRect((int)(pos.x - (SIZE*zoom)/3), (int)(pos.y - (SIZE*zoom)/2-(10*zoom)), (int)(SIZE*zoom*(2.0/3.0)*(health/getInitialLife())), (int)(5*zoom));
     }
 
 	public void moveTo(Field f) {
