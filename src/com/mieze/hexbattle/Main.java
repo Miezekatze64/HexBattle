@@ -3,13 +3,15 @@ package com.mieze.hexbattle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.Toolkit;
 import javax.swing.*;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 500;
-	public static final int HEIGHT = 500;
 	public static int FPS = 60;
+
+	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 
 	private long lastTime;
 	private long frameCount = 0;
@@ -26,8 +28,10 @@ public class Main extends JFrame {
 		add(panel);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+	       	setUndecorated(true);
+
 		pack();
-		setSize(WIDTH, HEIGHT);
 		setVisible(true);
 
 		Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {

@@ -78,6 +78,11 @@ public class Map {
 		offset_y -= off_y;
 	}
 
+	public void setOffset(int off_x, int off_y) {
+		offset_x = off_x;
+		offset_y = off_y;
+	}
+
 	public void addZoom(double factor) {
 		zoom *= factor;
 	}

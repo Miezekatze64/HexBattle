@@ -31,10 +31,15 @@ public class Player {
 
 	private int state = STATE_START;
 	private Color playerColor;
+	private boolean isMain = false;
 
 	private GameCharacter clickedCharacter;
 
 	public Player(Map map, Layout layout, Color color) {
+		this(map, layout, color, false);
+	}
+
+	public Player(Map map, Layout layout, Color color, boolean isMain) {
 		this.fields = new ArrayList<Hex>();
 		this.unexplored = new ArrayList<UnexploredField>();
 		this.active = new ArrayList<Hex>();
@@ -44,6 +49,7 @@ public class Player {
 		this.toolbar = new Toolbar();
 		this.inventory = new Inventory();
 		this.map = map;
+		this.isMain = isMain;
 		this.playerColor = color;
 		this.hexLayout = layout;
 
@@ -51,6 +57,7 @@ public class Player {
 		
 		//First character (builder)
 		addCharacter(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
+		System.err.println(map.offset_x);
 	}
 	
 	public void addCharacter(GameCharacter c) {
@@ -70,12 +77,19 @@ public class Player {
 			if (map.getType(start_pos) == Field.WATER) {
 				continue;
 			}
+
 			found = true;
 			for (int i = 0; i < 6; i++) {
 				if (map.getField(start_pos.neighbor(i)) != null && map.getField(start_pos.neighbor(i)).hasOwner()) {
 					found = false;
 				}
 			}
+		}
+		
+		if (isMain) {
+			System.out.println("here...");
+			Point start_point = hexLayout.hexToPixel(start_pos);
+			map.addOffset(-(int)start_point.x, -(int)start_point.y);
 		}
 
 		addField(start_pos, true);

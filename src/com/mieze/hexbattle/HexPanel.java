@@ -40,6 +40,7 @@ public class HexPanel extends JPanel {
 		} catch(ArrayIndexOutOfBoundsException e) {
 			throw new RuntimeException("Too many players!");
 		}
+	
 	}
 
 	public HexPanel() {
@@ -47,7 +48,7 @@ public class HexPanel extends JPanel {
 		
 		off_x = -Main.WIDTH/2f;
 		off_y = -Main.HEIGHT/2f;
-		
+
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -109,13 +110,13 @@ public class HexPanel extends JPanel {
 			}
 		});
 		createMap();
-		player = new Player(map, hexLayout, getNextColor());
+		player = new Player(map, hexLayout, getNextColor(), true);
 		
 		opponents.add(new Player(map, hexLayout, getNextColor()));
 	}
 
 	public void createMap() {
-		map = new Map(-250, -250, this);
+		map = new Map(-Main.WIDTH/2, -Main.HEIGHT/2, this);
 	}
 	
 	public void currentFPS(double fps) {
