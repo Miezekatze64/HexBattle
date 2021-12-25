@@ -57,7 +57,6 @@ public class Player {
 		
 		//First character (builder)
 		addCharacter(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
-		System.err.println(map.offset_x);
 	}
 	
 	public void addCharacter(GameCharacter c) {
@@ -87,7 +86,6 @@ public class Player {
 		}
 		
 		if (isMain) {
-			System.out.println("here...");
 			Point start_point = hexLayout.hexToPixel(start_pos);
 			map.addOffset(-(int)start_point.x, -(int)start_point.y);
 		}
