@@ -87,8 +87,10 @@ public class Player {
 	}
 
 	private void addToEmpire(Hex hex) {
-		empire.add(hex);
-		map.getField(hex).setOwner(this);
+		if (map.getField(hex).getOwner() == null) {
+			empire.add(hex);
+			map.getField(hex).setOwner(this);
+		}
 	}
 
 	public Color getColor() {
