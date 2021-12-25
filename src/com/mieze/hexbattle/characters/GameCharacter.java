@@ -3,6 +3,7 @@ package com.mieze.hexbattle.characters;
 import java.awt.*;
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.fields.*;
 
@@ -12,10 +13,13 @@ public abstract class GameCharacter {
 	protected Field field;
 	protected Player player;
 	protected Map map;
+
 	protected boolean isMoved = false;
 	
     public static Image img;
 	protected boolean animating;
+
+	public static int SIZE = 48;
 
 	protected Animation animation;
 
@@ -42,6 +46,8 @@ public abstract class GameCharacter {
     }
 
 	abstract public int getMovementLength();
+
+	abstract public int getInitialLife();
 
 	public void setPossibleFields() {
 		setPossibleFields(position, 0);
@@ -80,7 +86,15 @@ public abstract class GameCharacter {
 		}
 	}
 
-	public abstract void render(Graphics g, double zoom);
+    public void render(Graphics g, double zoom) {
+    	Point pos;
+    	if (!animating) {
+    		pos = map.hexToDisplay(hexLayout.hexToPixel(position));
+    	} else {
+    		pos = animation.getPosition();
+    	}
+        g.drawImage(img, (int)(pos.x - (SIZE*zoom)/2), (int)(pos.y - (SIZE*zoom)/2), (int)(SIZE*zoom), (int)(SIZE*zoom), null);
+    }
 
 	public void moveTo(Field f) {
 		this.animating = true;
