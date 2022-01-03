@@ -29,7 +29,8 @@ public class Player {
 	public static final int STATE_CHARACTER_CLICKED = 1;
 	public static final int STATE_NOT_IMPLEMENTED = 2;
 
-	private int state = STATE_START;
+	public int state = STATE_START;
+	private int city_count = 0;
 	private Color playerColor;
 	private boolean isMain = false;
 
@@ -67,8 +68,8 @@ public class Player {
 		boolean found = false;
 
 		while (!found) {
-			int q = (int) (Math.random() * 10);
-			int r = (int) (Math.random() * 10);
+			int q = (int) (Math.random() * 4);
+			int r = (int) (Math.random() * 4);
 			int s = -q - r;
 
 			this.start_pos = new Hex(q, r, s);
@@ -99,7 +100,7 @@ public class Player {
 	}
 
 	private void addToEmpire(Hex hex) {
-		if (map.getField(hex).getOwner() == null) {
+		if (map.getField(hex).getOwner() != this) {
 			empire.add(hex);
 			map.getField(hex).setOwner(this);
 		}
@@ -117,15 +118,15 @@ public class Player {
 			}
 		}
 
+		for (int i = 0; i < unexplored.size(); i++) {
+			unexplored.get(i).render(g);
+		}
+
 		for (int i = 0; i < map.fields.size(); i++) {
 			if (fields.contains(map.fields.get(i).getHex()) && isOnScreen(map.fields.get(i))) {
 				if (map.fields.get(i).getCharacter() != null)
 					map.fields.get(i).getCharacter().render(g, map.zoom);
 			}
-		}
-
-		for (int i = 0; i < unexplored.size(); i++) {
-			unexplored.get(i).render(g);
 		}
 
 		for (int i = 0; i < active.size(); i++) {
@@ -152,6 +153,10 @@ public class Player {
 
 	protected boolean isOnScreen(Field f) {
 		return f.isOnScreen(map.offset_x, map.offset_y, map.zoom);
+	}
+	
+	public void removeCharacter(GameCharacter character) {
+		characters.remove(character);
 	}
 
 	public void reset() {
@@ -208,8 +213,7 @@ public class Player {
 			break;
 		case STATE_CHARACTER_CLICKED:
 			if (clickedCharacter == null) {
-				throw new IllegalStateException(
-						"A player connot be click and unexisting at the same time (unreaachable)!!");
+				throw new IllegalStateException("A player connot be click and unexisting at the same time (unreaachable)!!");
 			} else if (f == null) {
 				// TODO: handle empty click (maybe...)
 			} else {
@@ -223,16 +227,24 @@ public class Player {
 
 				if (!(f instanceof UnexploredField)) {
 					if (f.hasCharacter()) {
-						active.removeAll(active);
-						GameCharacter character = f.getCharacter();
-						character.setPossibleFields();
-						clickedCharacter = character;
-						state = STATE_CHARACTER_CLICKED;
-						break;
+						if (f.getCharacter().isFromPlayer(this)) {
+							active.removeAll(active);
+							GameCharacter character = f.getCharacter();
+							character.setPossibleFields();
+							clickedCharacter = character;
+							state = STATE_CHARACTER_CLICKED;
+							break;
+						} else {
+							attack(clickedCharacter, f.getCharacter());
+							active.removeAll(active);
+							clickedCharacter.setMoved(true);
+							state = STATE_START;
+							break;
+						}
 					} else {
 						if (f instanceof WaterField) {
 							/*
-							 * TODO implement this ↓ if (!(f.getCharacter() instanceof BoatCharacter)) {
+							 * TODO implement this (!(f.getCharacter() instanceof BoatCharacter)) {
 							 */
 							break;
 							/* } */
@@ -259,6 +271,25 @@ public class Player {
 			break;
 		}
 	}
+	
+	public void attack(GameCharacter attacker, GameCharacter target) {
+		System.out.println("attack");
+
+		double attack = attacker.getAttackScore() * (attacker.getHealth() / attacker.getInitialLife());
+		double defense = target.getDefenceScore() * (target.getHealth() / target.getInitialLife());
+		double damage = attack + defense;
+
+		double nextHealth = target.getHealth()-
+			(attack / damage) * attacker.getAttackScore()*0.8;
+		
+		target.setHealth(nextHealth);
+		if (nextHealth <= 0) {
+			Field f = map.getField(target.getPosition());
+			map.getField(attacker.getPosition()).removeCharacter();
+			f.setCharacter(attacker);
+			attacker.moveTo(f);
+		}
+	}
 
 	public void yourTurn() {
 		/* temporarly */
@@ -280,7 +311,7 @@ public class Player {
 	}
 
 	public int getCitiyCount() {
-		return 1;
+		return city_count;
 	}
 
 	public void openSurroundedFields(Hex h) {
@@ -290,9 +321,10 @@ public class Player {
 	}
 
 	public void openAndConquerSurroundedFields(Hex h) {
+		Player ownerOfCity = map.getField(h).getOwner();
 		for (int i = 0; i < 6; i++) {
 			addField(h.neighbor(i), true);
-			addToEmpire(h.neighbor(i));
+			if (ownerOfCity == map.getField(h.neighbor(i)).getOwner()) addToEmpire(h.neighbor(i));
 		}
 		addToEmpire(h);
 	}
@@ -321,6 +353,7 @@ public class Player {
 	}
 
 	public void conquerCity(Hex h) {
+		city_count++;
 		map.getField(h).setBuilding(new City(map.getField(h)));
 		openAndConquerSurroundedFields(h);
 	}
@@ -335,7 +368,7 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter())) {
+		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter() || !map.getField(h).getCharacter().isFromPlayer(this))) {
 			active.add(h);
 		}
 	}

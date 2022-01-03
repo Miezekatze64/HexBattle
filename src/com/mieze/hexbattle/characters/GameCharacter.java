@@ -46,10 +46,30 @@ public abstract class GameCharacter {
     protected static void scaleImage(double w, double h) {
         img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
     }
+    
+    public void setHealth(double health) {
+		this.health = health;
+		if (health <= 0) {
+			die();
+		}
+	}
+	
+	private void die() {
+		field.setCharacter(null);
+		player.removeCharacter(this);
+	}
+	
+	public double getHealth()  {
+		return this.health;
+	}
 
 	abstract public int getMovementLength();
 
 	abstract public int getInitialLife();
+	
+	abstract public int getAttackScore();
+
+	abstract public int getDefenceScore();
 
 	public void setPossibleFields() {
 		setPossibleFields(position, 0);

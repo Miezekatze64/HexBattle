@@ -78,7 +78,7 @@ public class City extends Building {
 	@Override
 	public void onClick() {
 		Toolbar toolbar = field.getOwner().getToolbar();
-		if (!toolbar.hasButton("New builder")) {
+		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New builder")) {
 			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img) {
 				@Override
 				public void onClick() {
