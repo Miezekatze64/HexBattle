@@ -10,23 +10,22 @@ import com.mieze.hexbattle.fields.building.*;
 
 public class BuilderCharacter extends GameCharacter {
 	private static Image build_city;
-	private static Image conquer_city;
+	private static Image build_mine;
+	public static final int PRICE = 2;
+	public static Image img;
 
 	static {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        img = toolkit.getImage("assets/builder.png");
-        scaleImage(32, 32);
-        
-        build_city = toolkit.getImage("assets/city_1.png");
-        scaleImage(32, 32);
-        
-        conquer_city = toolkit.getImage("assets/city_1.png");
-        scaleImage(32, 32);
-    }
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		img = toolkit.getImage("assets/builder.png");
+				
+		build_city = toolkit.getImage("assets/city_1.png");
+		
+		build_mine = toolkit.getImage("assets/worker.png");
+	}
 
-    public BuilderCharacter(Field field, Layout hexLayout, Player player) {
-        super(field, hexLayout, player);
-    }
+	public BuilderCharacter(Field field, Layout hexLayout, Player player) {
+		super(field, hexLayout, player);
+	}
 
 	@Override
 	public int getMovementLength() {
@@ -53,6 +52,15 @@ public class BuilderCharacter extends GameCharacter {
 					public void onClick() {
 						player.conquerCity(position);
 						player.reset();
+					}
+				});
+			} else if (!field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
+				if (!toolbar.hasButton("Build mine"))
+				toolbar.add(new ToolbarButton("Build mine", build_mine) {
+					@Override
+					public void onClick() {
+//						player.conquerCity(position);
+//						player.reset();
 					}
 				});
 			}

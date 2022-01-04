@@ -74,7 +74,7 @@ public class Player {
 
 			this.start_pos = new Hex(q, r, s);
 
-			if (map.getType(start_pos) == Field.WATER) {
+			if (map.getType(start_pos) != Field.EMPTY) {
 				continue;
 			}
 
@@ -273,8 +273,6 @@ public class Player {
 	}
 	
 	public void attack(GameCharacter attacker, GameCharacter target) {
-		System.out.println("attack");
-
 		double attack = attacker.getAttackScore() * (attacker.getHealth() / attacker.getInitialLife());
 		double defense = target.getDefenceScore() * (target.getHealth() / target.getInitialLife());
 		double damage = attack + defense;

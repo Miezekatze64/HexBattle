@@ -16,13 +16,18 @@ public abstract class GameCharacter {
 
 	protected boolean isMoved = false;
 	
-    public static Image img;
+	protected static Image conquer_city;
 	protected boolean animating;
 	protected double health = 0;
 
 	public static int SIZE = 48;
 
 	protected Animation animation;
+
+	static {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		conquer_city = toolkit.getImage("assets/city_1.png");
+	}
 
 	public GameCharacter(Field field, Layout hexLayout, Player player) {
 		this.map = player.map;
@@ -43,10 +48,6 @@ public abstract class GameCharacter {
 		return position;
 	}
 	
-    protected static void scaleImage(double w, double h) {
-        img = img.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
-    }
-    
     public void setHealth(double health) {
 		this.health = health;
 		if (health <= 0) {
@@ -115,6 +116,14 @@ public abstract class GameCharacter {
     	} else {
     		pos = animation.getPosition();
     	}
+		Image img;
+		if (this instanceof BuilderCharacter)
+			img = BuilderCharacter.img;
+		else if (this instanceof WorkerCharacter)
+			img = WorkerCharacter.img;
+		else
+			throw new IllegalStateException("Character class not implemented: " + this.getClass().getCanonicalName());
+
         g.drawImage(img, (int)(pos.x - (SIZE*zoom)/2), (int)(pos.y - (SIZE*zoom)/2), (int)(SIZE*zoom), (int)(SIZE*zoom), null);
 
 		g.setColor(player.getColor());

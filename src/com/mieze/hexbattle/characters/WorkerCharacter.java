@@ -3,25 +3,24 @@ package com.mieze.hexbattle.characters;
 import java.awt.*;
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
+import com.mieze.hexbattle.toolbars.*;
 import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.building.*;
 
 public class WorkerCharacter extends GameCharacter {
 	private static Image chop_wood;
 	private static Image mine;
+	public static final int PRICE = 2;
+	public static Image img;
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/worker.png");
-		scaleImage(32, 32);
 		
 		chop_wood = toolkit.getImage("assets/city_1.png");
-		scaleImage(32, 32);
 		
 		mine = toolkit.getImage("assets/city_1.png");
-		scaleImage(32, 32);
-    }
+	}
 
 	public WorkerCharacter(Field field, Layout hexLayout, Player player) {
 		super(field, hexLayout, player);
@@ -37,7 +36,7 @@ public class WorkerCharacter extends GameCharacter {
 		Field field = map.getField(position);
 		if (field.hasBuilding()) {
 			if (field instanceof ForestField) {
-				if (!toolbar.hasButton("Chop wood"))
+				if (!toolbar.hasButton("Chop wood") && field.getOwner() == player)
 				toolbar.add(new ToolbarButton("Chop wood", chop_wood) {
 					@Override
 					public void onClick() {
@@ -45,7 +44,8 @@ public class WorkerCharacter extends GameCharacter {
 						player.reset();
 */					}
 				});
-			} else if (field.hasBuilding() && field instanceof MountainField) {
+			}
+			if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
 				if (!toolbar.hasButton("Mine"))
 				toolbar.add(new ToolbarButton("Mine", mine) {
 					@Override
@@ -53,6 +53,16 @@ public class WorkerCharacter extends GameCharacter {
 /*						player.conquerCity(position);
 						player.reset();
 */					}
+				});
+			}
+			if (field.getBuilding() instanceof City && field.getOwner() != player) {
+				if (!toolbar.hasButton("Conquer city"))
+				toolbar.add(new ToolbarButton("Conquer city", conquer_city) {
+					@Override
+					public void onClick() {
+						player.conquerCity(position);
+						player.reset();
+					}
 				});
 			}
 		}

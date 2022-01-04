@@ -9,18 +9,15 @@ import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import com.mieze.hexbattle.hex.Point;
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
+import com.mieze.hexbattle.toolbars.*;
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.characters.BuilderCharacter;
-import com.mieze.hexbattle.characters.GameCharacter;
+import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.fields.Field;
 
 public class City extends Building {
 	private static final double SIZE = 50;
-	protected static final int PRICE = 2;
 	private static BufferedImage[] img = new BufferedImage[4];
 	private int lvl = 1;
 	private Color color = null;
@@ -83,13 +80,29 @@ public class City extends Building {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
-					if (player.buyCharacter(PRICE)) {
+					if (player.buyCharacter(BuilderCharacter.PRICE)) {
 						GameCharacter newCharacter = new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner());
 						newCharacter.setMoved(true);
 						field.setCharacter(newCharacter);
 						field.getOwner().addCharacter(newCharacter);
 					} else {
-						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", BuilderCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			});
+		}
+		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New worker")) {
+			toolbar.add(new ToolbarButton("New worker", WorkerCharacter.img) {
+				@Override
+				public void onClick() {
+					Player player = field.getOwner();
+					if (player.buyCharacter(WorkerCharacter.PRICE)) {
+						GameCharacter newCharacter = new WorkerCharacter(field, HexPanel.hexLayout, field.getOwner());
+						newCharacter.setMoved(true);
+						field.setCharacter(newCharacter);
+						field.getOwner().addCharacter(newCharacter);
+					} else {
+						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
