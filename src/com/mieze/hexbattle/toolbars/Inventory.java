@@ -13,10 +13,10 @@ public class Inventory {
 	public static final int DIAMONDS = 3;
 	public static final int CHARPOINTS = 4;
 	
-	private long wood = 0;
-	private long coal= 0;
-	private long iron = 0;
-	private long diamonds = 0;
+	private long wood = 4;
+	private long coal= 4;
+	private long iron = 2;
+	private long diamonds = 1;
 	
 	private double characterPoints = 1.0;
 	
@@ -67,6 +67,42 @@ public class Inventory {
 		case CHARPOINTS:
 			setCharacterPoints(getCharacterPoints() + count);
 			break;
+		}
+	}
+
+	 //first check > 0 before calling this
+	public void subResources(int resource, double count) {
+		switch(resource) {
+		case WOOD:
+			wood -= count;
+			break;
+		case COAL:
+			coal -= count;
+			break;
+		case IRON:
+			iron -= count;
+			break;
+		case DIAMONDS:
+			diamonds -= count;
+			break;
+		case CHARPOINTS:
+			setCharacterPoints(getCharacterPoints() - count);
+			break;
+		}
+	}
+
+	public long getResources(int resource) {
+		switch(resource) {
+		case WOOD:
+			return wood;
+		case COAL:
+			return coal;
+		case IRON:
+			return iron;
+		case DIAMONDS:
+			return diamonds;
+		default:
+			return 0;
 		}
 	}
 	

@@ -3,7 +3,7 @@
 foreground=''
 
 print_usage() {
-  printf "Usage: \n-f run in foreground\n"
+  printf "Usage: \n-f|--foreground\t\trun in foreground\n-c|--recompile\t\tforce recompiling\n"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -13,6 +13,12 @@ while [[ $# -gt 0 ]]; do
 	foreground='true'
 	shift
 	;;
+    -c|--recompile)
+    if ! ./compile.sh; then
+        exit 1;
+    fi
+    shift
+    ;;
     *) print_usage
        exit 1
        ;;

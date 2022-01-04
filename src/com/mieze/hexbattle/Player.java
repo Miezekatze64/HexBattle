@@ -136,7 +136,7 @@ public class Player {
 			Point p = map.hexToDisplay(hexLayout.hexToPixel(hex));
 			int point_x = (int) p.x;
 			int point_y = (int) p.y;
-
+			
 			double w = (hexLayout.size.x * map.zoom) / 2;
 			double h = (hexLayout.size.x * map.zoom) / 2;
 
@@ -306,6 +306,22 @@ public class Player {
 			inventory.setCharacterPoints(inventory.getCharacterPoints()-amount);
 			return true;
 		}
+	}
+
+	public boolean payResourses(int[] amount) {
+		int resource = 0;
+		boolean rt = true;
+		for (int num : amount) {
+			if (inventory.getResources(resource) < num) {
+				rt = false;
+			}
+		}
+		if (rt == false) return false;
+		for (int num : amount) {
+			inventory.subResources(resource, num);
+			resource++;
+		}
+		return true;
 	}
 
 	public int getCitiyCount() {

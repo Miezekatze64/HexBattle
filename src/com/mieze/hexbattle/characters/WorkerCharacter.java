@@ -1,6 +1,9 @@
 package com.mieze.hexbattle.characters;
 
 import java.awt.*;
+
+import javax.swing.JOptionPane;
+
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.toolbars.*;
@@ -19,7 +22,7 @@ public class WorkerCharacter extends GameCharacter {
 		
 		chop_wood = toolkit.getImage("assets/city_1.png");
 		
-		mine = toolkit.getImage("assets/city_1.png");
+		mine = toolkit.getImage("assets/mine.png");
 	}
 
 	public WorkerCharacter(Field field, Layout hexLayout, Player player) {
@@ -45,14 +48,7 @@ public class WorkerCharacter extends GameCharacter {
 			});
 		}
 		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
-			if (!toolbar.hasButton("Mine"))
-			toolbar.add(new ToolbarButton("Mine", mine) {
-				@Override
-				public void onClick() {
-/*					player.conquerCity(position);
-					player.reset();
-*/				}
-			});
+			
 		}
 		if (field.getBuilding() instanceof City && field.getOwner() != player) {
 			if (!toolbar.hasButton("Conquer city"))
