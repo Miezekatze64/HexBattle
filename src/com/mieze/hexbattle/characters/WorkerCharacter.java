@@ -34,37 +34,35 @@ public class WorkerCharacter extends GameCharacter {
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
 		Field field = map.getField(position);
-		if (field.hasBuilding()) {
-			if (field instanceof ForestField) {
-				if (!toolbar.hasButton("Chop wood") && field.getOwner() == player)
-				toolbar.add(new ToolbarButton("Chop wood", chop_wood) {
-					@Override
-					public void onClick() {
-/*						player.conquerCity(position);
-						player.reset();
-*/					}
-				});
-			}
-			if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
-				if (!toolbar.hasButton("Mine"))
-				toolbar.add(new ToolbarButton("Mine", mine) {
-					@Override
-					public void onClick() {
-/*						player.conquerCity(position);
-						player.reset();
-*/					}
-				});
-			}
-			if (field.getBuilding() instanceof City && field.getOwner() != player) {
-				if (!toolbar.hasButton("Conquer city"))
-				toolbar.add(new ToolbarButton("Conquer city", conquer_city) {
-					@Override
-					public void onClick() {
-						player.conquerCity(position);
-						player.reset();
-					}
-				});
-			}
+		if (field instanceof ForestField) {
+			if (!toolbar.hasButton("Chop wood") && field.getOwner() == player)
+			toolbar.add(new ToolbarButton("Chop wood", chop_wood) {
+				@Override
+				public void onClick() {
+/*					player.conquerCity(position);
+					player.reset();
+*/				}
+			});
+		}
+		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
+			if (!toolbar.hasButton("Mine"))
+			toolbar.add(new ToolbarButton("Mine", mine) {
+				@Override
+				public void onClick() {
+/*					player.conquerCity(position);
+					player.reset();
+*/				}
+			});
+		}
+		if (field.getBuilding() instanceof City && field.getOwner() != player) {
+			if (!toolbar.hasButton("Conquer city"))
+			toolbar.add(new ToolbarButton("Conquer city", conquer_city) {
+				@Override
+				public void onClick() {
+					player.conquerCity(position);
+					player.reset();
+				}
+			});
 		}
 	}
 
