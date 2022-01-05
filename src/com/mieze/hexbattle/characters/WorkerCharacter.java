@@ -16,7 +16,7 @@ public class WorkerCharacter extends GameCharacter {
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/worker.png");
-		chop_wood = toolkit.getImage("assets/city_1.png");
+		chop_wood = toolkit.getImage("assets/wood.png");
 	}
 
 	public WorkerCharacter(Field field, Layout hexLayout, Player player) {
@@ -33,7 +33,7 @@ public class WorkerCharacter extends GameCharacter {
 		Field field = map.getField(position);
 		if (field instanceof ForestField) {
 			if (!toolbar.hasButton("Chop wood") && field.getOwner() == player)
-			toolbar.add(new ToolbarButton("Chop wood", chop_wood) {
+			toolbar.add(new ToolbarButton("Chop wood", chop_wood, "Chop one tree of this forest.") {
 				@Override
 				public void onClick() {
 					((ForestField)field).chop();
