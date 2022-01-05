@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.mieze.hexbattle.characters.GameCharacter;
 import com.mieze.hexbattle.fields.*;
-import com.mieze.hexbattle.fields.building.Building;
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.fields.building.Village;
 import com.mieze.hexbattle.hex.*;
