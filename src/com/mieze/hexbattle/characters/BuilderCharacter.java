@@ -61,8 +61,6 @@ public class BuilderCharacter extends GameCharacter {
 				});
 			}
 		}
-		System.out.println(String.format("Here: %b %b %b", !field.hasBuilding(), field instanceof MountainField, field.getOwner() == player));
-		
 		if (!field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
 			if (!toolbar.hasButton("Build mine"))
 			toolbar.add(new ToolbarButton("Build mine", build_mine) {

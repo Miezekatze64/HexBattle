@@ -65,7 +65,7 @@ public class Map {
 	public Field getField(Hex hex) {
 		// System.out.println(hex);
 
-		for (int i = 0; i < fields.size(); i++) {
+		for (int i = fields.size()-1; i >= 0; i--) {
 			if (fields.get(i).getHex().equals(hex)) {
 				return fields.get(i);
 			}

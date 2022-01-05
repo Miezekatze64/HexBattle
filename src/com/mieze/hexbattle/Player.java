@@ -286,6 +286,9 @@ public class Player {
 			map.getField(attacker.getPosition()).removeCharacter();
 			f.setCharacter(attacker);
 			attacker.moveTo(f);
+
+			attacker.setMoved(true);
+			openSurroundedFields(f.getHex());
 		}
 	}
 

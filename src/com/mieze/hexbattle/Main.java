@@ -47,7 +47,6 @@ public class Main extends JFrame {
 
 		gameLoop.start();
 	}
-	
 	public static HexPanel getPanel() {
 		return panel;
 	}

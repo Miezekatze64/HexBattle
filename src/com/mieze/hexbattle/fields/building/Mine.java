@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import com.mieze.hexbattle.hex.Point;
 import com.mieze.hexbattle.toolbars.*;
