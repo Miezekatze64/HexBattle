@@ -59,7 +59,11 @@ public class HexPanel extends JPanel {
 		addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				player.mouseMoved(new Point(e.getX(), e.getY()));
+				try {
+					player.mouseMoved(new Point(e.getX(), e.getY()));
+				} catch (Throwable t) {
+					Main.handleException(t);
+				}
 			}
 
 			@Override
@@ -85,12 +89,16 @@ public class HexPanel extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1)
-					player.onClick(new Point(e.getX(), e.getY()));
-				if (e.getButton() != MouseEvent.BUTTON1) {
-					last_x = e.getX();
-					last_y = e.getY();
-					drag = true;
+				try{
+					if (e.getButton() == MouseEvent.BUTTON1)
+						player.onClick(new Point(e.getX(), e.getY()));
+					if (e.getButton() != MouseEvent.BUTTON1) {
+						last_x = e.getX();
+						last_y = e.getY();
+						drag = true;
+					}
+				} catch (Throwable t) {
+					Main.handleException(t);
 				}
 			}
 
@@ -130,12 +138,16 @@ public class HexPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		if (first) {
-			((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
-			first = false;
+		try {
+			if (first) {
+				((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
+				first = false;
+			}
+			player.render((Graphics2D)g);
+			renderFPS(g);
+		} catch (Throwable t) {
+			Main.handleException(t);
 		}
-		player.render((Graphics2D)g);
-		renderFPS(g);
 	}
 	
 	public void renderFPS(Graphics g) {

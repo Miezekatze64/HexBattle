@@ -18,7 +18,31 @@ public class Main extends JFrame {
 	private static HexPanel panel;
 
 	public static void main(String[] args) {
-		new Main();
+		try {
+			new Main();
+		} catch (Throwable t) {
+			handleException(t);
+		}
+	}
+
+	public static void handleException(Throwable t) {
+		javax.swing.JOptionPane.showMessageDialog(null, t.getClass() + ":\n" + t.getMessage() + "\n\nMore infos in err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+		try {
+			java.io.FileWriter fstream = new java.io.FileWriter("err.log", true);
+			java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
+			out.write(t.toString() + '\n');
+			out.close();
+
+			java.io.PrintStream stream = new java.io.PrintStream(new java.io.File("err.log"));
+			t.printStackTrace(stream);
+			stream.close();
+
+		} catch (Exception e) {
+			javax.swing.JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"+t.getClass() + ":\n" + t.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+		}
+
+		System.exit(1);
 	}
 
 	public Main() {
