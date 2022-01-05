@@ -1,6 +1,5 @@
 package com.mieze.hexbattle.toolbars;
 
-import com.mieze.hexbattle.Main;
 import com.mieze.hexbattle.Map;
 
 import java.awt.*;
