@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
-	public static int FPS = 60;
+	public static int FPS = 40;
 
 	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
