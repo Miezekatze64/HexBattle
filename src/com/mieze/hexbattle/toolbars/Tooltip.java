@@ -34,6 +34,9 @@ public class Tooltip {
 			int rx = x-w/2;
 			int ry = bottom?y-h-45:y+45;
 
+			g.setColor(Color.WHITE);
+			g.fillRect(rx, ry, w, h);
+
 			g.setColor(Color.RED);
 			g.drawRect(rx, ry, w, h);
 

@@ -32,7 +32,7 @@ public abstract class ToolbarButton {
 		g.setFont(new Font("Arial", Font.BOLD, 14));
 		g.setColor(Color.RED);
 		
-		g.drawString(name, x-g.getFontMetrics(g.getFont()).stringWidth(name)/2, y+HEIGHT/2+6);
+		g.drawString(name, x-g.getFontMetrics(g.getFont()).stringWidth(name)/2, y+HEIGHT/2+20);
 		
 		if (mouseOver) tooltip.render(g, m, x, y);
 	}

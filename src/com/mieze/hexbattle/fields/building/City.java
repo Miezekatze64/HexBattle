@@ -76,7 +76,7 @@ public class City extends Building {
 	public void onClick() {
 		Toolbar toolbar = field.getOwner().getToolbar();
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New builder")) {
-			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img) {
+			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img, "Used to build cities, ports, mine, and lots of other things...\n\nCosts: 2 character points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
@@ -92,7 +92,7 @@ public class City extends Building {
 			});
 		}
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New worker")) {
-			toolbar.add(new ToolbarButton("New worker", WorkerCharacter.img) {
+			toolbar.add(new ToolbarButton("New worker", WorkerCharacter.img, "Used to work at mines, \n\nCosts: 2 charactr points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();

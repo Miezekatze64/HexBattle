@@ -44,7 +44,7 @@ public class WorkerCharacter extends GameCharacter {
 		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
 			final Mine mine = ((Mine)field.getBuilding());
 			if (!toolbar.hasButton("Mine!"))
-			toolbar.add(new ToolbarButton("Mine!", mine.getImage(), "You'll get at a chance of " + ((int)(mine.getChance()*1000))/10.0 + "% " + mine.getAmount() + " items of " + mine.getTypeString() + ".") {
+			toolbar.add(new ToolbarButton("Mine!", mine.getImage(), "You have a chance of " + ((int)(mine.getChance()*1000))/10.0 + "% to get " + mine.getAmount() + " items of " + mine.getTypeString() + ".") {
 				@Override
 				public void onClick() {
 					player.addResourses(mine.mine());
