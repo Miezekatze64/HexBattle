@@ -327,6 +327,14 @@ public class Player {
 		return true;
 	}
 
+	public void addResourses(int[] amount) {
+		int resource = 0;
+		for (int num : amount) {
+			inventory.addResources(resource, num);
+			resource++;
+		}
+	}
+
 	public int getCitiyCount() {
 		return city_count;
 	}

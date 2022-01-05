@@ -35,6 +35,34 @@ public class Mine extends Building {
 		}
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public Image getImage() {
+		return img[type];
+	}
+
+	public int[] mine() {
+		if (Math.random() <= chance) {
+			int[] arr = new int[]{0, 0, 0, 0};
+			switch(type) {
+			case MINE_COAL:
+				arr[Inventory.COAL] = amount;
+				break;
+			case MINE_IRON:
+				arr[Inventory.IRON] = amount;
+				break;
+			case MINE_DIAMOND:
+				arr[Inventory.DIAMONDS] = amount;
+				break;
+			}
+			return arr;
+		} else {
+			return new int[]{0, 0, 0, 0};
+		}
+	}
+
 	public Mine(Field f) {
 		super(f);
 
@@ -45,7 +73,7 @@ public class Mine extends Building {
 		this.amount = (int)(Math.random()*9+1);
 	}
 
-	
+
 
 	@Override
 	public void render(Graphics g, double zoom) {

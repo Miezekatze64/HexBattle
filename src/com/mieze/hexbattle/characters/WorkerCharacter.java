@@ -48,7 +48,14 @@ public class WorkerCharacter extends GameCharacter {
 			});
 		}
 		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
-			
+			if (!toolbar.hasButton("Mine!"))
+			toolbar.add(new ToolbarButton("Mine!", ((Mine)field.getBuilding()).getImage()) {
+				@Override
+				public void onClick() {
+					player.addResourses(((Mine)field.getBuilding()).mine());
+					player.reset();
+				}
+			});
 		}
 		if (field.getBuilding() instanceof City && field.getOwner() != player) {
 			if (!toolbar.hasButton("Conquer city"))
