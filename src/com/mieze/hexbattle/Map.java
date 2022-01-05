@@ -3,7 +3,9 @@ package com.mieze.hexbattle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.mieze.hexbattle.characters.GameCharacter;
 import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.building.Building;
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.fields.building.Village;
 import com.mieze.hexbattle.hex.*;
@@ -97,9 +99,13 @@ public class Map {
 	}
 
 	public void addField(Hex hex) {
+		addField(hex, getType(hex));
+	}
+	
+	public void addField(Hex hex, int type) {
 		Field add;
 		if (!contains(hex)) {
-			switch (getType(hex)) {
+			switch(type) {
 			default:
 			case Field.EMPTY:
 				add = new EmptyField(hex, this);
@@ -128,6 +134,18 @@ public class Map {
 
 			this.fields.add(add);
 		}
+	}
+
+	public void overrideFieldType(Hex hex, int type) {
+		Field field = getField(hex);
+		Player owner = field.getOwner();
+		GameCharacter character = field.getCharacter();
+
+		fields.remove(field);
+		addField(hex, type);
+
+		getField(hex).setOwner(owner);
+		getField(hex).setCharacter(character);
 	}
 
 	int getType(Hex hex) {

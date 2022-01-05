@@ -36,9 +36,10 @@ public class WorkerCharacter extends GameCharacter {
 			toolbar.add(new ToolbarButton("Chop wood", chop_wood) {
 				@Override
 				public void onClick() {
-/*					player.conquerCity(position);
+					((ForestField)field).chop();
+					player.addResourses(new int[]{1, 0, 0, 0});
 					player.reset();
-*/				}
+				}
 			});
 		}
 		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {

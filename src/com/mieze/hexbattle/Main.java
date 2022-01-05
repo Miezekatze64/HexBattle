@@ -17,6 +17,8 @@ public class Main extends JFrame {
 	private long frameCount = 0;
 	private static HexPanel panel;
 
+	private static boolean error = false;
+
 	public static void main(String[] args) {
 		try {
 			new Main();
@@ -26,23 +28,26 @@ public class Main extends JFrame {
 	}
 
 	public static void handleException(Throwable t) {
-		javax.swing.JOptionPane.showMessageDialog(null, t.getClass() + ":\n" + t.getMessage() + "\n\nMore infos in err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
+		if (t != null && !error) {
+			error = true;
+			javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
+			
+			try {
+				java.io.FileWriter fstream = new java.io.FileWriter("err.log", true);
+				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
+				out.write(t.toString() + '\n');
+				out.close();
 
-		try {
-			java.io.FileWriter fstream = new java.io.FileWriter("err.log", true);
-			java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
-			out.write(t.toString() + '\n');
-			out.close();
+				java.io.PrintStream stream = new java.io.PrintStream(new java.io.File("err.log"));
+				t.printStackTrace(stream);
+				stream.close();
 
-			java.io.PrintStream stream = new java.io.PrintStream(new java.io.File("err.log"));
-			t.printStackTrace(stream);
-			stream.close();
+			} catch (Exception e) {
+				javax.swing.JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"+e.getClass() + ":\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
 
-		} catch (Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"+e.getClass() + ":\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
 		}
-
-		System.exit(1);
 	}
 
 	public Main() {
