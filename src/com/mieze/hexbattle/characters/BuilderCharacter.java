@@ -24,7 +24,7 @@ public class BuilderCharacter extends GameCharacter {
 				
 		build_city = toolkit.getImage("assets/city_1.png");
 		
-		build_mine = toolkit.getImage("assets/worker.png");
+		build_mine = toolkit.getImage("assets/mine.png");
 	}
 
 	public BuilderCharacter(Field field, Layout hexLayout, Player player) {
@@ -38,7 +38,7 @@ public class BuilderCharacter extends GameCharacter {
 
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
-		System.out.println("clicked");
+		//System.out.println("clicked");
 		Field field = map.getField(position);
 		if (field.hasBuilding()) {
 			if (field.getBuilding() instanceof Village) {

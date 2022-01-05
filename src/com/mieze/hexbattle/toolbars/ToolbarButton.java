@@ -58,21 +58,24 @@ public abstract class ToolbarButton {
 		public void render(Graphics g, Map m, int x, int y) {
 			int w = 125;
 			int h = 150;
+			
+			int rx = x-w/2;
+			int ry = y-h-45;
 
 			g.setColor(Color.RED);
-			g.drawRect(x-w/2, y-h-30, w, h);
+			g.drawRect(rx, ry, w, h);
 
 			g.setColor(Color.BLACK);
 
-			int rx = x-w/2;
-			int ry = y-h-30;
+
+			Font save = g.getFont();
 			
 			Font f = new Font("Helvetia", Font.BOLD, 14);
 
 			g.setFont(f);
 			g.drawString(title, rx+7, ry+30);
 
-			f = new Font("Helvetia", Font.PLAIN, 11);
+			f = new Font("Helvetia", Font.PLAIN, 12);
 			g.setFont(f);
 
 			List<String> strings = wrap(text, g.getFontMetrics(f), w-10);
@@ -82,7 +85,7 @@ public abstract class ToolbarButton {
 			}
 			g.setColor(Color.RED);
 
-			
+			g.setFont(save);
 			
 		}
 

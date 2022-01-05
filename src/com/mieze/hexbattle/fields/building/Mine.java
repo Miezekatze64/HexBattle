@@ -88,4 +88,16 @@ public class Mine extends Building {
 	public void onClick() {
 		
 	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+    public double getChance() {
+        return chance;
+    }
+
+	public String getTypeString() {
+		return type == MINE_COAL?"coal":type==MINE_DIAMOND?"diamonds":"iron";
+	}
 }

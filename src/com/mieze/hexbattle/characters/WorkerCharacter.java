@@ -2,8 +2,6 @@ package com.mieze.hexbattle.characters;
 
 import java.awt.*;
 
-import javax.swing.JOptionPane;
-
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.toolbars.*;
@@ -12,17 +10,13 @@ import com.mieze.hexbattle.fields.building.*;
 
 public class WorkerCharacter extends GameCharacter {
 	private static Image chop_wood;
-	private static Image mine;
 	public static final int PRICE = 2;
 	public static Image img;
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/worker.png");
-		
 		chop_wood = toolkit.getImage("assets/city_1.png");
-		
-		mine = toolkit.getImage("assets/mine.png");
 	}
 
 	public WorkerCharacter(Field field, Layout hexLayout, Player player) {
@@ -48,18 +42,19 @@ public class WorkerCharacter extends GameCharacter {
 			});
 		}
 		if (field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
+			final Mine mine = ((Mine)field.getBuilding());
 			if (!toolbar.hasButton("Mine!"))
-			toolbar.add(new ToolbarButton("Mine!", ((Mine)field.getBuilding()).getImage()) {
+			toolbar.add(new ToolbarButton("Mine!", mine.getImage(), "You'll get at a chance of " + ((int)(mine.getChance()*1000))/10.0 + "% " + mine.getAmount() + " items of " + mine.getTypeString() + ".") {
 				@Override
 				public void onClick() {
-					player.addResourses(((Mine)field.getBuilding()).mine());
+					player.addResourses(mine.mine());
 					player.reset();
 				}
 			});
 		}
 		if (field.getBuilding() instanceof City && field.getOwner() != player) {
 			if (!toolbar.hasButton("Conquer city"))
-			toolbar.add(new ToolbarButton("Conquer city", conquer_city) {
+			toolbar.add(new ToolbarButton("Conquer city", conquer_city, "Add this city to your empire.") {
 				@Override
 				public void onClick() {
 					player.conquerCity(position);

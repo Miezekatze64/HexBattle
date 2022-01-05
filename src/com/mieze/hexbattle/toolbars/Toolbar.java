@@ -37,7 +37,7 @@ public class Toolbar {
 	
 	private void initToolbar() {
 		buttons = new ArrayList<>();
-		buttons.add(new ToolbarButton("Next Turn", nextTurnImage) {
+		buttons.add(new ToolbarButton("Next Turn", nextTurnImage, "Click to end your turn.") {
 			@Override
 			public void onClick() {
 				Main.getPanel().nextTurn();
@@ -74,7 +74,7 @@ public class Toolbar {
 	public void render(Graphics g, Map m) {
 		for (int i = 0; i < buttons.size(); i++) {
 			int x = (int)((((double)(i+1)/((double)(buttons.size()+1))*.75)+.125)*m.getWidth());
-			int y = m.getHeight()-50;
+			int y = m.getHeight()-60;
 			buttons.get(i).render(g, m, x, y);
 		}
 	}
