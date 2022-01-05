@@ -76,7 +76,7 @@ public class City extends Building {
 	public void onClick() {
 		Toolbar toolbar = field.getOwner().getToolbar();
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New builder")) {
-			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img, "Used to build cities, ports, mine, and lots of other things...\n\nCosts: 2 character points.") {
+			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img, "Used to build cities, ports, mine, and lots of other things...\n\nCosts: "+BuilderCharacter.PRICE+" character points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
@@ -92,7 +92,7 @@ public class City extends Building {
 			});
 		}
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New worker")) {
-			toolbar.add(new ToolbarButton("New worker", WorkerCharacter.img, "Used to work at mines, \n\nCosts: 2 charactr points.") {
+			toolbar.add(new ToolbarButton("New worker", WorkerCharacter.img, "Used to work at mines, \n\nCosts: "+WorkerCharacter.PRICE+" charactr points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
@@ -103,6 +103,22 @@ public class City extends Building {
 						field.getOwner().addCharacter(newCharacter);
 					} else {
 						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			});
+		}
+		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New swordsman")) {
+			toolbar.add(new ToolbarButton("New swordsman", SwordsmanCharacter.img, "A character made to fight...\n\nCosts: "+SwordsmanCharacter.PRICE+" character points.") {
+				@Override
+				public void onClick() {
+					Player player = field.getOwner();
+					if (player.buyCharacter(SwordsmanCharacter.PRICE)) {
+						GameCharacter newCharacter = new SwordsmanCharacter(field, HexPanel.hexLayout, field.getOwner());
+						newCharacter.setMoved(true);
+						field.setCharacter(newCharacter);
+						field.getOwner().addCharacter(newCharacter);
+					} else {
+						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", SwordsmanCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});

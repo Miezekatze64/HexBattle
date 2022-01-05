@@ -121,6 +121,8 @@ public abstract class GameCharacter {
 			img = BuilderCharacter.img;
 		else if (this instanceof WorkerCharacter)
 			img = WorkerCharacter.img;
+		else if (this instanceof SwordsmanCharacter)
+			img = SwordsmanCharacter.img;
 		else
 			throw new IllegalStateException("Character class not implemented: " + this.getClass().getCanonicalName());
 
