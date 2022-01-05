@@ -103,7 +103,7 @@ public class Map {
 			default:
 			case Field.EMPTY:
 				add = new EmptyField(hex, this);
-				if (Math.random()*100 < 20) {
+				if (Math.random()*100 < 40) {
 					boolean village = true;
 					for (int i = 0; i < 6; i++) {
 						if (getField(hex.neighbor(i)) != null && getField(hex.neighbor(i)).hasBuilding() && (getField(hex.neighbor(i)).getBuilding() instanceof City || getField(hex.neighbor(i)).getBuilding() instanceof Village)) {
@@ -141,12 +141,15 @@ public class Map {
 		} else if (type_val < 3) {
 			// grass
 			return Field.EMPTY;
-		} else if (type_val < 6) {
+		} else if (type_val < 5) {
 			// forests
 			return Field.FOREST;
-		} else {
+		} else if (type_val < 9) {
 			// mountains
 			return Field.MOUNTAIN;
+		} else {
+			//grass
+			return Field.EMPTY;
 		}
 	}
 

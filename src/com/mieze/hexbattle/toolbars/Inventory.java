@@ -111,7 +111,7 @@ public class Inventory {
 		g.drawString(new StringBuilder().append(wood).toString(), (int)(m.getWidth()*0.17)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(wood).toString())/2, 80);
 		
 		g.drawImage(imgCoal, (int)(m.getWidth()*0.33), 20, 40, 40, null);
-		g.drawString(new StringBuilder().append(wood).toString(), (int)(m.getWidth()*0.33)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(coal).toString())/2, 80);
+		g.drawString(new StringBuilder().append(coal).toString(), (int)(m.getWidth()*0.33)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(coal).toString())/2, 80);
 		
 		g.drawImage(imgCharPoints, (int)(m.getWidth()*0.5), 20, 40, 40, null);
 		g.drawString(new StringBuilder().append(getCharacterPoints()).toString(), (int)(m.getWidth()*0.5)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(getCharacterPoints()).toString())/2, 80);
