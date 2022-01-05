@@ -39,7 +39,7 @@ public class Main extends JFrame {
 			stream.close();
 
 		} catch (Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"+t.getClass() + ":\n" + t.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+			javax.swing.JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"+e.getClass() + ":\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 
 		System.exit(1);
