@@ -421,4 +421,8 @@ public class Player {
 			unexplored.add(new UnexploredField(hex, map));
 		}
 	}
+
+    public void mouseMoved(Point point) {
+		toolbar.mouseMoved(point, map);
+    }
 }

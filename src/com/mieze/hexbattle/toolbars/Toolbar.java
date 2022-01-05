@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import com.mieze.hexbattle.*;
+import com.mieze.hexbattle.hex.Point;
 
 
 public class Toolbar {
@@ -86,4 +87,22 @@ public class Toolbar {
 		}
 		return false;
 	}
+
+    public void mouseMoved(Point point, Map m) {
+		
+		for (int i = 0; i < buttons.size(); i++) {
+			int x = (int)((((double)(i+1)/((double)(buttons.size()+1))*.75)+.125)*m.getWidth())-ToolbarButton.WIDTH/2;
+			int y = m.getHeight()-50-ToolbarButton.HEIGHT/2;
+
+			if (buttons.get(i).mouseOver()) {
+				if (point.x >= ToolbarButton.WIDTH+x || point.x <= x && point.y >= ToolbarButton.HEIGHT+y || point.y <= y) {
+					buttons.get(i).hover(false);
+				}
+			} else {
+				if (point.x < ToolbarButton.WIDTH+x && point.x > x && point.y < ToolbarButton.HEIGHT+y && point.y > y) {
+					buttons.get(i).hover(true);
+				}
+			}
+		}
+    }
 }

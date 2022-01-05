@@ -59,7 +59,7 @@ public class HexPanel extends JPanel {
 		addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
+				player.mouseMoved(new Point(e.getX(), e.getY()));
 			}
 
 			@Override
