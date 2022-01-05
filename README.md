@@ -24,6 +24,4 @@ javac com/mieze/hexbattle/**/*.java -d ../bin/
 ```sh
 cd ..
 java -classpath bin/ com.mieze.hexbattle.Main
-```
-
-	
+```	
