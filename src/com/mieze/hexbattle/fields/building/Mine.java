@@ -14,19 +14,22 @@ import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.fields.Field;
 
 public class Mine extends Building {
+	public static final int MINE_COAL = 0;
+	public static final int MINE_IRON = 1;
+	public static final int MINE_DIAMOND = 2;
+
+	private int type;
+	private double chance;
+	private int amount;
+
 	private static final double SIZE = 50;
-	private static BufferedImage[] img = new BufferedImage[4];
+	private static BufferedImage[] img = new BufferedImage[3];
 
 	static {
 		try {
-			img[0] = ImageIO.read(new File("assets/mine.png"));
-			scaleImage(img[0], 32, 32);
-//			img[1] = ImageIO.read(new File("assets/city_2.png"));
-//			scaleImage(img[1], 32, 32);
-//			img[2] = ImageIO.read(new File("assets/city_3.png"));
-//			scaleImage(img[2], 32, 32);
-//			img[3] = ImageIO.read(new File("assets/city_4.png"));
-//			scaleImage(img[3], 32, 32);
+			img[MINE_COAL] = ImageIO.read(new File("assets/mine_coal.png"));
+			img[MINE_IRON] = ImageIO.read(new File("assets/mine_iron.png"));
+			img[MINE_DIAMOND] = ImageIO.read(new File("assets/mine_diamond.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -34,14 +37,22 @@ public class Mine extends Building {
 
 	public Mine(Field f) {
 		super(f);
+
+		double rand = Math.random();
+		this.type = rand < .5?MINE_COAL:(rand < .8?MINE_IRON:MINE_DIAMOND);
+
+		this.chance = Math.random();
+		this.amount = (int)(Math.random()*9+1);
 	}
+
+	
 
 	@Override
 	public void render(Graphics g, double zoom) {
 		Map map = field.getOwner().map;
 		Point pos = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(field.getHex()));
 
-		g.drawImage(img[Inventory.COAL-1], (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
+		g.drawImage(img[type], (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
 				(int) (SIZE * zoom), null);
 	}
 
