@@ -8,9 +8,9 @@ import com.mieze.hexbattle.Map;
 
 public class Tooltip {
 		private String title, text;
-		private static final Font ftext = new Font("Helvetia", Font.PLAIN, 12);
-		private static final Font ftitle = new Font("Helvetia", Font.BOLD, 14);
-		private static final int w = 125;
+		private static final Font ftext = new Font(Font.MONOSPACED, Font.ITALIC, 14);
+		private static final Font ftitle = new Font(Font.DIALOG, Font.BOLD, 14);
+		private static final int w = 150;
 		private boolean bottom = false;
 		List<String> strings;
 
@@ -43,7 +43,7 @@ public class Tooltip {
 			}
 
 			g.setFont(ftitle);
-			g.drawString(title, rx+7, ry+30);
+			g.drawString(title, x-g.getFontMetrics(ftitle).stringWidth(title)/2, ry+30);
 
 			g.setColor(Color.RED);
 

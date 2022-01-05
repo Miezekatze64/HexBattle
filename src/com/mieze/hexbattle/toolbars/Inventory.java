@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import com.mieze.hexbattle.Map;
+import com.mieze.hexbattle.hex.Point;
 
 public class Inventory {
 	public static final int WOOD = 0;
@@ -25,6 +26,11 @@ public class Inventory {
 	private static Image imgIron;
 	private static Image imgDiamonds;
 	private static Image imgCharPoints;
+
+	private boolean hover = true;
+	private int hovering = -1;
+
+	private static Tooltip[] tooltips = new Tooltip[5];
 	
     static {
     	int w = 32, h = 32;
@@ -44,6 +50,12 @@ public class Inventory {
         
         imgCharPoints = toolkit.getImage("assets/item_character.png");
         imgCharPoints = imgCharPoints.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+
+		tooltips[WOOD] = new Tooltip("Wood", "Can be got from an worker by chopping wood.\n\nUsed to build things like mines or ports.");
+		tooltips[COAL] = new Tooltip("Coal", "Not rare. Can be got from an worker by mining at a coal mine.\n\nUsed to upgrade citys and buy advanced characters.");
+		tooltips[CHARPOINTS] = new Tooltip("Character-Points", "You get 0.5 times the count of your citys per round.\n\nUsed to buy all characters.");
+		tooltips[IRON] = new Tooltip("Iron", "Medium rare. Can be got from an worker by mining at an iron mine.\n\nUsed to buy thing like battleships or knights.");
+		tooltips[DIAMONDS] = new Tooltip("Diamonds", "Very rare. Can be got from an worker by mining at a diamonds mine.\n\nUsed to buy advanced (and expensive) things like late city upgrades or advanced creatures.");
     }
 	
 	public Inventory() {
@@ -121,6 +133,26 @@ public class Inventory {
 		
 		g.drawImage(imgDiamonds, (int)(m.getWidth()*0.83), 20, 40, 40, null);
 		g.drawString(new StringBuilder().append(diamonds).toString(), (int)(m.getWidth()*0.83)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(diamonds).toString())/2, 80);
+
+		if (hover) {
+			switch(hovering) {
+			case WOOD:
+				tooltips[WOOD].render(g, m, (int)(m.getWidth()*0.17)+10, 20);
+				break;
+			case COAL:
+				tooltips[COAL].render(g, m, (int)(m.getWidth()*0.33)+10, 20);
+				break;
+			case CHARPOINTS:
+				tooltips[CHARPOINTS].render(g, m, (int)(m.getWidth()*0.5)+10, 20);
+				break;
+			case IRON:
+				tooltips[IRON].render(g, m, (int)(m.getWidth()*0.67)+10, 20);
+				break;
+			case DIAMONDS:
+				tooltips[DIAMONDS].render(g, m, (int)(m.getWidth()*0.83)+10, 20);
+				break;
+			}
+		}
 	}
 
 	public double getCharacterPoints() {
@@ -130,4 +162,32 @@ public class Inventory {
 	public void setCharacterPoints(double characterPoints) {
 		this.characterPoints = characterPoints;
 	}
+
+	public void mouseMoved(Point point, Map m) {
+		if (point.y > 20 && point.y < 60) {
+			if (point.x > m.getWidth()*0.17 && point.x < m.getWidth()*0.17+40) {
+				hover = true;
+				hovering = WOOD;
+				return;
+			} else if (point.x > m.getWidth()*0.33 && point.x < m.getWidth()*0.33+40) {
+				hover = true;
+				hovering = COAL;
+				return;
+			} else if (point.x > m.getWidth()*0.5 && point.x < m.getWidth()*0.5+40) {
+				hover = true;
+				hovering = CHARPOINTS;
+				return;
+			} else if (point.x > m.getWidth()*0.67 && point.x < m.getWidth()*0.67+40) {
+				hover = true;
+				hovering = IRON;
+				return;
+			} else if (point.x > m.getWidth()*0.83 && point.x < m.getWidth()*0.83+40) {
+				hover = true;
+				hovering = DIAMONDS;
+				return;
+			}
+		}
+		hover = false;
+		hovering = -1;
+    }
 }

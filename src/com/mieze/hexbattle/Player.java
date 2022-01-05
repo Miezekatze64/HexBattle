@@ -424,5 +424,6 @@ public class Player {
 
     public void mouseMoved(Point point) {
 		toolbar.mouseMoved(point, map);
+		inventory.mouseMoved(point, map);
     }
 }
