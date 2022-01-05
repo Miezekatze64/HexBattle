@@ -1,5 +1,6 @@
 package com.mieze.hexbattle.toolbars;
 
+import com.mieze.hexbattle.Main;
 import com.mieze.hexbattle.Map;
 
 import java.awt.*;
@@ -49,6 +50,10 @@ public abstract class ToolbarButton {
 
 	protected class Tooltip {
 		private String title, text;
+		private static final Font ftext = new Font("Helvetia", Font.PLAIN, 12);
+		private static final Font ftitle = new Font("Helvetia", Font.BOLD, 14);
+		private static final int w = 125;
+		List<String> strings;
 
 		public Tooltip(String title, String text) {
 			this.title = title;
@@ -56,41 +61,32 @@ public abstract class ToolbarButton {
 		}
 
 		public void render(Graphics g, Map m, int x, int y) {
-			int w = 125;
-			int h = 150;
-			
+			Font save = g.getFont();
+
+			g.setFont(ftext);
+			if (this.strings == null) this.strings = wrap(text, g.getFontMetrics(ftext), w-10);
+			final int h = (strings.size()+4)*15;
+
 			int rx = x-w/2;
-			int ry = y-h-45;
+			int ry = y-h-45;			
 
 			g.setColor(Color.RED);
 			g.drawRect(rx, ry, w, h);
 
 			g.setColor(Color.BLACK);
-
-
-			Font save = g.getFont();
-			
-			Font f = new Font("Helvetia", Font.BOLD, 14);
-
-			g.setFont(f);
-			g.drawString(title, rx+7, ry+30);
-
-			f = new Font("Helvetia", Font.PLAIN, 12);
-			g.setFont(f);
-
-			List<String> strings = wrap(text, g.getFontMetrics(f), w-10);
-
 			for (int i = 0; i < strings.size(); i++) {
 				g.drawString(strings.get(i), rx+5, ry+(i+4)*15);
 			}
+
+			g.setFont(ftitle);
+			g.drawString(title, rx+7, ry+30);
+
 			g.setColor(Color.RED);
 
 			g.setFont(save);
-			
 		}
 
 		private List<String> wrap(String txt, FontMetrics fm, int maxWidth){
-			//StringTokenizer st =  new  StringTokenizer(txt);
 
 			List<String> list = new ArrayList<String>();
 			String line = "";

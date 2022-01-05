@@ -42,8 +42,8 @@ public class BuilderCharacter extends GameCharacter {
 		Field field = map.getField(position);
 		if (field.hasBuilding()) {
 			if (field.getBuilding() instanceof Village) {
-				if (!toolbar.hasButton("Build village"))
-				toolbar.add(new ToolbarButton("Build village", build_city) {
+				if (!toolbar.hasButton("Build city"))
+				toolbar.add(new ToolbarButton("Build city", build_city, "Turn this lonely village into a city of your empire!") {
 					@Override
 					public void onClick() {
 						player.conquerCity(position);
@@ -52,7 +52,7 @@ public class BuilderCharacter extends GameCharacter {
 				});
 			} else if (field.getBuilding() instanceof City && field.getOwner() != player) {
 				if (!toolbar.hasButton("Conquer city"))
-				toolbar.add(new ToolbarButton("Conquer city", conquer_city) {
+				toolbar.add(new ToolbarButton("Conquer city", conquer_city, "Add this city to your empire.") {
 					@Override
 					public void onClick() {
 						player.conquerCity(position);
@@ -63,7 +63,7 @@ public class BuilderCharacter extends GameCharacter {
 		}
 		if (!field.hasBuilding() && field instanceof MountainField && field.getOwner() == player) {
 			if (!toolbar.hasButton("Build mine"))
-			toolbar.add(new ToolbarButton("Build mine", build_mine) {
+			toolbar.add(new ToolbarButton("Build mine", build_mine, "This mine can contain coal (50%), iron (30%) or diamonds (20%).\nEach mine has a unique amount of items and a unique chance (0 -> 100%) to get the items at each time mining.") {
 				@Override
 				public void onClick() {
 					final int[] res = new int[4];
