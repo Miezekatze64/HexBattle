@@ -95,7 +95,7 @@ public class Main extends JFrame {
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-	       	setUndecorated(true);
+		//setUndecorated(true);
 
 		pack();
 		setVisible(true);

@@ -15,6 +15,7 @@ public class Map {
 	protected int offset_y = 0;
 	public double zoom = 1;
 	private long seed;
+
 	public HexPanel panel;
 
 	private static Layout hexLayout = HexPanel.hexLayout;
@@ -114,8 +115,8 @@ public class Map {
 			switch(type) {
 			default:
 			case Field.EMPTY:
-				add = new EmptyField(hex, this);
-				if (Math.random()*100 < 40) {
+				add = new EmptyField(hex, this);/*
+				if (random.nextFloat()*100 < 40) {
 					boolean village = true;
 					for (int i = 0; i < 6; i++) {
 						if (getField(hex.neighbor(i)) != null && getField(hex.neighbor(i)).hasBuilding() && (getField(hex.neighbor(i)).getBuilding() instanceof City || getField(hex.neighbor(i)).getBuilding() instanceof Village)) {
@@ -125,6 +126,18 @@ public class Map {
 					if (village) {
 						add.setBuilding(new Village(add));
 					}
+				}*/
+				break;
+			case -1:
+				add = new EmptyField(hex, this);
+				boolean village = true;
+				for (int i = 0; i < 6; i++) {
+					if (getField(hex.neighbor(i)) != null && getField(hex.neighbor(i)).hasBuilding() && (getField(hex.neighbor(i)).getBuilding() instanceof City || getField(hex.neighbor(i)).getBuilding() instanceof Village)) {
+						village = false;
+					}
+				}
+				if (village) {
+					add.setBuilding(new Village(add));
 				}
 				break;
 			case Field.WATER:
@@ -157,13 +170,16 @@ public class Map {
 	int getType(Hex hex) {
 		OffsetCoord oc = OffsetCoord.qoffsetFromCube(OffsetCoord.EVEN, hex);
 		double val = noise.eval(oc.row * SMOOTH_FACTOR, oc.col * SMOOTH_FACTOR);
-		int type_val = Math.round((float) val * 10);
+		double type_val = val * 10.0;
 
 		if (type_val < -4) {
 			// lake / oceans / rivers / ...
 			return Field.WATER;
 		} else if (type_val < 3) {
 			// grass
+			if (type_val < 0 && type_val > -1) {
+				return -1;
+			}
 			return Field.EMPTY;
 		} else if (type_val < 5) {
 			// forests
