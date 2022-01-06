@@ -40,7 +40,7 @@ public class Main extends JFrame {
 			javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
 			
 			try {
-				java.io.FileWriter fstream = new java.io.FileWriter("err.log", true);
+				java.io.FileWriter fstream = new java.io.FileWriter("log/err.log", true);
 				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
 				out.write(t.toString() + '\n');
 				out.close();

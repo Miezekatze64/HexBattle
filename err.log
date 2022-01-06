@@ -1,0 +1,8 @@
+java.lang.NullPointerException
+	at java.base/java.net.Socket.<init>(Socket.java:501)
+	at java.base/java.net.Socket.<init>(Socket.java:319)
+	at com.mieze.hexbattle.server.Client.initServer(Client.java:25)
+	at com.mieze.hexbattle.server.Client.<init>(Client.java:20)
+	at com.mieze.hexbattle.Main.initServer(Main.java:68)
+	at com.mieze.hexbattle.Main.<init>(Main.java:82)
+	at com.mieze.hexbattle.Main.main(Main.java:29)

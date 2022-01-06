@@ -8,9 +8,11 @@ public class Client{
     private PrintStream out;
     private EventListener eventListener = null;
     private Thread socketThread = null;
+    private PrintStream log;
 
     public Client(String ip, int port) {
         try {
+            log = new PrintStream(new File("log/client.log"));
             initServer(InetAddress.getByName(ip), port);
         } catch(Exception e) {
             e.printStackTrace();
@@ -32,19 +34,19 @@ public class Client{
 
             socketThread = new Thread() { //client listen thread
                 public void run() {
-                    System.out.println("CLIENT: listening on" + ip);
+                    log.println("CLIENT: listening on" + ip);
                     try {
                         while (true) {
                             String line = bufferedReader.readLine();
                             if (line != null) {
-                                System.out.println("CLIENT: got line: " + line);
+                                log.println("CLIENT: got line: " + line);
                                 handleEvent(line);
                             }
                             sleep(10);
                         }
                     } catch(SocketException e) {
                         if (socket.isClosed()) {
-                            System.out.println("CLIENT: socket closed");
+                            log.println("CLIENT: socket closed");
                             try {
                                 bufferedReader.close();
                                 out.close();
@@ -72,8 +74,10 @@ public class Client{
 
     public void close() {
         try {
+            log.println("CLIENT: closing socket");
+            log.flush();
+            log.close();
             socket.close();
-            System.out.println("CLIENT: closing socket");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,7 +85,7 @@ public class Client{
 
     public void sendEvent(Event e) {
         out.println(e.getType() + "|" + e.getValue());
-        System.out.println("CLIENT: Event sent! [Type: "+e.getType() + " | Value: " + e.getValue()+"]");
+        log.println("CLIENT: Event sent! [Type: "+e.getType() + " | Value: " + e.getValue()+"]");
     }
 
     private void handleEvent(String s) {
@@ -90,7 +94,7 @@ public class Client{
             String type = strings[0];
             String value = strings[1];
             
-            System.out.println("CLIENT: Event received! [Type: " + type + " | Value: " + value +"]");
+            log.println("CLIENT: Event received! [Type: " + type + " | Value: " + value +"]");
             if (hasEventListener()) getEventListener().newEvent(new Event(type, value));
         }
     }

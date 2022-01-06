@@ -10,15 +10,17 @@ public class Server {
     private InetAddress ip;
     private ArrayList<Socket> sockets = new ArrayList<>();
     private ArrayList<PrintStream> outputs = new ArrayList<>();
+    private PrintStream log;
 
     public Server() {
         try {
+            log = new PrintStream(new File("logs/sever.log"));
             server = new ServerSocket(PORT);
             this.ip = server.getInetAddress();
         } catch (IOException e) {
-            System.out.println("---IOException---\n");
+            log.println("---IOException---\n");
             e.printStackTrace();
-            System.out.println("\n-----------------");
+            log.println("\n-----------------");
         }
     }
 
@@ -29,7 +31,7 @@ public class Server {
                     while (true) {
                         Socket socket = server.accept();
                         sockets.add(socket);
-                        System.out.println("SERVER: New connection! ("+outputs.size()+")");
+                        log.println("SERVER: New connection! ("+outputs.size()+")");
                         outputs.add(new PrintStream(socket.getOutputStream()));
 
                         new Thread() {
@@ -45,7 +47,7 @@ public class Server {
                                             for (int i = 0; i < sockets.size(); i++) {
                                                 if (i != index) {
                                                     outputs.get(i).println(line);
-                                                    System.out.println("SERVER: Sent line to socket " + i + ": " + line);
+                                                    log.println("SERVER: Sent line to socket " + i + ": " + line);
                                                 }
                                             }
                                         } else  {
@@ -53,17 +55,17 @@ public class Server {
                                         }
                                         sleep(10);
                                     }
-                                    System.out.println("SERVER: Socket " + index + " disconnected!");
+                                    log.println("SERVER: Socket " + index + " disconnected!");
                                 } catch(SocketException e) {
                                     //socket closing (interrupt)
                                 } catch (IOException e) {
-                                    System.out.println("---IOException---\n");
+                                    log.println("---IOException---\n");
                                     e.printStackTrace();
-                                    System.out.println("\n-----------------");
+                                    log.println("\n-----------------");
                                 } catch(InterruptedException e) {
 
                                 } finally {
-                                    System.out.println("SERVER: closing streams of socket "+index+".");
+                                    log.println("SERVER: closing streams of socket "+index+".");
                                     try {
                                         outputs.get(index).close();
                                         in.close();
@@ -79,21 +81,21 @@ public class Server {
                     }   
                 } catch(SocketException e) {
                     if (server.isClosed()) {
-                        System.out.println("SERVER: successfully closed");
+                        log.println("SERVER: successfully closed");
                     }
                 } catch (IOException e) {
-                    System.out.println("---IOException---\n");
+                    log.println("---IOException---\n");
                     e.printStackTrace();
-                    System.out.println("\n-----------------");
+                    log.println("\n-----------------");
                 } finally {
-                    System.out.println("SERVER: clenup sockets");
+                    log.println("SERVER: clenup sockets");
                     for (int i = 0; i < sockets.size(); i++) {
                         try {
                             if (!sockets.get(i).isClosed()) sockets.get(i).close();
                         } catch (Exception e) {
-                            System.out.println("---Exception---\n");
+                            log.println("---Exception---\n");
                             e.printStackTrace();
-                            System.out.println("\n-----------------");
+                            log.println("\n-----------------");
                         }
                     }
                 }
@@ -103,6 +105,8 @@ public class Server {
 
     public void close() {
         try {
+            log.flush();
+            log.close();
             server.close();
         } catch (IOException e) {
             e.printStackTrace();
