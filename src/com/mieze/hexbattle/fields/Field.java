@@ -1,6 +1,9 @@
 package com.mieze.hexbattle.fields;
 
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.Stroke;
+import java.awt.Color;
 
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
