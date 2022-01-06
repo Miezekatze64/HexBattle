@@ -60,7 +60,6 @@ public class Player {
 		this.hexLayout = layout;
 
 		setStartFields(position);
-		
 		//First character (builder)
 		addCharacter(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
 	}
@@ -78,8 +77,8 @@ public class Player {
 		}
 
 		while (!found) {
-			int q = (int) (Math.random() * 4);
-			int r = (int) (Math.random() * 4);
+			int q = (int) (Math.random() * 10);
+			int r = (int) (Math.random() * 10);
 			int s = -q - r;
 
 			this.start_pos = new Hex(q, r, s);
@@ -95,14 +94,16 @@ public class Player {
 				}
 			}
 		}
-		
+
 		if (isMain) {
 			Point start_point = hexLayout.hexToPixel(start_pos);
 			map.addOffset(-(int)start_point.x, -(int)start_point.y);
 		}
 
 		addField(start_pos, true);
+
 		conquerCity(start_pos);
+
 	}
 	
 	public Hex getPosition() {

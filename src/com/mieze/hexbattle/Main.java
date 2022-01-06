@@ -94,10 +94,11 @@ public class Main extends JFrame {
 		add(panel);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//setUndecorated(true);
-
+		
 		pack();
+		setSize(500, 500);
 		setVisible(true);
 
 		Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {

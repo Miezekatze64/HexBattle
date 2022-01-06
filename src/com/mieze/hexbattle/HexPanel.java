@@ -28,9 +28,10 @@ public class HexPanel extends JPanel {
 	private float off_x;
 	private float off_y;
 	
-	private static final Color[] COLORS = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.GRAY};
+	private static final Color[] COLORS = {Color.RED, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.GRAY};
 	private int colorIndex = 0;
 	private boolean first = true;
+	private boolean started = false;
 
 	private Player currentPlayer = null;
 	
@@ -64,7 +65,7 @@ public class HexPanel extends JPanel {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				try {
-					if (map != null) player.mouseMoved(new Point(e.getX(), e.getY()));
+					if (map != null && player != null) player.mouseMoved(new Point(e.getX(), e.getY()));
 				} catch (Throwable t) {
 					Main.handleException(t);
 				}
@@ -128,17 +129,30 @@ public class HexPanel extends JPanel {
 		Main.client.setEventListener(new Client.EventListener() {
 			@Override
 			public void newEvent(Event e) {
+				System.out.println(e.getType());
+				if (e.getType().startsWith("start") && started) {
+					return;
+				}
 				switch(e.getType()) {
 					case Event.EVENT_START_PLAYER:
-						String[] split = e.getValue().split(",");
-						newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+						{
+							String[] split = e.getValue().split(",");
+							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+						}
 						break;
 					case Event.EVENT_START_SEED:
 						createMap(Long.parseLong(e.getValue()));
 						break;
 					case Event.EVENT_START_PLAYER_END:
+						started = true;
 						player = new Player(map, hexLayout, getNextColor(), true);
 						Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+						break;
+					case Event.EVENT_ADD_PLAYER: 
+						{
+							String[] split = e.getValue().split(",");
+							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));	
+						}
 					default:
 						break;
 				}
@@ -168,12 +182,10 @@ public class HexPanel extends JPanel {
 			}
 		});
 		
-		//opponents.add(new Player(map, hexLayout, getNextColor()));
 		if (Main.isHost) {
 			createMap();
 			player = new Player(map, hexLayout, getNextColor(), true);
 			currentPlayer = player;
-
 		} else {
 			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, ""));
 		}

@@ -2,7 +2,7 @@
 
 echo "Starting compilation..."
 cd ./src/
-if javac com/mieze/hexbattle/**/*.java -d ../bin/; then
+if javac com/mieze/hexbattle/**/*.java -d ../bin/ -verbose; then
     echo "Compilation finished (.class files in ./bin/)"
     echo "run ./run.sh to run project"
     exit 0
