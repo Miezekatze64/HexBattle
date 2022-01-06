@@ -129,6 +129,7 @@ public class HexPanel extends JPanel {
 		Main.client.setEventListener(new Client.EventListener() {
 			@Override
 			public void newEvent(Event e) {
+				if (currentPlayer != null) currentPlayer.newEvent(e);
 				System.out.println(e.getType());
 				if (e.getType().startsWith("start") && started) {
 					return;
@@ -138,6 +139,10 @@ public class HexPanel extends JPanel {
 						{
 							String[] split = e.getValue().split(",");
 							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+
+							if (currentPlayer == null) {
+								currentPlayer = opponents.get(opponents.size()-1);
+							}
 						}
 						break;
 					case Event.EVENT_START_SEED:
@@ -147,11 +152,12 @@ public class HexPanel extends JPanel {
 						started = true;
 						player = new Player(map, hexLayout, getNextColor(), true);
 						Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+						currentPlayer.yourTurn();
 						break;
 					case Event.EVENT_ADD_PLAYER: 
 						{
 							String[] split = e.getValue().split(",");
-							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));	
+							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
 						}
 					default:
 						break;
@@ -162,6 +168,7 @@ public class HexPanel extends JPanel {
 		Main.client.setEventListener(new Client.EventListener() {
 			@Override
 			public void newEvent(Event e) {
+				if (currentPlayer != null) currentPlayer.newEvent(e);
 				switch(e.getType()) {
 				case Event.EVENT_JOIN:
 					Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
@@ -186,6 +193,7 @@ public class HexPanel extends JPanel {
 			createMap();
 			player = new Player(map, hexLayout, getNextColor(), true);
 			currentPlayer = player;
+			currentPlayer.yourTurn();
 		} else {
 			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, ""));
 		}

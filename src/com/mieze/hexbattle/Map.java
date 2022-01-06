@@ -72,6 +72,10 @@ public class Map {
 	}
 
 	public Field getField(Hex hex) {
+		return getField(hex, false);
+	}
+
+	public Field getField(Hex hex, boolean createNew) {
 		// System.out.println(hex);
 
 		for (int i = fields.size()-1; i >= 0; i--) {
@@ -79,7 +83,14 @@ public class Map {
 				return fields.get(i);
 			}
 		}
-		return null;
+
+		if (createNew) {
+			addField(hex);
+			System.out.println("Added field: " + hex);
+			return getField(hex);
+		} else {
+			return null;
+		}
 	}
 
 	public void addOffset(int off_x, int off_y) {

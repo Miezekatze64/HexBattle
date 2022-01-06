@@ -1,13 +1,16 @@
 package com.mieze.hexbattle;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Graphics2D;
+import java.awt.Color;
+
+import java.util.ArrayList;
 
 import com.mieze.hexbattle.fields.*;
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.server.Client.Event;
 import com.mieze.hexbattle.toolbars.*;
 
 public class Player {
@@ -30,7 +33,7 @@ public class Player {
 	public static final int STATE_OTHER_PLAYER = 2;
 	public static final int STATE_NOT_IMPLEMENTED = 3;
 
-	public int state = STATE_START;
+	public int state = STATE_OTHER_PLAYER;
 	private int city_count = 0;
 	private Color playerColor;
 	private boolean isMain = false;
@@ -104,6 +107,28 @@ public class Player {
 
 		conquerCity(start_pos);
 
+	}
+
+	public void newEvent(Event e) {
+		switch (e.getType()) {
+		case Event.EVENT_GAME_MOVE:
+			String[] hexarr = e.getValue().split(";");
+			String[] h1 = hexarr[0].split(",");
+			String[] h2 = hexarr[1].split(",");
+
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+			Hex hex2 = new Hex(Integer.parseInt(h2[0]), Integer.parseInt(h2[1]), Integer.parseInt(h2[2]));
+
+			Field f1 = map.getField(hex1);
+			Field f2 = map.getField(hex2);
+			GameCharacter character = map.getField(hex1).getCharacter();
+
+			f1.removeCharacter();
+			character.moveTo(f2);
+
+			f2.setCharacter(character);
+			break;
+		}
 	}
 	
 	public Hex getPosition() {
@@ -265,6 +290,8 @@ public class Player {
 							/* } */
 						}
 
+						Hex before = clickedCharacter.getPosition();
+
 						// move to next field
 						clickedCharacter.moveTo(f);
 						active.removeAll(active);
@@ -273,6 +300,10 @@ public class Player {
 						clickedCharacter.setMoved(true);
 
 						openSurroundedFields(f.getHex());
+
+						Hex after = f.getHex();
+						Main.client.sendEvent(new Event(Event.EVENT_GAME_MOVE, before.q+","+before.r+","+before.s+";"+after.q+","+after.r+","+after.s));
+
 						state = STATE_START;
 						break;
 					}

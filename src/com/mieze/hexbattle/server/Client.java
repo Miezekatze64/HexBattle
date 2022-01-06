@@ -135,6 +135,10 @@ public class Client{
         public static final String EVENT_START_PLAYER = "start_player";
         public static final String EVENT_START_PLAYER_END = "start_player_end";
         public static final String EVENT_START_SEED = "start_seed";
+        
+        public static final String EVENT_GAME_MOVE = "game_move";
+
+
         public static final String EVENT_END = "end";
 
         private String type;
