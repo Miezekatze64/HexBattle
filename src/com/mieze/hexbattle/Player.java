@@ -27,7 +27,8 @@ public class Player {
 
 	public static final int STATE_START = 0;
 	public static final int STATE_CHARACTER_CLICKED = 1;
-	public static final int STATE_NOT_IMPLEMENTED = 2;
+	public static final int STATE_OTHER_PLAYER = 2;
+	public static final int STATE_NOT_IMPLEMENTED = 3;
 
 	public int state = STATE_START;
 	private int city_count = 0;
@@ -41,6 +42,10 @@ public class Player {
 	}
 
 	public Player(Map map, Layout layout, Color color, boolean isMain) {
+		this(map, layout, color, isMain, null);
+	}
+
+	public Player(Map map, Layout layout, Color color, boolean isMain, Hex position) {
 		this.fields = new ArrayList<Hex>();
 		this.unexplored = new ArrayList<UnexploredField>();
 		this.active = new ArrayList<Hex>();
@@ -54,7 +59,7 @@ public class Player {
 		this.playerColor = color;
 		this.hexLayout = layout;
 
-		setStartFields();
+		setStartFields(position);
 		
 		//First character (builder)
 		addCharacter(new BuilderCharacter(map.getField(start_pos), hexLayout, this));
@@ -64,8 +69,13 @@ public class Player {
 		characters.add(c);
 	}
 
-	public void setStartFields() {
+	public void setStartFields(Hex position) {
 		boolean found = false;
+
+		if (position != null) {
+			found = true;
+			this.start_pos = position;
+		}
 
 		while (!found) {
 			int q = (int) (Math.random() * 4);
@@ -95,6 +105,10 @@ public class Player {
 		conquerCity(start_pos);
 	}
 	
+	public Hex getPosition() {
+		return this.start_pos;
+	}
+
 	public Toolbar getToolbar() {
 		return toolbar;
 	}

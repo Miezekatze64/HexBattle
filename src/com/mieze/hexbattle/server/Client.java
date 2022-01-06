@@ -89,15 +89,17 @@ public class Client{
     }
 
     public void sendEvent(Event e) {
-        out.println(e.getType() + "|" + e.getValue());
+        out.println(e.getType() + "||" + e.getValue());
         log.println("CLIENT: Event sent! [Type: "+e.getType() + " | Value: " + e.getValue()+"]");
     }
 
     private void handleEvent(String s) {
         if (s != null) {
-            String[] strings = s.split("[|]");
-            String type = strings[0];
-            String value = strings[1];
+            String type, value = "";
+
+            String[] strings = s.split("\\|\\|");
+            type = strings[0];
+            if (strings.length > 1) value = strings[1];
             
             log.println("CLIENT: Event received! [Type: " + type + " | Value: " + value +"]");
             if (hasEventListener()) getEventListener().newEvent(new Event(type, value));
@@ -117,7 +119,13 @@ public class Client{
     }
 
     public static class Event {
+        public static final String EVENT_JOIN = "join";
+        public static final String EVENT_ADD_PLAYER = "add_player";
+        
         public static final String EVENT_START = "start";
+        public static final String EVENT_START_PLAYER = "start_player";
+        public static final String EVENT_START_PLAYER_END = "start_player_end";
+        public static final String EVENT_START_SEED = "seed";
         public static final String EVENT_END = "end";
 
         private String type;

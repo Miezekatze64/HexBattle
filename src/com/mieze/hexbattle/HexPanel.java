@@ -7,6 +7,9 @@ import java.awt.event.*;
 
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.server.*;
+import com.mieze.hexbattle.server.Client.Event;
+
 import javax.swing.*;
 
 public class HexPanel extends JPanel {
@@ -29,6 +32,7 @@ public class HexPanel extends JPanel {
 	private int colorIndex = 0;
 	private boolean first = true;
 
+	private Player currentPlayer = null;
 	
 	static {
 		hexLayout = new Layout(Layout.pointy, new Point(40, 40), new Point(0, 0));
@@ -52,7 +56,7 @@ public class HexPanel extends JPanel {
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				map.addZoom(Math.pow(ZOOM_CONSTANT, -e.getPreciseWheelRotation()));
+				if (map != null) map.addZoom(Math.pow(ZOOM_CONSTANT, -e.getPreciseWheelRotation()));
 			}
 		});
 		
@@ -60,7 +64,7 @@ public class HexPanel extends JPanel {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				try {
-					player.mouseMoved(new Point(e.getX(), e.getY()));
+					if (map != null) player.mouseMoved(new Point(e.getX(), e.getY()));
 				} catch (Throwable t) {
 					Main.handleException(t);
 				}
@@ -68,7 +72,7 @@ public class HexPanel extends JPanel {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if (drag) {
+				if (drag && map != null) {
 		
 					off_x = e.getX() - last_x;
 					off_y = e.getY() - last_y;
@@ -89,13 +93,15 @@ public class HexPanel extends JPanel {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try{
-					if (e.getButton() == MouseEvent.BUTTON1)
-						player.onClick(new Point(e.getX(), e.getY()));
-					if (e.getButton() != MouseEvent.BUTTON1) {
-						last_x = e.getX();
-						last_y = e.getY();
-						drag = true;
+				try {
+					if (map != null) {
+						if (e.getButton() == MouseEvent.BUTTON1)
+							player.onClick(new Point(e.getX(), e.getY()));
+						if (e.getButton() != MouseEvent.BUTTON1) {
+							last_x = e.getX();
+							last_y = e.getY();
+							drag = true;
+						}
 					}
 				} catch (Throwable t) {
 					Main.handleException(t);
@@ -117,14 +123,72 @@ public class HexPanel extends JPanel {
 				// TODO Auto-generated method stub
 			}
 		});
-		createMap();
-		player = new Player(map, hexLayout, getNextColor(), true);
 		
-		opponents.add(new Player(map, hexLayout, getNextColor()));
+		if (!Main.isHost)
+		Main.client.setEventListener(new Client.EventListener() {
+			@Override
+			public void newEvent(Event e) {
+				switch(e.getType()) {
+					case Event.EVENT_START_PLAYER:
+						String[] split = e.getValue().split(",");
+						newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+						break;
+					case Event.EVENT_START_SEED:
+						createMap(Long.parseLong(e.getValue()));
+						break;
+					case Event.EVENT_START_PLAYER_END:
+						player = new Player(map, hexLayout, getNextColor(), true);
+						Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+					default:
+						break;
+				}
+			}
+		});
+		else
+		Main.client.setEventListener(new Client.EventListener() {
+			@Override
+			public void newEvent(Event e) {
+				switch(e.getType()) {
+				case Event.EVENT_JOIN:
+					Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
+
+					Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+					for (int i = 0; i < opponents.size(); i++) {
+						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, opponents.get(i).getPosition().q + "," + opponents.get(i).getPosition().r+","+opponents.get(i).getPosition().s));
+					}
+
+					Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER_END, ""));
+					break;
+				case Event.EVENT_ADD_PLAYER:
+					String[] split = e.getValue().split(",");
+					newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+				default:
+					break;
+				}
+			}
+		});
+		
+		//opponents.add(new Player(map, hexLayout, getNextColor()));
+		if (Main.isHost) {
+			createMap();
+			player = new Player(map, hexLayout, getNextColor(), true);
+			currentPlayer = player;
+
+		} else {
+			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, ""));
+		}
+	}
+
+	public void newPlayer(Hex hex) {
+		opponents.add(new Player(map, hexLayout, getNextColor(), false, hex));
 	}
 
 	public void createMap() {
 		map = new Map(-Main.WIDTH/2, -Main.HEIGHT/2, this);
+	}
+
+	public void createMap(long seed) {
+		map = new Map(-Main.WIDTH/2, -Main.HEIGHT/2, this, seed);
 	}
 	
 	public void currentFPS(double fps) {
@@ -138,15 +202,17 @@ public class HexPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		try {
-			if (first) {
-				((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
-				first = false;
+		if (map != null && player != null) {
+			try {
+				if (first) {
+					((Graphics2D)getGraphics()).setComposite(AlphaComposite.Clear);
+					first = false;
+				}
+				player.render((Graphics2D)g);
+				renderFPS(g);
+			} catch (Exception e) {
+				Main.handleException(e);
 			}
-			player.render((Graphics2D)g);
-			renderFPS(g);
-		} catch (Throwable t) {
-			Main.handleException(t);
 		}
 	}
 	

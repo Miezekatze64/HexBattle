@@ -28,16 +28,23 @@ public class Map {
 	}
 
 	public Map(int offset_x, int offset_y, HexPanel panel) {
+		this(offset_x, offset_y, panel, new Random(System.currentTimeMillis()).nextLong());
+	}
+
+	public Map(int offset_x, int offset_y, HexPanel panel, long seed) {
 		this.offset_x = offset_x;
 		this.offset_y = offset_y;
-		this.seed = new Random(System.currentTimeMillis()).nextLong();
 		this.fields = new ArrayList<Field>();
 		this.panel = panel;
+		this.seed = seed;
 
 		noise = new OpenSimplexNoise(seed);
 
 		// addField(new Point(0, 0), true);
+	}
 
+	public long getSeed() {
+		return seed;
 	}
 
 	public Point hexToDisplay(Point p) {

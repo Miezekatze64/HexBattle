@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
-	public static int FPS = 40;
+	public static int FPS = 30;
 
 	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -20,9 +20,9 @@ public class Main extends JFrame {
 
 	private static boolean error = false;
 
-	private boolean isServer = false;
-	private Server server = null;
-	private Client client;
+	public static boolean isHost = false;
+	public static Server server = null;
+	public static Client client;
 
 	public static void main(String[] args) {
 		try {
@@ -63,13 +63,13 @@ public class Main extends JFrame {
 		if (scanner.hasNextLine()) answer = scanner.nextLine();
 		
 		if (answer.equalsIgnoreCase("y")) {
-			isServer = true;
+			isHost = true;
 			server = new Server();
 			server.start();
 			client = new Client(server.getIp(), Server.PORT);
 			System.out.println("IP: " + server.getIp().getHostAddress());
 		} else {
-			isServer = false;
+			isHost = false;
 			System.out.print("Enter IP: ");
 			String ip = "";
 			if (scanner.hasNextLine()) ip = scanner.nextLine();
@@ -89,25 +89,7 @@ public class Main extends JFrame {
 				if (server != null) server.close();
 			}
 		});
-
-		if (!isServer) while (true)
-			client.setEventListener(new Client.EventListener() {
-				public void newEvent(Client.Event e) {
-					System.out.println("Event: " + e);	
-				}
-			});
-
-		if (isServer) while(true) {
-			client.sendEvent(new Client.Event(Client.Event.EVENT_START, "Ping"));
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-		System.exit(0);
-
+		if (isHost) setTitle("Hexbattle [Host]");
 		panel = new HexPanel();
 		add(panel);
 
