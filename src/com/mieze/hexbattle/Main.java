@@ -37,15 +37,15 @@ public class Main extends JFrame {
 	public static void handleException(Throwable t) {
 		if (t != null && !error) {
 			error = true;
-			javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
+			javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in ./logs/err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
 			
 			try {
-				java.io.FileWriter fstream = new java.io.FileWriter("log/err.log", true);
+				java.io.FileWriter fstream = new java.io.FileWriter("logs/err.log", true);
 				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
 				out.write(t.toString() + '\n');
 				out.close();
 
-				java.io.PrintStream stream = new java.io.PrintStream(new java.io.File("err.log"));
+				java.io.PrintStream stream = new java.io.PrintStream(new java.io.File("logs/err.log"));
 				t.printStackTrace(stream);
 				stream.close();
 

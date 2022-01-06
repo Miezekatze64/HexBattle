@@ -12,7 +12,7 @@ public class Client{
 
     public Client(String ip, int port) {
         try {
-            log = new PrintStream(new File("log/client.log"));
+            log = new PrintStream(new File("logs/client.log"));
             initServer(InetAddress.getByName(ip), port);
         } catch(Exception e) {
             e.printStackTrace();
@@ -20,7 +20,12 @@ public class Client{
     }
 
     public Client(InetAddress ip, int port) {
-        initServer(ip, port);
+        try {
+            log = new PrintStream(new File("logs/client.log"));
+            initServer(ip, port);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initServer(InetAddress ip, int port) {

@@ -14,13 +14,11 @@ public class Server {
 
     public Server() {
         try {
-            log = new PrintStream(new File("logs/sever.log"));
+            log = new PrintStream(new File("logs/server.log"));
             server = new ServerSocket(PORT);
             this.ip = server.getInetAddress();
         } catch (IOException e) {
-            log.println("---IOException---\n");
             e.printStackTrace();
-            log.println("\n-----------------");
         }
     }
 
@@ -60,7 +58,7 @@ public class Server {
                                     //socket closing (interrupt)
                                 } catch (IOException e) {
                                     log.println("---IOException---\n");
-                                    e.printStackTrace();
+                                    e.printStackTrace(log);
                                     log.println("\n-----------------");
                                 } catch(InterruptedException e) {
 
@@ -85,7 +83,7 @@ public class Server {
                     }
                 } catch (IOException e) {
                     log.println("---IOException---\n");
-                    e.printStackTrace();
+                    e.printStackTrace(log);
                     log.println("\n-----------------");
                 } finally {
                     log.println("SERVER: clenup sockets");
@@ -94,7 +92,7 @@ public class Server {
                             if (!sockets.get(i).isClosed()) sockets.get(i).close();
                         } catch (Exception e) {
                             log.println("---Exception---\n");
-                            e.printStackTrace();
+                            e.printStackTrace(log);
                             log.println("\n-----------------");
                         }
                     }
