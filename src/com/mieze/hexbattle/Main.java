@@ -3,8 +3,6 @@ package com.mieze.hexbattle;
 import com.mieze.hexbattle.server.*;
 
 import java.awt.event.*;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.awt.Toolkit;
 import javax.swing.*;
@@ -69,12 +67,7 @@ public class Main extends JFrame {
 			server = new Server();
 			server.start();
 			client = new Client(server.getIp(), Server.PORT);
-			try {
-				server.getIp();
-				System.out.println("IP: " + InetAddress.getLocalHost().getHostAddress());
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
+			System.out.println("IP: " + server.getIp().getHostAddress());
 		} else {
 			isServer = false;
 			System.out.print("Enter IP: ");

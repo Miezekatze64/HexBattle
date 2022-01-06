@@ -16,7 +16,23 @@ public class Server {
         try {
             log = new PrintStream(new File("logs/server.log"));
             server = new ServerSocket(PORT);
-            this.ip = server.getInetAddress();
+
+            try {
+                Enumeration<NetworkInterface> nics = NetworkInterface.getNetworkInterfaces();
+                while (nics.hasMoreElements()) {
+                    NetworkInterface nic = nics.nextElement();
+                    if (!nic.isLoopback()) {
+                        Enumeration<InetAddress> addrs = nic.getInetAddresses();
+                        while (addrs.hasMoreElements()) {
+                            InetAddress addr = addrs.nextElement();
+                            if (addr instanceof Inet4Address) this.ip = addr;
+                        }
+                    }
+                }
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+            if (this.ip == null) throw new RuntimeException("No network connection found...");
         } catch (IOException e) {
             e.printStackTrace();
         }
