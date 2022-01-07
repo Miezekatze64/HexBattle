@@ -114,7 +114,7 @@ public class City extends Building {
 					Player player = field.getOwner();
 					if (player.buyCharacter(WorkerCharacter.PRICE)) {
 						player.buyCharacter(field, GameCharacter.WORKER);
-
+						
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.WORKER));
 					} else {

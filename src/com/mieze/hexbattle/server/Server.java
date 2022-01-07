@@ -102,7 +102,7 @@ public class Server {
                                         sleep(10);
                                     }
                                     log.println("SERVER: Socket " + index + " disconnected!");
-                                    System.out.println("SERVER: Player disconnected! (ID "+outputs.size()+")");
+                                    System.out.println("SERVER: Player disconnected! (ID "+index+")");
                                 } catch(SocketException e) {
                                     // socket closing (interrupt)
                                 } catch (IOException e) {
