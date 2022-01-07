@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.mieze.hexbattle.fields.*;
 import com.mieze.hexbattle.fields.building.City;
+import com.mieze.hexbattle.fields.building.Mine;
 import com.mieze.hexbattle.characters.*;
 import com.mieze.hexbattle.hex.*;
 import com.mieze.hexbattle.hex.Point;
@@ -167,6 +168,16 @@ public class Player {
 			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
 
 			conquerCity(hex1, true);
+		}
+		break;
+		case Event.GAME_BUILD_MINE:
+		{
+			String[] hexarr = e.getValue().split(";");
+			String[] h1 = hexarr[0].split(",");
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+			int type = Integer.parseInt(hexarr[1]);
+
+			map.getField(hex1).setBuilding(new Mine(map.getField(hex1), type));
 		}
 		break;
 		}

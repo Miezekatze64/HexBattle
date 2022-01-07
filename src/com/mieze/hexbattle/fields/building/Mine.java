@@ -64,10 +64,17 @@ public class Mine extends Building {
 	}
 
 	public Mine(Field f) {
+		this(f, -1);
+	}
+	
+	public Mine(Field f, int type) {
 		super(f);
-
-		double rand = Math.random();
-		this.type = rand < .5?MINE_COAL:(rand < .8?MINE_IRON:MINE_DIAMOND);
+		if (type == -1) {
+			double rand = Math.random();
+			this.type = rand < .5?MINE_COAL:(rand < .8?MINE_IRON:MINE_DIAMOND);
+		} else {
+			this.type = type;
+		}
 
 		this.chance = Math.random();
 		this.amount = (int)(Math.random()*9+1);

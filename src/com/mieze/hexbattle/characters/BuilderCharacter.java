@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.server.Client.Event;
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
 import com.mieze.hexbattle.fields.*;
@@ -70,6 +71,10 @@ public class BuilderCharacter extends GameCharacter {
 					res[Inventory.WOOD] = 3;
 					if (player.payResourses(res)) {
 						field.setBuilding(new Mine(field));
+
+						Hex h = field.getHex();
+						Main.client.sendEvent(new Event(Event.GAME_BUILD_MINE, h.q+","+h.r+","+h.s+";"+((Mine)field.getBuilding()).getType()));
+
 						player.reset();
 					} else {
 						JOptionPane.showMessageDialog(null, "You need at least 3 Wood to buy this", "Not enough resources", JOptionPane.INFORMATION_MESSAGE);
