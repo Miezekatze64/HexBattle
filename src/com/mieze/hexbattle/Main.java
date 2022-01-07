@@ -4,15 +4,14 @@ import com.mieze.hexbattle.server.*;
 
 import java.awt.event.*;
 import java.util.Scanner;
-import java.awt.Toolkit;
 import javax.swing.*;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static int FPS = 30;
 
-	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+	public static final int WIDTH = 1200;	//Toolkit.getDefaultToolkit().getScreenSize().width;
+	public static final int HEIGHT = 800;	//Toolkit.getDefaultToolkit().getScreenSize().height;
 
 	private long lastTime;
 	private long frameCount = 0;
@@ -98,7 +97,7 @@ public class Main extends JFrame {
 		//setUndecorated(true);
 		
 		pack();
-		setSize(500, 500);
+		setSize(WIDTH, HEIGHT);
 		setVisible(true);
 
 		Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
