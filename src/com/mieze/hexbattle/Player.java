@@ -19,6 +19,7 @@ import com.mieze.hexbattle.characters.GameCharacter;
 import com.mieze.hexbattle.characters.BuilderCharacter;
 import com.mieze.hexbattle.characters.WorkerCharacter;
 import com.mieze.hexbattle.characters.SwordsmanCharacter;
+import com.mieze.hexbattle.characters.RiderCharacter;
 
 import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Layout;
@@ -97,8 +98,6 @@ public class Player {
 				map.getField(characters.get(i).getPosition()).removeCharacter();
 			}
 			characters.removeAll(characters);
-		} else {
-			if (isMain) System.out.println(city_count);
 		}
 	}
 
@@ -266,6 +265,9 @@ public class Player {
 				break;
 			case GameCharacter.SWORDSMAN:
 				newCharacter = new SwordsmanCharacter(field, HexPanel.hexLayout, field.getOwner());
+				break;
+			case GameCharacter.RIDER:
+				newCharacter = new RiderCharacter(field, HexPanel.hexLayout, field.getOwner());
 				break;
 			default:
 			throw new IllegalStateException("Constant not implemented!");

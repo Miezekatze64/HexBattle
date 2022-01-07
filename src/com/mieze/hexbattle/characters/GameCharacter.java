@@ -21,6 +21,7 @@ public abstract class GameCharacter {
 	public static final int BUILDER = 0;
 	public static final int WORKER = 1;
 	public static final int SWORDSMAN = 2;
+	public static final int RIDER = 3;
 
 	protected Hex position;
 	protected Layout hexLayout;
@@ -137,6 +138,8 @@ public abstract class GameCharacter {
 			img = WorkerCharacter.img;
 		else if (this instanceof SwordsmanCharacter)
 			img = SwordsmanCharacter.img;
+		else if (this instanceof RiderCharacter)
+			img = RiderCharacter.img;
 		else
 			throw new IllegalStateException("Character class not implemented: " + this.getClass().getCanonicalName());
 
