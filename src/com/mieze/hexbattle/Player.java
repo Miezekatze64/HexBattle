@@ -476,7 +476,22 @@ public class Player {
 		if (!first) inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCityCount());
 	}
 	
+	// only character points
 	public boolean buyCharacter(int amount) {
+		if (inventory.getCharacterPoints() < amount) {
+			return false;
+		} else {
+			inventory.setCharacterPoints(inventory.getCharacterPoints()-amount);
+			return true;
+		}
+	}
+
+	//character points + other resources
+	public boolean buyCharacter(int amount, int[] resources) {
+		if (resources.length != 4) throw new IllegalArgumentException("Array must have length of 4!");
+
+		if (!payResourses(resources)) return false;
+
 		if (inventory.getCharacterPoints() < amount) {
 			return false;
 		} else {

@@ -124,21 +124,34 @@ public class City extends Building {
 			});
 		}
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New swordsman")) {
-			toolbar.add(new ToolbarButton("New swordsman", SwordsmanCharacter.img, "A character made to fight...\n\nCosts: "+SwordsmanCharacter.PRICE+" character points.") {
+			toolbar.add(new ToolbarButton("New swordsman", SwordsmanCharacter.img, "A character made to fight...\n\nCosts: "+SwordsmanCharacter.RESOURCES[2]+" iron and "+SwordsmanCharacter.PRICE+" character points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
-					if (player.buyCharacter(SwordsmanCharacter.PRICE)) {
+					if (player.buyCharacter(SwordsmanCharacter.PRICE, SwordsmanCharacter.RESOURCES)) {
 						player.buyCharacter(field, GameCharacter.SWORDSMAN);
 
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.SWORDSMAN));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", SwordsmanCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showInternalMessageDialog(null, resourceMessage(SwordsmanCharacter.PRICE, SwordsmanCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
 		}
+	}
+
+	private String resourceMessage(double cp, int[] res) {
+		final String pre = "You need at least ";
+		String str = pre;
+		for (int i = 0; i < res.length; i++) {
+			if (res[i] != 0) str += res[i] + ((i == 0)?" wood, ":(i == 1)?" coal, ":(i == 2)?" iron, ":" diamonds ");
+		}
+		if (res[3] == 0) str = str.substring(0, str.length()-2)+ " ";
+
+		str += "and " + cp + " character points.";
+
+		return str;
 	}
 
 	@Override

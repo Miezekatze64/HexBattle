@@ -16,6 +16,7 @@ import com.mieze.hexbattle.fields.building.City;
 
 public class SwordsmanCharacter extends GameCharacter {
 	public static final int PRICE = 4;
+    public static final int[] RESOURCES = new int[]{0, 0, 1, 0};
 	public static Image img;
 
 	static {
