@@ -29,7 +29,6 @@ public class SwordsmanCharacter extends GameCharacter {
 
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
-		//System.out.println("clicked");
 		Field field = map.getField(position);
 		if (field.hasBuilding()) {
 			if (field.getBuilding() instanceof City && field.getOwner() != player) {

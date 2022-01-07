@@ -76,7 +76,6 @@ public class Map {
 	}
 
 	public Field getField(Hex hex, boolean createNew) {
-		// System.out.println(hex);
 
 		for (int i = fields.size()-1; i >= 0; i--) {
 			if (fields.get(i).getHex().equals(hex)) {
@@ -86,7 +85,6 @@ public class Map {
 
 		if (createNew) {
 			addField(hex);
-			System.out.println("Added field: " + hex);
 			return getField(hex);
 		} else {
 			return null;

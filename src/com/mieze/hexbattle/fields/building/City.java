@@ -58,8 +58,7 @@ public class City extends Building {
 					Color c = new Color(image.getRGB(x, y), true);
 					int alpha = c.getAlpha();
 					int gray = c.getRed();
-					g.setColor(
-							new Color(gray | color.getRed(), gray | color.getGreen(), gray | color.getBlue(), alpha));
+					g.setColor(new Color(gray | color.getRed(), gray | color.getGreen(), gray | color.getBlue(), alpha));
 					g.fillRect(x, y, 1, 1);
 				}
 			}

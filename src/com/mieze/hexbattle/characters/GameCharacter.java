@@ -141,7 +141,6 @@ public abstract class GameCharacter {
 		animation = new Animation(position, f.getHex(), 200, map) {
 			@Override
 			public void animationFinished() {
-				System.out.println("moved!");
 				animating = false;
 				animation = null;
 				position = f.getHex();

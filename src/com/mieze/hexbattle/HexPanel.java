@@ -27,6 +27,8 @@ public class HexPanel extends JPanel {
 	
 	private float off_x;
 	private float off_y;
+	private int player_index;
+	private int current_index = 0;
 	
 	private static final Color[] COLORS = {Color.RED, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.GRAY};
 	private int colorIndex = 0;
@@ -127,15 +129,18 @@ public class HexPanel extends JPanel {
 		
 		if (!Main.isHost)
 		Main.client.setEventListener(new Client.EventListener() {
+
 			@Override
 			public void newEvent(Event e) {
 				try {
 					if (currentPlayer != null) currentPlayer.newEvent(e);
-					System.out.println(e.getType());
 					if (e.getType().startsWith("start") && started) {
 						return;
 					}
 					switch(e.getType()) {
+						case Event.EVENT_END_TURN:
+							nextTurn(true);
+							break;
 						case Event.EVENT_START_PLAYER:
 							{
 								String[] split = e.getValue().split(",");
@@ -152,8 +157,9 @@ public class HexPanel extends JPanel {
 						case Event.EVENT_START_PLAYER_END:
 							started = true;
 							player = new Player(map, hexLayout, getNextColor(), true);
+							player_index = opponents.size();
 							Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
-							currentPlayer.yourTurn();
+							currentPlayer.yourTurn(true);
 							break;
 						case Event.EVENT_ADD_PLAYER: 
 							{
@@ -175,6 +181,9 @@ public class HexPanel extends JPanel {
 				try {
 					if (currentPlayer != null) currentPlayer.newEvent(e);
 					switch(e.getType()) {
+					case Event.EVENT_END_TURN:
+						nextTurn(true);
+						break;
 					case Event.EVENT_JOIN:
 						Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
 
@@ -201,7 +210,8 @@ public class HexPanel extends JPanel {
 			createMap();
 			player = new Player(map, hexLayout, getNextColor(), true);
 			currentPlayer = player;
-			currentPlayer.yourTurn();
+			currentPlayer.yourTurn(true);
+			player_index = 0;
 		} else {
 			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, ""));
 		}
@@ -222,10 +232,26 @@ public class HexPanel extends JPanel {
 	public void currentFPS(double fps) {
 		this.fps = fps;
 	}
-	
+
 	public void nextTurn() {
-		// TODO: implement other players
-		player.yourTurn();
+		nextTurn(false);
+	}
+	
+	public void nextTurn(boolean fromEvent) {
+		currentPlayer.state = Player.STATE_OTHER_PLAYER;
+		if (!fromEvent) Main.client.sendEvent(new Event(Event.EVENT_END_TURN, ""));
+
+		current_index = (current_index + 1)%(opponents.size()+1);
+		
+		if (current_index == player_index) {
+			currentPlayer = player;
+		} else if (current_index < player_index) {
+			currentPlayer = opponents.get(current_index);
+		} else {
+			currentPlayer = opponents.get(current_index-1);
+		}
+
+		if (currentPlayer == player) player.yourTurn(false);
 	}
 
 	@Override

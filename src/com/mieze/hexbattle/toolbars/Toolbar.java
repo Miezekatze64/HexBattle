@@ -15,6 +15,7 @@ public class Toolbar {
 	private boolean isStandard = true;
 	
 	private static Image nextTurnImage;
+	private Player player;
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -26,7 +27,8 @@ public class Toolbar {
 		img = img.getScaledInstance((int) w, (int) h, Image.SCALE_DEFAULT);
 	}
 
-	public Toolbar() {
+	public Toolbar(Player player) {
+		this.player = player;
 		initToolbar();
 	}
 	
@@ -40,7 +42,7 @@ public class Toolbar {
 		buttons.add(new ToolbarButton("Next Turn", nextTurnImage, "Click to end your turn.") {
 			@Override
 			public void onClick() {
-				Main.getPanel().nextTurn();
+				if (player.state != Player.STATE_OTHER_PLAYER) Main.getPanel().nextTurn();
 			}
 		});
 	}
@@ -75,7 +77,7 @@ public class Toolbar {
 		for (int i = 0; i < buttons.size(); i++) {
 			int x = (int)((((double)(i+1)/((double)(buttons.size()+1))*.75)+.125)*m.getWidth());
 			int y = m.getHeight()-60;
-			buttons.get(i).render(g, m, x, y);
+			buttons.get(i).render(g, m, x, y, player);
 		}
 	}
 

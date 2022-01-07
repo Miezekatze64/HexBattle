@@ -56,7 +56,7 @@ public class Player {
 		this.characters = new ArrayList<GameCharacter>();
 		this.empire = new ArrayList<Hex>();
 
-		this.toolbar = new Toolbar();
+		this.toolbar = new Toolbar(this);
 		this.inventory = new Inventory();
 		this.map = map;
 		this.isMain = isMain;
@@ -420,14 +420,13 @@ public class Player {
 		}
 	}
 
-	public void yourTurn() {
-		/* temporarly */
+	public void yourTurn(boolean first) {
 		state = STATE_START;
 		for (int i = 0; i < characters.size(); i++) {
 			characters.get(i).setMoved(false);
 		}
 
-		inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCitiyCount());
+		if (!first) inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCitiyCount());
 	}
 	
 	public boolean buyCharacter(int amount) {

@@ -143,7 +143,7 @@ public class Client{
         public static final String EVENT_GAME_BUILD_MINE = "game_build_mine";
         public static final String EVENT_GAME_CHOP_WOOD = "game_cop_wood";
 
-        public static final String EVENT_END = "end";
+        public static final String EVENT_END_TURN = "end_turn";
 
         private String type;
         private String value;
