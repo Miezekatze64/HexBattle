@@ -112,6 +112,7 @@ public class Player {
 	public void newEvent(Event e) {
 		switch (e.getType()) {
 		case Event.EVENT_GAME_MOVE:
+		{
 			String[] hexarr = e.getValue().split(";");
 			String[] h1 = hexarr[0].split(",");
 			String[] h2 = hexarr[1].split(",");
@@ -119,14 +120,32 @@ public class Player {
 			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
 			Hex hex2 = new Hex(Integer.parseInt(h2[0]), Integer.parseInt(h2[1]), Integer.parseInt(h2[2]));
 
-			Field f1 = map.getField(hex1);
-			Field f2 = map.getField(hex2);
-			GameCharacter character = map.getField(hex1).getCharacter();
+			Field f1 = map.getField(hex1, true);
+			Field f2 = map.getField(hex2, true);
+			GameCharacter character = f1.getCharacter();
 
 			f1.removeCharacter();
 			character.moveTo(f2);
 
 			f2.setCharacter(character);
+		}
+			break;
+		case Event.EVENT_GAME_ATTACK:
+		{
+			String[] hexarr = e.getValue().split(";");
+			String[] h1 = hexarr[0].split(",");
+			String[] h2 = hexarr[1].split(",");
+
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+			Hex hex2 = new Hex(Integer.parseInt(h2[0]), Integer.parseInt(h2[1]), Integer.parseInt(h2[2]));
+
+			Field f1 = map.getField(hex1, true);
+			Field f2 = map.getField(hex2, true);
+			GameCharacter character1 = f1.getCharacter();
+			GameCharacter character2 = f2.getCharacter();
+			
+			attack(character1, character2, true);
+		}
 			break;
 		}
 	}
@@ -275,7 +294,7 @@ public class Player {
 							state = STATE_CHARACTER_CLICKED;
 							break;
 						} else {
-							attack(clickedCharacter, f.getCharacter());
+							attack(clickedCharacter, f.getCharacter(), false);
 							active.removeAll(active);
 							clickedCharacter.setMoved(true);
 							state = STATE_START;
@@ -318,7 +337,9 @@ public class Player {
 		}
 	}
 	
-	public void attack(GameCharacter attacker, GameCharacter target) {
+	public void attack(GameCharacter attacker, GameCharacter target, boolean fromEvent) {
+		if (!fromEvent) Main.client.sendEvent(new Event(Event.EVENT_GAME_ATTACK, attacker.getPosition().q+","+attacker.getPosition().r+","+attacker.getPosition().s+";"+target.getPosition().q+","+target.getPosition().r+","+target.getPosition().s));
+
 		double attack = attacker.getAttackScore() * (attacker.getHealth() / attacker.getInitialLife());
 		double defense = target.getDefenceScore() * (target.getHealth() / target.getInitialLife());
 		double damage = attack + defense;

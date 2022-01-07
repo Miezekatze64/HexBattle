@@ -129,38 +129,42 @@ public class HexPanel extends JPanel {
 		Main.client.setEventListener(new Client.EventListener() {
 			@Override
 			public void newEvent(Event e) {
-				if (currentPlayer != null) currentPlayer.newEvent(e);
-				System.out.println(e.getType());
-				if (e.getType().startsWith("start") && started) {
-					return;
-				}
-				switch(e.getType()) {
-					case Event.EVENT_START_PLAYER:
-						{
-							String[] split = e.getValue().split(",");
-							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+				try {
+					if (currentPlayer != null) currentPlayer.newEvent(e);
+					System.out.println(e.getType());
+					if (e.getType().startsWith("start") && started) {
+						return;
+					}
+					switch(e.getType()) {
+						case Event.EVENT_START_PLAYER:
+							{
+								String[] split = e.getValue().split(",");
+								newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
 
-							if (currentPlayer == null) {
-								currentPlayer = opponents.get(opponents.size()-1);
+								if (currentPlayer == null) {
+									currentPlayer = opponents.get(opponents.size()-1);
+								}
 							}
-						}
-						break;
-					case Event.EVENT_START_SEED:
-						createMap(Long.parseLong(e.getValue()));
-						break;
-					case Event.EVENT_START_PLAYER_END:
-						started = true;
-						player = new Player(map, hexLayout, getNextColor(), true);
-						Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
-						currentPlayer.yourTurn();
-						break;
-					case Event.EVENT_ADD_PLAYER: 
-						{
-							String[] split = e.getValue().split(",");
-							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-						}
-					default:
-						break;
+							break;
+						case Event.EVENT_START_SEED:
+							createMap(Long.parseLong(e.getValue()));
+							break;
+						case Event.EVENT_START_PLAYER_END:
+							started = true;
+							player = new Player(map, hexLayout, getNextColor(), true);
+							Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+							currentPlayer.yourTurn();
+							break;
+						case Event.EVENT_ADD_PLAYER: 
+							{
+								String[] split = e.getValue().split(",");
+								newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+							}
+						default:
+							break;
+					}
+				} catch(Exception e1) {
+					Main.handleException(e1);
 				}
 			}
 		});
@@ -168,23 +172,27 @@ public class HexPanel extends JPanel {
 		Main.client.setEventListener(new Client.EventListener() {
 			@Override
 			public void newEvent(Event e) {
-				if (currentPlayer != null) currentPlayer.newEvent(e);
-				switch(e.getType()) {
-				case Event.EVENT_JOIN:
-					Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
+				try {
+					if (currentPlayer != null) currentPlayer.newEvent(e);
+					switch(e.getType()) {
+					case Event.EVENT_JOIN:
+						Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
 
-					Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
-					for (int i = 0; i < opponents.size(); i++) {
-						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, opponents.get(i).getPosition().q + "," + opponents.get(i).getPosition().r+","+opponents.get(i).getPosition().s));
+						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+						for (int i = 0; i < opponents.size(); i++) {
+							Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, opponents.get(i).getPosition().q + "," + opponents.get(i).getPosition().r+","+opponents.get(i).getPosition().s));
+						}
+
+						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER_END, ""));
+						break;
+					case Event.EVENT_ADD_PLAYER:
+						String[] split = e.getValue().split(",");
+						newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+					default:
+						break;
 					}
-
-					Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER_END, ""));
-					break;
-				case Event.EVENT_ADD_PLAYER:
-					String[] split = e.getValue().split(",");
-					newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-				default:
-					break;
+				} catch(Exception e1) {
+					Main.handleException(e1);
 				}
 			}
 		});
