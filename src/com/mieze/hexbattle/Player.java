@@ -5,6 +5,8 @@ import java.awt.Color;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.mieze.hexbattle.fields.Field;
 import com.mieze.hexbattle.fields.UnexploredField;
 import com.mieze.hexbattle.fields.ForestField;
@@ -52,6 +54,7 @@ public class Player {
 	private int city_count = 0;
 	private Color playerColor;
 	private boolean isMain = false;
+	private boolean alive = true;
 
 	private GameCharacter clickedCharacter;
 
@@ -84,6 +87,34 @@ public class Player {
 	
 	public void addCharacter(GameCharacter c) {
 		characters.add(c);
+	}
+
+	public void checkKill() {
+		if (city_count == 0 && alive) {
+			alive = false;
+			JOptionPane.showMessageDialog(null, (!isMain)?("Player " + colorName(playerColor) + " died"):("You died..."), "DEAD", JOptionPane.INFORMATION_MESSAGE);
+			for (int i = 0; i < characters.size(); i++) {
+				map.getField(characters.get(i).getPosition()).removeCharacter();
+			}
+			characters.removeAll(characters);
+		} else {
+			if (isMain) System.out.println(city_count);
+		}
+	}
+
+	public static String colorName(Color c) {
+		for (java.lang.reflect.Field f : Color.class.getDeclaredFields()) {
+			//we want to test only fields of type Color
+			if (f.getType().equals(Color.class))
+				try {
+					if (f.get(null).equals(c))
+						return f.getName().toLowerCase();
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// shouldn't not be thrown, but just in case print its stacktrace
+					e.printStackTrace();
+				}
+		}
+		return "<unknown>";
 	}
 
 	public void setStartFields(Hex position) {
@@ -303,6 +334,8 @@ public class Player {
 	}
 
 	public void onClick(Point p) {
+		if (state == STATE_OTHER_PLAYER) return;
+
 		if (toolbar.onClick((int) p.x, (int) p.y, map)) {
 			toolbar.reset();
 			return;
@@ -440,7 +473,7 @@ public class Player {
 			characters.get(i).setMoved(false);
 		}
 
-		if (!first) inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCitiyCount());
+		if (!first) inventory.addResources(Inventory.CHARPOINTS, 0.5 * getCityCount());
 	}
 	
 	public boolean buyCharacter(int amount) {
@@ -476,8 +509,12 @@ public class Player {
 		}
 	}
 
-	public int getCitiyCount() {
+	public int getCityCount() {
 		return city_count;
+	}
+
+	public void setCityCount(int cc) {
+		this.city_count = cc;
 	}
 
 	public void openSurroundedFields(Hex h) {
@@ -525,11 +562,19 @@ public class Player {
 	public void conquerCity(Hex h, boolean fromEvent) {
 		Player player;
 		if (map.getField(h) == null) return;
+
 		GameCharacter c = map.getField(h).getCharacter();
-		if (c == null) player = this;
-		else player = c.getPlayer();
+		
+		if (c == null)
+			player = this;
+		else
+			player = c.getPlayer();
+
+		if (player == map.getField(h).getOwner()) return;
+		
 		if (!fromEvent) Main.client.sendEvent(new Event(Event.EVENT_GAME_CONQUER_CITY, h.q+","+h.r+","+h.s));
 
+		if (map.getField(h).getOwner() != null) map.getField(h).getOwner().city_count--;
 		player.city_count++;
 		map.getField(h).setBuilding(new City(map.getField(h)));
 		player.openAndConquerSurroundedFields(h);

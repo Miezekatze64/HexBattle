@@ -262,6 +262,11 @@ public class HexPanel extends JPanel {
 			currentPlayer = opponents.get(current_index-1);
 		}
 
+		player.checkKill();
+		for (int i = 0; i < opponents.size(); i++) {
+			opponents.get(i).checkKill();
+		}
+
 		if (currentPlayer == player) player.yourTurn(false);
 	}
 
