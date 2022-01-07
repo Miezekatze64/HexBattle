@@ -59,6 +59,8 @@ public class Server {
                         Socket socket = server.accept();
                         sockets.add(socket);
                         log.println("SERVER: New connection! ("+outputs.size()+")");
+                        System.out.println("SERVER: New player joined! (ID "+outputs.size()+")");
+
                         outputs.add(new PrintStream(socket.getOutputStream()));
 
                         new Thread() {
