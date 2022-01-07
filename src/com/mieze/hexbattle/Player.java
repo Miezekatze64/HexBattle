@@ -129,7 +129,7 @@ public class Player {
 
 			f2.setCharacter(character);
 		}
-			break;
+		break;
 		case Event.EVENT_GAME_ATTACK:
 		{
 			String[] hexarr = e.getValue().split(";");
@@ -146,7 +146,29 @@ public class Player {
 			
 			attack(character1, character2, true);
 		}
-			break;
+		break;
+		case Event.EVENT_GAME_NEW_CHARACTER:
+		{
+			String[] hexarr = e.getValue().split(";");
+			String[] h1 = hexarr[0].split(",");
+			String character = hexarr[1];
+
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+			int charInt = Integer.parseInt(character);
+
+			Field f1 = map.getField(hex1, true);
+			
+			buyCharacter(f1, charInt);
+		}
+		break;
+		case Event.EVENT_GAME_CONQUER_CITY:
+		{
+			String[] h1 = e.getValue().split(",");
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+
+			conquerCity(hex1, true);
+		}
+		break;
 		}
 	}
 	
@@ -167,6 +189,26 @@ public class Player {
 
 	public Color getColor() {
 		return this.playerColor;
+	}
+
+	public void buyCharacter(Field field, int type) {
+		GameCharacter newCharacter;
+		switch (type) {
+			case GameCharacter.BUILDER:
+				newCharacter = new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner());
+				break;
+			case GameCharacter.WORKER:
+				newCharacter = new WorkerCharacter(field, HexPanel.hexLayout, field.getOwner());
+				break;
+			case GameCharacter.SWORDSMAN:
+				newCharacter = new SwordsmanCharacter(field, HexPanel.hexLayout, field.getOwner());
+				break;
+			default:
+			throw new IllegalStateException("Constant not implemented!");
+		}
+		newCharacter.setMoved(true);
+		field.setCharacter(newCharacter);
+		field.getOwner().addCharacter(newCharacter);
 	}
 
 	public void render(Graphics2D g) {
@@ -445,9 +487,20 @@ public class Player {
 	}
 
 	public void conquerCity(Hex h) {
-		city_count++;
+		conquerCity(h, false);
+	}
+
+	public void conquerCity(Hex h, boolean fromEvent) {
+		Player player;
+		if (map.getField(h) == null) return;
+		GameCharacter c = map.getField(h).getCharacter();
+		if (c == null) player = this;
+		else player = c.getPlayer();
+		if (!fromEvent) Main.client.sendEvent(new Event(Event.EVENT_GAME_CONQUER_CITY, h.q+","+h.r+","+h.s));
+
+		player.city_count++;
 		map.getField(h).setBuilding(new City(map.getField(h)));
-		openAndConquerSurroundedFields(h);
+		player.openAndConquerSurroundedFields(h);
 	}
 
 	private boolean isUnexplored(Hex hex) {

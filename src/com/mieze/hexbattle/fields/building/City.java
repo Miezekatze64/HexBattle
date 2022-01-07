@@ -8,9 +8,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.server.Client.Event;
 import com.mieze.hexbattle.toolbars.*;
 import com.mieze.hexbattle.HexPanel;
+import com.mieze.hexbattle.Main;
 import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.Player;
 import com.mieze.hexbattle.characters.*;
@@ -81,10 +84,10 @@ public class City extends Building {
 				public void onClick() {
 					Player player = field.getOwner();
 					if (player.buyCharacter(BuilderCharacter.PRICE)) {
-						GameCharacter newCharacter = new BuilderCharacter(field, HexPanel.hexLayout, field.getOwner());
-						newCharacter.setMoved(true);
-						field.setCharacter(newCharacter);
-						field.getOwner().addCharacter(newCharacter);
+						player.buyCharacter(field, GameCharacter.BUILDER);
+						
+						Hex hex = field.getHex();
+						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BUILDER));
 					} else {
 						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", BuilderCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -97,10 +100,10 @@ public class City extends Building {
 				public void onClick() {
 					Player player = field.getOwner();
 					if (player.buyCharacter(WorkerCharacter.PRICE)) {
-						GameCharacter newCharacter = new WorkerCharacter(field, HexPanel.hexLayout, field.getOwner());
-						newCharacter.setMoved(true);
-						field.setCharacter(newCharacter);
-						field.getOwner().addCharacter(newCharacter);
+						player.buyCharacter(field, GameCharacter.WORKER);
+
+						Hex hex = field.getHex();
+						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.WORKER));
 					} else {
 						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -113,10 +116,10 @@ public class City extends Building {
 				public void onClick() {
 					Player player = field.getOwner();
 					if (player.buyCharacter(SwordsmanCharacter.PRICE)) {
-						GameCharacter newCharacter = new SwordsmanCharacter(field, HexPanel.hexLayout, field.getOwner());
-						newCharacter.setMoved(true);
-						field.setCharacter(newCharacter);
-						field.getOwner().addCharacter(newCharacter);
+						player.buyCharacter(field, GameCharacter.SWORDSMAN);
+
+						Hex hex = field.getHex();
+						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.SWORDSMAN));
 					} else {
 						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", SwordsmanCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}

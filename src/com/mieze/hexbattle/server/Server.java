@@ -93,7 +93,7 @@ public class Server {
                                 } finally {
                                     log.println("SERVER: closing streams of socket "+index+".");
                                     try {
-                                        outputs.get(index).close();
+                                        //outputs.get(index).close();
                                         in.close();
                                         socket.close();
                                         outputs.remove(index);

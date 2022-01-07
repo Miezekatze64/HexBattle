@@ -138,6 +138,8 @@ public class Client{
         
         public static final String EVENT_GAME_MOVE = "game_move";
         public static final String EVENT_GAME_ATTACK = "game_attack";
+        public static final String EVENT_GAME_NEW_CHARACTER = "game_new_character";
+        public static final String EVENT_GAME_CONQUER_CITY = "game_conquer_city";
 
         public static final String EVENT_END = "end";
 

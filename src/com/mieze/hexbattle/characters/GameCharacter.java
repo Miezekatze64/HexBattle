@@ -8,6 +8,10 @@ import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.fields.*;
 
 public abstract class GameCharacter {
+	public static final int BUILDER = 0;
+	public static final int WORKER = 1;
+	public static final int SWORDSMAN = 2;
+
 	protected Hex position;
 	protected Layout hexLayout;
 	protected Field field;
@@ -146,4 +150,8 @@ public abstract class GameCharacter {
 	}
 
 	public abstract void checkAndAddTools(Toolbar toolbar);
+
+	public Player getPlayer() {
+		return player;
+	}
 }
