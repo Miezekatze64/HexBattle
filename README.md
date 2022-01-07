@@ -16,9 +16,9 @@
     $ cd PROJECT_ROOT\src
     ```
 
-- Compile using java:
+- Compile using javac:
     ```cmd
-    $ java com\mieze\hexbattle\**\*.java -d ..\bin\
+    $ java com\mieze\hexbattle\**\*.java -d ..\bin\ -verbose
     ```
 
 - Go to project root and run the game
