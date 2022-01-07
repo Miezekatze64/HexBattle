@@ -4,9 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
-import com.mieze.hexbattle.hex.*;
+
+import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.hex.Hex;
 
 public abstract class Animation {
+
 	private Map map;
 	private float rel_pos = 0;
 	private Point startPoint;

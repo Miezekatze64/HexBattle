@@ -4,12 +4,23 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.mieze.hexbattle.characters.GameCharacter;
-import com.mieze.hexbattle.fields.*;
+
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.EmptyField;
+import com.mieze.hexbattle.fields.WaterField;
+import com.mieze.hexbattle.fields.MountainField;
+import com.mieze.hexbattle.fields.ForestField;
+
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.fields.building.Village;
-import com.mieze.hexbattle.hex.*;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
+import com.mieze.hexbattle.hex.OffsetCoord;
+import com.mieze.hexbattle.hex.Point;
 
 public class Map {
+
 	protected ArrayList<Field> fields;
 	protected int offset_x = 0;
 	protected int offset_y = 0;

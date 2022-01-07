@@ -17,6 +17,7 @@ import java.net.SocketException;
 import java.net.Inet4Address;
 
 public class Server {
+    
     public static final int PORT = 1234;
     private ServerSocket server;
     private InetAddress ip;

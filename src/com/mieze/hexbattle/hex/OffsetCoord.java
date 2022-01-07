@@ -1,6 +1,7 @@
 package com.mieze.hexbattle.hex;
 
 public class OffsetCoord {
+	
 	public OffsetCoord(int col, int row) {
 		this.col = col;
 		this.row = row;

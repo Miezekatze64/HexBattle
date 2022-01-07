@@ -5,9 +5,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
-import com.mieze.hexbattle.*;
-import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.Player;
+import com.mieze.hexbattle.Main;
+import com.mieze.hexbattle.Map;
 
+import com.mieze.hexbattle.hex.Point;
 
 public class Toolbar {
 	

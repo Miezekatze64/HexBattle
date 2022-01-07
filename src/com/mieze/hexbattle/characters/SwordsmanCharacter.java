@@ -1,12 +1,18 @@
 package com.mieze.hexbattle.characters;
 
-import java.awt.*;
-import com.mieze.hexbattle.*;
-import com.mieze.hexbattle.hex.*;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import com.mieze.hexbattle.Player;
+
+import com.mieze.hexbattle.hex.Layout;
+
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
-import com.mieze.hexbattle.fields.*;
-import com.mieze.hexbattle.fields.building.*;
+
+import com.mieze.hexbattle.fields.Field;
+
+import com.mieze.hexbattle.fields.building.City;
 
 public class SwordsmanCharacter extends GameCharacter {
 	public static final int PRICE = 4;

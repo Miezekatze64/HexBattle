@@ -1,4 +1,5 @@
 package com.mieze.hexbattle;
+
 /*
  * 2014 OpenSimplex Noise in Java.
  * by Kurt Spencer

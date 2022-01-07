@@ -16,6 +16,7 @@ import java.awt.image.FilteredImageSource;
 import javax.swing.GrayFilter;
 
 public abstract class ToolbarButton {
+	
 	private boolean mouseOver = false;
 
 	public static final int WIDTH = 60;

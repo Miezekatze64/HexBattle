@@ -3,7 +3,7 @@ package com.mieze.hexbattle.fields.building;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.Field;
 
 public abstract class Building {
 	protected static Image img;

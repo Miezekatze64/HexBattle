@@ -8,6 +8,7 @@ import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.hex.Point;
 
 public class Inventory {
+	
 	public static final int WOOD = 0;
 	public static final int COAL = 1;
 	public static final int IRON = 2;

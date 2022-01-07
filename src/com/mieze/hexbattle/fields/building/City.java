@@ -1,22 +1,36 @@
 package com.mieze.hexbattle.fields.building;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
 import javax.swing.JOptionPane;
 
 import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Point;
+
 import com.mieze.hexbattle.server.Client.Event;
-import com.mieze.hexbattle.toolbars.*;
+
+import com.mieze.hexbattle.toolbars.Toolbar;
+import com.mieze.hexbattle.toolbars.ToolbarButton;
+
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Main;
 import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.characters.*;
+
+import com.mieze.hexbattle.characters.BuilderCharacter;
+import com.mieze.hexbattle.characters.GameCharacter;
+import com.mieze.hexbattle.characters.WorkerCharacter;
+import com.mieze.hexbattle.characters.SwordsmanCharacter;
+
 import com.mieze.hexbattle.fields.Field;
 
 public class City extends Building {

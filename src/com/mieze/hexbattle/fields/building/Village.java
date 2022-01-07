@@ -6,7 +6,9 @@ import java.awt.Toolkit;
 
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Map;
+
 import com.mieze.hexbattle.fields.Field;
+
 import com.mieze.hexbattle.hex.Point;
 
 public class Village extends Building {

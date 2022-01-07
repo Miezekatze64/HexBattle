@@ -3,8 +3,9 @@ package com.mieze.hexbattle.fields;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import com.mieze.hexbattle.hex.*;
-import com.mieze.hexbattle.*;
+import com.mieze.hexbattle.hex.Hex;
+
+import com.mieze.hexbattle.Map;
 
 public class MountainField extends Field {
 	public MountainField(Hex hex, Map map) {

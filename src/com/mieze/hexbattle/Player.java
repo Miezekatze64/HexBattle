@@ -5,14 +5,28 @@ import java.awt.Color;
 
 import java.util.ArrayList;
 
-import com.mieze.hexbattle.fields.*;
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.UnexploredField;
+import com.mieze.hexbattle.fields.ForestField;
+import com.mieze.hexbattle.fields.WaterField;
+
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.fields.building.Mine;
-import com.mieze.hexbattle.characters.*;
-import com.mieze.hexbattle.hex.*;
+
+import com.mieze.hexbattle.characters.GameCharacter;
+import com.mieze.hexbattle.characters.BuilderCharacter;
+import com.mieze.hexbattle.characters.WorkerCharacter;
+import com.mieze.hexbattle.characters.SwordsmanCharacter;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
+
 import com.mieze.hexbattle.hex.Point;
+
 import com.mieze.hexbattle.server.Client.Event;
-import com.mieze.hexbattle.toolbars.*;
+
+import com.mieze.hexbattle.toolbars.Toolbar;
+import com.mieze.hexbattle.toolbars.Inventory;
 
 public class Player {
 	public Map map;

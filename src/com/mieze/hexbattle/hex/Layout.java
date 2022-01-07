@@ -3,6 +3,7 @@ package com.mieze.hexbattle.hex;
 import java.util.ArrayList;
 
 public class Layout {
+	
 	public Layout(Orientation orientation, Point size, Point origin) {
 		this.orientation = orientation;
 		this.size = size;

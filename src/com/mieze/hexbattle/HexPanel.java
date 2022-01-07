@@ -2,12 +2,23 @@ package com.mieze.hexbattle;
 
 import java.util.ArrayList;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
 
-import com.mieze.hexbattle.hex.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseMotionListener;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
+
 import com.mieze.hexbattle.hex.Point;
-import com.mieze.hexbattle.server.*;
+
+import com.mieze.hexbattle.server.Client;
 import com.mieze.hexbattle.server.Client.Event;
 
 import javax.swing.*;

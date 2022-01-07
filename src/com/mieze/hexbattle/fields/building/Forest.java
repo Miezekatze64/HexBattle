@@ -1,15 +1,19 @@
 package com.mieze.hexbattle.fields.building;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Graphics;
+
+import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import com.mieze.hexbattle.hex.Point;
+
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Map;
+
 import com.mieze.hexbattle.fields.Field;
 
 public class Forest extends Building {

@@ -1,16 +1,29 @@
 package com.mieze.hexbattle.characters;
 
-import java.awt.*;
+import java.awt.Toolkit;
+import java.awt.Image;
+
 import javax.swing.JOptionPane;
 
-import com.mieze.hexbattle.*;
-import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.Main;
+import com.mieze.hexbattle.Player;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
+
 import com.mieze.hexbattle.server.Client.Event;
+
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
-import com.mieze.hexbattle.fields.*;
-import com.mieze.hexbattle.fields.building.*;
-import com.mieze.hexbattle.toolbars.*;
+
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.MountainField;
+
+import com.mieze.hexbattle.fields.building.City;
+import com.mieze.hexbattle.fields.building.Village;
+import com.mieze.hexbattle.fields.building.Mine;
+
+import com.mieze.hexbattle.toolbars.Inventory;
 
 
 public class BuilderCharacter extends GameCharacter {

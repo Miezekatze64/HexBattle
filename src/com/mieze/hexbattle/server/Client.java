@@ -12,7 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-public class Client{
+public class Client {
+
     private Socket socket = null;
     private PrintStream out;
     private EventListener eventListener = null;

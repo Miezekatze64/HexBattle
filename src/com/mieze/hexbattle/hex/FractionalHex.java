@@ -3,6 +3,7 @@ package com.mieze.hexbattle.hex;
 import java.util.ArrayList;
 
 public class FractionalHex {
+	
 	public FractionalHex(double q, double r, double s) {
 		this.q = q;
 		this.r = r;

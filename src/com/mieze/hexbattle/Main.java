@@ -2,9 +2,13 @@ package com.mieze.hexbattle;
 
 import com.mieze.hexbattle.server.*;
 
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 import java.util.Scanner;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import javax.swing.JOptionPane;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;

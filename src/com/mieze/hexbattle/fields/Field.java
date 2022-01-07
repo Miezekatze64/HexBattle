@@ -5,11 +5,17 @@ import java.awt.BasicStroke;
 import java.awt.Stroke;
 import java.awt.Color;
 
-import com.mieze.hexbattle.*;
-import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.Player;
+import com.mieze.hexbattle.Map;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
+
 import com.mieze.hexbattle.hex.Point;
-import com.mieze.hexbattle.characters.*;
-import com.mieze.hexbattle.fields.building.*;
+
+import com.mieze.hexbattle.characters.GameCharacter;
+
+import com.mieze.hexbattle.fields.building.Building;
 
 public abstract class Field {
 	protected Hex hex;

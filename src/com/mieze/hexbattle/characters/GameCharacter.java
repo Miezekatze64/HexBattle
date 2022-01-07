@@ -1,11 +1,21 @@
 package com.mieze.hexbattle.characters;
 
-import java.awt.*;
-import com.mieze.hexbattle.*;
-import com.mieze.hexbattle.hex.*;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.Image;
+
+import com.mieze.hexbattle.Player;
+import com.mieze.hexbattle.Animation;
+import com.mieze.hexbattle.Map;
+
+import com.mieze.hexbattle.hex.Hex;
+import com.mieze.hexbattle.hex.Layout;
 import com.mieze.hexbattle.hex.Point;
+
 import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.fields.*;
+
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.WaterField;
 
 public abstract class GameCharacter {
 	public static final int BUILDER = 0;
