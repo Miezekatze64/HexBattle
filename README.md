@@ -33,8 +33,8 @@ Java Runtime Environment (with javac) 1.8.0 or newer.
     ```sh
     ./run.sh
     ```
-OR
+OR  
 2./3. Run and compile in one:
-    ```
+    ```sh
     ./run.sh --recompile
     ```
