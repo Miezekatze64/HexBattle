@@ -1,40 +1,44 @@
 # HexBattle
 
 ## Requirements
-Java Runtime Environment (with javac) 1.8.0 or newer.
+[Java](https://www.oracle.com/java/technologies/) 1.8.0 or newer.
 
 ## Compile and run
-1. Install jre (version 1.8.0 or newer)
+- Install a [Java Runtime Environment](https://www.oracle.com/java/technologies/downloads/) (version 1.8 or newer [Java 17 recommended])
+- Clone the repository
+    ```sh
+    $ git clone https://github.com/Miezekatze64/HexBattle.git
+    ```
 
 ### Windows
-2. Go to source directory:
+- Go to source directory:
     ```cmd
     $ cd PROJECT_ROOT\src
     ```
 
-3. Compile using java:
+- Compile using java:
     ```cmd
     $ java com\mieze\hexbattle\**\*.java -d ..\bin\
     ```
 
-4. Go to project root and run the game
+- Go to project root and run the game
     ```cmd
     cd ..
     java -classpath bin com.mieze.hexbattle.Main
     ```
 
 ### Linux / Unix / MacOS
-2. Compile using bash script:
+- Compile using bash script:
     ```sh
-    ./compile.sh
+    $ ./compile.sh
     ```
 
-3. Run using bash script:
+- Run using bash script:
     ```sh
-    ./run.sh
+    $ ./run.sh
     ```
-OR  
-2./3. Run and compile in one:
+
+- Or run and compile at same time:
     ```sh
-    ./run.sh --recompile
+    $ ./run.sh --recompile
     ```
