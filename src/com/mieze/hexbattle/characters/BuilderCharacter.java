@@ -73,7 +73,7 @@ public class BuilderCharacter extends GameCharacter {
 						field.setBuilding(new Mine(field));
 
 						Hex h = field.getHex();
-						Main.client.sendEvent(new Event(Event.GAME_BUILD_MINE, h.q+","+h.r+","+h.s+";"+((Mine)field.getBuilding()).getType()));
+						Main.client.sendEvent(new Event(Event.EVENT_GAME_BUILD_MINE, h.q+","+h.r+","+h.s+";"+((Mine)field.getBuilding()).getType()));
 
 						player.reset();
 					} else {

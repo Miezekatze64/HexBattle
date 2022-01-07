@@ -170,14 +170,22 @@ public class Player {
 			conquerCity(hex1, true);
 		}
 		break;
-		case Event.GAME_BUILD_MINE:
+		case Event.EVENT_GAME_BUILD_MINE:
 		{
 			String[] hexarr = e.getValue().split(";");
 			String[] h1 = hexarr[0].split(",");
 			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
 			int type = Integer.parseInt(hexarr[1]);
 
-			map.getField(hex1).setBuilding(new Mine(map.getField(hex1), type));
+			map.getField(hex1, true).setBuilding(new Mine(map.getField(hex1), type));
+		}
+		break;
+		case Event.EVENT_GAME_CHOP_WOOD:
+		{
+			String[] h1 = e.getValue().split(",");
+			Hex hex = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+
+			((ForestField)map.getField(hex, true)).chop();
 		}
 		break;
 		}

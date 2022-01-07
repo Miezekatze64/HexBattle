@@ -4,6 +4,7 @@ import java.awt.*;
 
 import com.mieze.hexbattle.*;
 import com.mieze.hexbattle.hex.*;
+import com.mieze.hexbattle.server.Client.Event;
 import com.mieze.hexbattle.toolbars.*;
 import com.mieze.hexbattle.fields.*;
 import com.mieze.hexbattle.fields.building.*;
@@ -16,7 +17,7 @@ public class WorkerCharacter extends GameCharacter {
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/worker.png");
-		chop_wood = toolkit.getImage("assets/wood.png");
+		chop_wood = toolkit.getImage("assets/item_wood.png");
 	}
 
 	public WorkerCharacter(Field field, Layout hexLayout, Player player) {
@@ -37,6 +38,9 @@ public class WorkerCharacter extends GameCharacter {
 				@Override
 				public void onClick() {
 					((ForestField)field).chop();
+					Hex h = field.getHex();
+					Main.client.sendEvent(new Event(Event.EVENT_GAME_CHOP_WOOD, h.q+","+h.r+","+h.s));
+
 					player.addResourses(new int[]{1, 0, 0, 0});
 					player.reset();
 				}
