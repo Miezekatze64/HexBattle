@@ -36,10 +36,12 @@ public class Main extends JFrame {
 	}
 
 	public static void handleException(Throwable t) {
+		//show message box at error
 		if (t != null && !error) {
 			error = true;
 			javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in ./logs/err.log", "ERROR", JOptionPane.ERROR_MESSAGE);
 			
+			//writing error to logs/error.log
 			try {
 				java.io.FileWriter fstream = new java.io.FileWriter("logs/err.log", true);
 				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
@@ -59,6 +61,10 @@ public class Main extends JFrame {
 	}
 
 	private void initServer() {
+
+		//initialize server/client
+		//TODO: add GUI instead of text input
+
 		System.out.print("Start as host? (y/n): ");
 		Scanner scanner = new Scanner(System.in);
 		String answer = "";
@@ -83,16 +89,22 @@ public class Main extends JFrame {
 	}
 
 	public Main() {
+		//creating JFrame
 		super("Hexbattle");
+
 		initServer();
 
+		//add shutdown hook to close client and server streams at exit
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				if (client != null) client.close();
 				if (server != null) server.close();
 			}
 		});
+
 		if (isHost) setTitle("Hexbattle [Host]");
+
+		//creating main panel
 		panel = new HexPanel();
 		add(panel);
 
@@ -104,6 +116,7 @@ public class Main extends JFrame {
 		setSize(WIDTH, HEIGHT);
 		setVisible(true);
 
+		//creating game loop
 		Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,6 +135,8 @@ public class Main extends JFrame {
 	}
 
 	private void calcFPS(long time) {
+		//calculate current FPS
+
 		double fps = 1000.0 / (System.currentTimeMillis() - lastTime)*50;
 		lastTime = System.currentTimeMillis();
 		
