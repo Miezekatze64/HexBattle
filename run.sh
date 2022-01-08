@@ -3,7 +3,7 @@
 foreground=''
 
 print_usage() {
-  printf "Usage: \n-c|--recompile\t\tforce recompiling\n"
+  printf "Usage: \n-c|--recompile\t\tcompile before running\n"
 }
 
 while [[ $# -gt 0 ]]; do

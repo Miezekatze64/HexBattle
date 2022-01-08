@@ -20,7 +20,7 @@ public class Boat extends GameCharacter {
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		img = toolkit.getImage("assets/rider.png");
+		img = toolkit.getImage("assets/boat.png");
 	}
 
 	public Boat(Field field, Layout hexLayout, Player player) {
@@ -87,11 +87,13 @@ public class Boat extends GameCharacter {
 	
 	@Override
 	public int getAttackScore() {
-		return 3;
+		if (hasCharacter()) return getCharacter().getAttackScore();
+		return 0;
 	}
 		
 	@Override
 	public int getDefenceScore() {
-		return 2;
+		if (hasCharacter()) return getCharacter().getDefenceScore();
+		return 1;
 	}
 }

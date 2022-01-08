@@ -30,7 +30,7 @@ public class Port extends Building {
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		img = toolkit.getImage("assets/city_1.png");
+		img = toolkit.getImage("assets/port.png");
 	}
 
 	public Port(Field f) {
@@ -41,13 +41,13 @@ public class Port extends Building {
 	public void onClick() {
 		Toolbar toolbar = field.getOwner().getToolbar();
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New bpat")) {
-			toolbar.add(new ToolbarButton("New boat", RiderCharacter.img, "A simple boat, which can be used to transport characters...\n\nCosts: "+Boat.RESOURCES[0]+" coal and "+Boat.PRICE+" character points.") {
+			toolbar.add(new ToolbarButton("New boat", Boat.img, "A simple boat, which can be used to transport characters...\n\nCosts: "+Boat.RESOURCES[0]+" wood, "+Boat.RESOURCES[1]+" coal, "+Boat.RESOURCES[2]+" iron and "+Boat.PRICE+" character points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
 					if (player.buyCharacter(Boat.PRICE, Boat.RESOURCES)) {
 						player.buyCharacter(field, GameCharacter.BOAT);
-						
+
 						Hex hex = field.getHex();
 						player.openSurroundedFields(hex);
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BOAT));
