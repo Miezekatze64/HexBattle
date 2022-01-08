@@ -192,16 +192,16 @@ public class Map {
 		double val = noise.eval(oc.row * SMOOTH_FACTOR, oc.col * SMOOTH_FACTOR);
 		double type_val = val * 10.0;
 
-		if (type_val < -4) {
+		if (type_val < -3) {
 			// lake / oceans / rivers / ...
 			return Field.WATER;
-		} else if (type_val < 3) {
+		} else if (type_val < 4) {
 			// grass
 			if (type_val < 0 && type_val > -1) {
 				return -1;
 			}
 			return Field.EMPTY;
-		} else if (type_val < 5) {
+		} else if (type_val < 6) {
 			// forests
 			return Field.FOREST;
 		} else if (type_val < 9) {
