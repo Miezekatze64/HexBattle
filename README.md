@@ -43,3 +43,4 @@ java -classpath bin com.mieze.hexbattle.Main
 ```
 ./run.sh --recompile
 ```
+
