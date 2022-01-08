@@ -16,12 +16,14 @@ import com.mieze.hexbattle.toolbars.Toolbar;
 
 import com.mieze.hexbattle.fields.Field;
 import com.mieze.hexbattle.fields.WaterField;
+import com.mieze.hexbattle.fields.building.Port;
 
 public abstract class GameCharacter {
 	public static final int BUILDER = 0;
 	public static final int WORKER = 1;
 	public static final int SWORDSMAN = 2;
 	public static final int RIDER = 3;
+	public static final int BOAT = 4;
 
 	protected Hex position;
 	protected Layout hexLayout;
@@ -71,7 +73,7 @@ public abstract class GameCharacter {
 	}
 	
 	private void die() {
-		field.setCharacter(null);
+		map.getField(position).setCharacter(null);
 		player.removeCharacter(this);
 	}
 	
@@ -108,11 +110,11 @@ public abstract class GameCharacter {
 			for (int n = 0; n < 6; n++) {
 				if (!h.neighbor(n).equals(position)) {
 					if (map.getField(h.neighbor(n)) instanceof WaterField) {
-						/*
-						 * TODO implement boats ↓
-						if (!(this instanceof BoatCharacter)) {*/
+						if (map.getField(h.neighbor(n)).hasBuilding() && map.getField(h.neighbor(n)).getBuilding() instanceof Port && map.getField(h.neighbor(n)).hasCharacter() && map.getField(h.neighbor(n)).getCharacter() instanceof Boat) {
+							player.activate(h.neighbor(n));
 							continue;
-						/*}*/
+						}
+						continue;
 					}
 					player.activate(h.neighbor(n));
 				}
@@ -140,6 +142,8 @@ public abstract class GameCharacter {
 			img = SwordsmanCharacter.img;
 		else if (this instanceof RiderCharacter)
 			img = RiderCharacter.img;
+		else if (this instanceof Boat)
+			img = Boat.img;
 		else
 			throw new IllegalStateException("Character class not implemented: " + this.getClass().getCanonicalName());
 

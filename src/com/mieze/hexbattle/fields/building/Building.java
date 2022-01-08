@@ -6,7 +6,7 @@ import java.awt.Image;
 import com.mieze.hexbattle.fields.Field;
 
 public abstract class Building {
-	protected static Image img;
+	public static Image img;
 
 	Field field;
 

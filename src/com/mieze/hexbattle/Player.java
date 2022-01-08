@@ -14,8 +14,9 @@ import com.mieze.hexbattle.fields.WaterField;
 
 import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.fields.building.Mine;
-
+import com.mieze.hexbattle.fields.building.Port;
 import com.mieze.hexbattle.characters.GameCharacter;
+import com.mieze.hexbattle.characters.Boat;
 import com.mieze.hexbattle.characters.BuilderCharacter;
 import com.mieze.hexbattle.characters.WorkerCharacter;
 import com.mieze.hexbattle.characters.SwordsmanCharacter;
@@ -37,7 +38,7 @@ public class Player {
 	protected ArrayList<GameCharacter> characters;
 	protected ArrayList<Hex> fields;
 	protected ArrayList<UnexploredField> unexplored;
-	private ArrayList<Hex> active;
+	public ArrayList<Hex> active;
 	private ArrayList<Hex> empire;
 
 	private Toolbar toolbar;
@@ -56,8 +57,9 @@ public class Player {
 	private Color playerColor;
 	private boolean isMain = false;
 	private boolean alive = true;
+	public boolean boat_leave = false;
 
-	private GameCharacter clickedCharacter;
+	public GameCharacter clickedCharacter;
 
 	public Player(Map map, Layout layout, Color color) {
 		this(map, layout, color, false);
@@ -172,7 +174,20 @@ public class Player {
 			f1.removeCharacter();
 			character.moveTo(f2);
 
-			f2.setCharacter(character);
+			if (f2.hasCharacter() && f2.getCharacter() instanceof Boat && f2.getCharacter().isFromPlayer(character.getPlayer())) {
+				((Boat)f2.getCharacter()).setCharacter(character);
+			} else {
+				f2.setCharacter(character);
+			}
+
+			if (character instanceof Boat) {
+				if (((Boat)character).hasCharacter()) {
+					GameCharacter char2 = ((Boat)character).getCharacter();
+
+					char2.moveTo(f2);
+					char2.setMoved(true);
+				}
+			}
 		}
 		break;
 		case Event.EVENT_GAME_ATTACK:
@@ -212,6 +227,37 @@ public class Player {
 			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
 
 			conquerCity(hex1, true);
+		}
+		break;
+		case Event.EVENT_GAME_NEW_PORT:
+		{
+			String[] h1 = e.getValue().split(",");
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+
+			map.getField(hex1, true).setBuilding(new Port(map.getField(hex1)));
+		}
+		break;
+		case Event.EVENT_GAME_LEAVE_BOAT:
+		{
+			String[] hexarr = e.getValue().split(";");
+			String[] h1 = hexarr[0].split(",");
+			String[] h2 = hexarr[1].split(",");
+
+			Hex hex1 = new Hex(Integer.parseInt(h1[0]), Integer.parseInt(h1[1]), Integer.parseInt(h1[2]));
+			Hex hex2 = new Hex(Integer.parseInt(h2[0]), Integer.parseInt(h2[1]), Integer.parseInt(h2[2]));
+
+			Field f1 = map.getField(hex1, true);
+			Field f2 = map.getField(hex2, true);
+			Boat boat = (Boat)f1.getCharacter();
+			GameCharacter character = boat.getCharacter();
+
+			character.moveTo(f2);
+			System.out.println("Moved to " + f2.getHex());
+			boat.removeCharacter();
+			f2.setCharacter(character);
+			boat.setMoved(true);
+			
+			character.setMoved(true);
 		}
 		break;
 		case Event.EVENT_GAME_BUILD_MINE:
@@ -268,6 +314,9 @@ public class Player {
 				break;
 			case GameCharacter.RIDER:
 				newCharacter = new RiderCharacter(field, HexPanel.hexLayout, field.getOwner());
+				break;
+			case GameCharacter.BOAT:
+				newCharacter = new Boat(field, HexPanel.hexLayout, field.getOwner());
 				break;
 			default:
 			throw new IllegalStateException("Constant not implemented!");
@@ -335,6 +384,20 @@ public class Player {
 		active.removeAll(active);
 	}
 
+	public void leaveBoat(Field f) {
+		active.removeAll(active);
+
+		GameCharacter character = ((Boat)f.getCharacter()).getCharacter();
+		character.setPossibleFields();
+		clickedCharacter = character;
+		
+		boat_leave = true;
+		Hex h = f.getHex();
+		//Main.client.sendEvent(new Event(Event.EVENT_GAME_LEAVE_BOAT, h.q+","+h.r+","+h.s));
+
+		state = STATE_CHARACTER_CLICKED;
+	}
+
 	public void onClick(Point p) {
 		if (state == STATE_OTHER_PLAYER) return;
 
@@ -354,14 +417,19 @@ public class Player {
 				if (!f.hasCharacter()) {
 					f.getBuilding().onClick();
 				}
+			} else {
+				if (f instanceof WaterField) {
+					if (!f.hasCharacter() && f.hasOwner() && f.getOwner() == this) {
+						((WaterField)f).onClick();
+					}
+				}
 			}
 		}
 
 		switch (state) {
 		case STATE_START:
-			if (f == null) {
-				// TODO: handle empty click (maybe...)
-			} else {
+			boat_leave = false;
+			if (f != null) {
 				if (!(f instanceof UnexploredField)) {
 					if (f.hasCharacter() && f.getCharacter().isFromPlayer(this) && !f.getCharacter().isMoved()) {
 						GameCharacter character = f.getCharacter();
@@ -373,8 +441,6 @@ public class Player {
 						state = STATE_CHARACTER_CLICKED;
 						break;
 					}
-				} else {
-					// TODO: handle UnexploredField click
 				}
 			}
 			clickedCharacter = null;
@@ -385,9 +451,11 @@ public class Player {
 				throw new IllegalStateException("A player connot be click and unexisting at the same time (unreaachable)!!");
 			} else if (f == null) {
 				// TODO: handle empty click (maybe...)
+				boat_leave = false;
 			} else {
 				// check if field is in range
 				if (!active.contains(f.getHex())) {
+					boat_leave = false;
 					clickedCharacter = null;
 					state = STATE_START;
 					active.removeAll(active);
@@ -397,6 +465,22 @@ public class Player {
 				if (!(f instanceof UnexploredField)) {
 					if (f.hasCharacter()) {
 						if (f.getCharacter().isFromPlayer(this)) {
+							if (f.getCharacter() instanceof Boat) {
+								boat_leave = false;
+								Hex before = clickedCharacter.getPosition();
+
+								clickedCharacter.moveTo(f);
+								active.removeAll(active);
+								map.getField(clickedCharacter.getPosition()).removeCharacter();
+								((Boat)f.getCharacter()).setCharacter(clickedCharacter);
+								clickedCharacter.setMoved(true);
+
+								Hex after = f.getHex();
+								Main.client.sendEvent(new Event(Event.EVENT_GAME_MOVE, before.q+","+before.r+","+before.s+";"+after.q+","+after.r+","+after.s));
+								break;
+							}
+
+							boat_leave = false;
 							active.removeAll(active);
 							GameCharacter character = f.getCharacter();
 							character.setPossibleFields();
@@ -404,6 +488,7 @@ public class Player {
 							state = STATE_CHARACTER_CLICKED;
 							break;
 						} else {
+							boat_leave = false;
 							attack(clickedCharacter, f.getCharacter(), false);
 							active.removeAll(active);
 							clickedCharacter.setMoved(true);
@@ -412,14 +497,27 @@ public class Player {
 						}
 					} else {
 						if (f instanceof WaterField) {
-							/*
-							 * TODO implement this (!(f.getCharacter() instanceof BoatCharacter)) {
-							 */
+/*							if (f.getCharacter() instanceof Boat) {
+								()
+							}
 							break;
-							/* } */
-						}
+*/						}
 
 						Hex before = clickedCharacter.getPosition();
+
+						if (boat_leave) {
+							clickedCharacter.moveTo(f);
+							((Boat)map.getField(before).getCharacter()).removeCharacter();
+							f.setCharacter(clickedCharacter);
+							clickedCharacter.setMoved(true);
+
+							map.getField(before).getCharacter().setMoved(true);
+							active.removeAll(active);
+
+							Hex h = f.getHex();
+							Main.client.sendEvent(new Event(Event.EVENT_GAME_LEAVE_BOAT, before.q+","+before.r+","+before.s+";"+h.q+","+h.r+","+h.s));
+							break;
+						}
 
 						// move to next field
 						clickedCharacter.moveTo(f);
@@ -427,6 +525,15 @@ public class Player {
 						map.getField(clickedCharacter.getPosition()).removeCharacter();
 						f.setCharacter(clickedCharacter);
 						clickedCharacter.setMoved(true);
+
+						if (clickedCharacter instanceof Boat) {
+							if (((Boat)clickedCharacter).hasCharacter()) {
+								GameCharacter char2 = ((Boat)clickedCharacter).getCharacter();
+
+								char2.moveTo(f);
+								char2.setMoved(true);
+							}
+						}
 
 						openSurroundedFields(f.getHex());
 
@@ -492,14 +599,15 @@ public class Player {
 	public boolean buyCharacter(int amount, int[] resources) {
 		if (resources.length != 4) throw new IllegalArgumentException("Array must have length of 4!");
 
-		if (!payResourses(resources)) return false;
-
+		
 		if (inventory.getCharacterPoints() < amount) {
 			return false;
 		} else {
 			inventory.setCharacterPoints(inventory.getCharacterPoints()-amount);
-			return true;
 		}
+		if (!payResourses(resources)) return false;
+		
+		return true;
 	}
 
 	public boolean payResourses(int[] amount) {
@@ -591,8 +699,8 @@ public class Player {
 		
 		if (!fromEvent) Main.client.sendEvent(new Event(Event.EVENT_GAME_CONQUER_CITY, h.q+","+h.r+","+h.s));
 
-		if (map.getField(h).getOwner() != null) map.getField(h).getOwner().city_count--;
 		player.city_count++;
+		if (map.getField(h).getOwner() != null) map.getField(h).getOwner().city_count--;
 		map.getField(h).setBuilding(new City(map.getField(h)));
 		player.openAndConquerSurroundedFields(h);
 	}
@@ -607,7 +715,7 @@ public class Player {
 	}
 
 	public void activate(Hex h) {
-		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter() || !map.getField(h).getCharacter().isFromPlayer(this))) {
+		if (!active.contains(h) && !isUnexplored(h) && map.getField(h) != null && (!map.getField(h).hasCharacter() || !map.getField(h).getCharacter().isFromPlayer(this) || map.getField(h).getCharacter() instanceof Boat)) {
 			active.add(h);
 		}
 	}

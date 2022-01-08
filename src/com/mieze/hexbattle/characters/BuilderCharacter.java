@@ -101,7 +101,6 @@ public class BuilderCharacter extends GameCharacter {
 		return 5;
 	}
 	
-	
 	@Override
 	public int getAttackScore() {
 		return 3;
