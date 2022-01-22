@@ -2,6 +2,8 @@ package com.mieze.hexbattle;
 
 import com.mieze.hexbattle.server.*;
 
+import java.io.File;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -29,6 +31,10 @@ public class Main extends JFrame {
 
 	public static void main(String[] args) {
 		try {
+            File logs = new File("./logs/");
+            if (!logs.exists()) {
+                logs.mkdir();
+            }
 			new Main();
 		} catch (Throwable t) {
 			handleException(t);
