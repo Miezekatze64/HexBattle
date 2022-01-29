@@ -52,7 +52,7 @@ public class Port extends Building {
 						player.openSurroundedFields(hex);
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BOAT));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, resourceMessage(Boat.PRICE, Boat.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, resourceMessage(Boat.PRICE, Boat.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});

@@ -103,7 +103,7 @@ public class City extends Building {
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BUILDER));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", BuilderCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, String.format("You need at least %d character points to buy this.", BuilderCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
@@ -119,7 +119,7 @@ public class City extends Building {
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.WORKER));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
@@ -135,7 +135,7 @@ public class City extends Building {
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.SWORDSMAN));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, resourceMessage(SwordsmanCharacter.PRICE, SwordsmanCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, resourceMessage(SwordsmanCharacter.PRICE, SwordsmanCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
@@ -151,7 +151,7 @@ public class City extends Building {
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.RIDER));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, resourceMessage(RiderCharacter.PRICE, RiderCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, resourceMessage(RiderCharacter.PRICE, RiderCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});

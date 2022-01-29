@@ -127,8 +127,8 @@ public class Player {
 		}
 
 		while (!found) {
-			int q = (int) (Math.random() * 20);
-			int r = (int) (Math.random() * 20);
+			int q = (int) (Math.random() * 10);
+			int r = (int) (Math.random() * 10);
 			int s = -q - r;
 
 			this.start_pos = new Hex(q, r, s);

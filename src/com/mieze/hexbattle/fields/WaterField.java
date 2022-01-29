@@ -38,7 +38,7 @@ public class WaterField extends Field {
 						Hex hex = field.getHex();
 						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_PORT, hex.q+","+hex.r+","+hex.s));
 					} else {
-						JOptionPane.showInternalMessageDialog(null, "You need at least 4 wood and 1 iron to buy this.", "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "You need at least 4 wood and 1 iron to buy this.", "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
