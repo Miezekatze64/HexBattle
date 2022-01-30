@@ -1,13 +1,14 @@
 package com.mieze.hexbattle;
 
 import com.mieze.hexbattle.server.*;
+import com.mieze.hexbattle.server.Client.Event;
 
 import java.io.File;
-
+import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ public class Main extends JFrame {
 	private long lastTime;
 	private long frameCount = 0;
 	private static HexPanel panel;
+	private static Menu menu;
 
 	private static boolean error = false;
 
@@ -29,13 +31,15 @@ public class Main extends JFrame {
 	public static Server server = null;
 	public static Client client;
 
+	private static Main instance;
+
 	public static void main(String[] args) {
 		try {
             File logs = new File("./logs/");
             if (!logs.exists()) {
                 logs.mkdir();
             }
-			new Main();
+			instance = new Main();
 		} catch (Throwable t) {
 			handleException(t);
 		}
@@ -66,39 +70,55 @@ public class Main extends JFrame {
 		}
 	}
 
-	private void initServer() {
+	public void connect(String ip) throws IOException, IllegalArgumentException{
+		isHost = false;
+		client = new Client(ip, Server.PORT);
+	}
 
-		//initialize server/client
-		//TODO: add GUI instead of text input
+	public void leaveGame() {
+		menu.leave();
+		isHost = false;
+		client.close();
+		client = null;
+	}
 
-		System.out.print("Start as host? (y/n): ");
-		Scanner scanner = new Scanner(System.in);
-		String answer = "";
+	public void startServer() throws IOException, IllegalArgumentException {
+		isHost = true;
+		server = new Server();
+		server.start();
+		client = new Client(server.getIp(), Server.PORT);
+	}
 
-		if (scanner.hasNextLine()) answer = scanner.nextLine();
-		
-		if (answer.equalsIgnoreCase("y")) {
-			isHost = true;
-			server = new Server();
-			server.start();
-			client = new Client(server.getIp(), Server.PORT);
-			System.out.println("IP: " + server.getIp().getHostAddress());
-		} else {
-			isHost = false;
-			System.out.print("Enter IP: ");
-			String ip = "";
-			if (scanner.hasNextLine()) ip = scanner.nextLine();
-			client = new Client(ip, Server.PORT);
-		}
+	public void stopServer() {
+		panel.connected.removeAll(panel.connected);
+		client.sendEvent(new Event(Event.EVENT_SERVER_CLOSE, ""));
+		isHost = false;
+		server.close();
+		server = null;
+		client.close();
+		client = null;
+	}
 
-		scanner.close();
+	public void showGame() {
+		panel.started();
+		setContentPane(panel);
+		validate();
+	}
+
+	public void showMenu() {
+		setContentPane(menu);
+		validate();
+	}
+
+	public static Main getInstance() {
+		return instance;
 	}
 
 	public Main() {
 		//creating JFrame
 		super("Hexbattle");
-
-		initServer();
+		instance = this;
+		//initServer();
 
 		//add shutdown hook to close client and server streams at exit
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -110,10 +130,13 @@ public class Main extends JFrame {
 
 		if (isHost) setTitle("Hexbattle [Host]");
 
+		menu = new Menu();
+		
 		//creating main panel
 		panel = new HexPanel();
-		add(panel);
 
+		showMenu();
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//setUndecorated(true);
@@ -148,5 +171,10 @@ public class Main extends JFrame {
 		
 		panel.currentFPS((int)fps);
 	}
-}
 
+    public void updateConnectedList(ArrayList<String> a) {
+		if (menu.isVisible()) {
+			menu.updateConnectedList(a);
+		}
+    }
+}

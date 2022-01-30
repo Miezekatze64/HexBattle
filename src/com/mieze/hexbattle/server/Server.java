@@ -1,6 +1,9 @@
 package com.mieze.hexbattle.server;
 
 import java.util.Enumeration;
+
+import com.mieze.hexbattle.Main;
+
 import java.util.ArrayList;
 
 import java.io.File;
@@ -18,15 +21,15 @@ import java.net.Inet4Address;
 
 public class Server {
     
-    public static final int PORT = 1234;
+    public static final int PORT = 8462;
     private ServerSocket server;
     private InetAddress ip;
     private ArrayList<Socket> sockets = new ArrayList<>();
     private ArrayList<PrintStream> outputs = new ArrayList<>();
     private PrintStream log;
 
-    public Server() {
-        try {
+    public Server() throws IOException {
+        //try {
 
             //creating log stream and server
             log = new PrintStream(new File("logs/server.log"));
@@ -53,12 +56,12 @@ public class Server {
             }
 
             if (this.ip == null) throw new RuntimeException("No network connection found...");
-        } catch (IOException e) {
+/*        } catch (IOException e) {
             log.println("---IOException---\n");
             e.printStackTrace(log);
             log.println("\n-----------------");
         }
-    }
+*/    }
 
     public void start() {
 
@@ -103,6 +106,7 @@ public class Server {
                                     }
                                     log.println("SERVER: Socket " + index + " disconnected!");
                                     System.out.println("SERVER: Player disconnected! (ID "+index+")");
+                                    Main.getPanel().disconnected();
                                 } catch(SocketException e) {
                                     // socket closing (interrupt)
                                 } catch (IOException e) {

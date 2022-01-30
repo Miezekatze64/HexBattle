@@ -392,8 +392,6 @@ public class Player {
 		clickedCharacter = character;
 		
 		boat_leave = true;
-		Hex h = f.getHex();
-		//Main.client.sendEvent(new Event(Event.EVENT_GAME_LEAVE_BOAT, h.q+","+h.r+","+h.s));
 
 		state = STATE_CHARACTER_CLICKED;
 	}
@@ -748,4 +746,8 @@ public class Player {
 		toolbar.mouseMoved(point, map);
 		inventory.mouseMoved(point, map);
     }
+
+	public boolean isDead() {
+		return !alive;
+	}
 }

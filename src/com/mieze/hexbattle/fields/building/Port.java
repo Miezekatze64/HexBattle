@@ -20,7 +20,6 @@ import com.mieze.hexbattle.Map;
 import com.mieze.hexbattle.Player;
 import com.mieze.hexbattle.characters.Boat;
 import com.mieze.hexbattle.characters.GameCharacter;
-import com.mieze.hexbattle.characters.RiderCharacter;
 
 import com.mieze.hexbattle.fields.Field;
 

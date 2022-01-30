@@ -20,67 +20,55 @@ public class Client {
     private Thread socketThread = null;
     private PrintStream log;
 
-    public Client(String ip, int port) {
-        try {
-            log = new PrintStream(new File("logs/client.log"));
-            initServer(InetAddress.getByName(ip), port);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public Client(String ip, int port) throws IOException, IllegalArgumentException {
+        log = new PrintStream(new File("logs/client.log"));
+        initServer(InetAddress.getByName(ip), port);
     }
 
-    public Client(InetAddress ip, int port) {
-        try {
-            log = new PrintStream(new File("logs/client.log"));
-            initServer(ip, port);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public Client(InetAddress ip, int port) throws IOException, IllegalArgumentException {
+        log = new PrintStream(new File("logs/client.log"));
+        initServer(ip, port);
     }
 
-    private void initServer(InetAddress ip, int port) {
-        try {
-            socket = new Socket(ip, port);
-            OutputStream output = socket.getOutputStream();
-            out = new PrintStream(output, true);
+    private void initServer(InetAddress ip, int port) throws IOException, IllegalArgumentException {
+        socket = new Socket(ip, port);
+        OutputStream output = socket.getOutputStream();
+        out = new PrintStream(output, true);
 
-            InputStream in = socket.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+        InputStream in = socket.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
-            socketThread = new Thread() { //client listen thread
-                public void run() {
-                    log.println("CLIENT: listening on" + ip);
-                    try {
-                        while (true) {
-                            String line = bufferedReader.readLine();
-                            if (line != null) {
-                                log.println("CLIENT: got line: " + line);
-                                handleEvent(line);
-                            }
-                            sleep(10);
+        socketThread = new Thread() { //client listen thread
+            public void run() {
+                log.println("CLIENT: listening on" + ip);
+                try {
+                    while (true) {
+                        String line = bufferedReader.readLine();
+                        if (line != null) {
+                            log.println("CLIENT: got line: " + line);
+                            handleEvent(line);
                         }
-                    } catch(SocketException e) {
-                        if (socket.isClosed()) {
-                            log.println("CLIENT: socket closed");
-                            try {
-                                bufferedReader.close();
-                                out.close();
-                            } catch (IOException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-
+                        sleep(10);
                     }
-                }
-            };
-            socketThread.start();
+                } catch(SocketException e) {
+                    if (socket.isClosed()) {
+                        log.println("CLIENT: socket closed");
+                        try {
+                            bufferedReader.close();
+                            out.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                }
+            }
+        };
+        socketThread.start();
+
     }
 
     public void setEventListener(EventListener e) {
@@ -131,12 +119,15 @@ public class Client {
     public static class Event {
         public static final String EVENT_JOIN = "join";
         public static final String EVENT_ADD_PLAYER = "add_player";
+
+        public static final String EVENT_CONNECTED_CHANGED  = "connected_changed";
         
         public static final String EVENT_START = "start_start";
         public static final String EVENT_START_PLAYER = "start_player";
         public static final String EVENT_START_PLAYER_END = "start_player_end";
         public static final String EVENT_START_SEED = "start_seed";
         
+        public static final String EVENT_GAME_START = "game_start";
         public static final String EVENT_GAME_MOVE = "game_move";
         public static final String EVENT_GAME_ATTACK = "game_attack";
         public static final String EVENT_GAME_NEW_CHARACTER = "game_new_character";
@@ -147,6 +138,10 @@ public class Client {
         public static final String EVENT_GAME_LEAVE_BOAT = "game_leave_boat";
 
         public static final String EVENT_END_TURN = "end_turn";
+        public static final String EVENT_GET_CONNECTED = "connected";
+        public static final String EVENT_SEND_NAME = "send_name";
+        public static final String EVENT_SERVER_CLOSE = "server_close";
+        public static final String EVENT_ALREADY_STARTED = "already_started";
 
         private String type;
         private String value;

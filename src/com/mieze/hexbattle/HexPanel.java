@@ -1,7 +1,7 @@
 package com.mieze.hexbattle;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -45,8 +45,11 @@ public class HexPanel extends JPanel {
 	private int colorIndex = 0;
 	private boolean first = true;
 	private boolean started = false;
+	private boolean gameStarted = false;
 
 	private Player currentPlayer = null;
+	protected ArrayList<String> connected = new ArrayList<>();
+	private String name = "";
 	
 	static {
 		hexLayout = new Layout(Layout.pointy, new Point(40, 40), new Point(0, 0));
@@ -62,6 +65,12 @@ public class HexPanel extends JPanel {
 	}
 
 	public HexPanel() {
+
+	}
+
+	public void init(String name) {
+		this.name = name;
+
 		opponents = new ArrayList<Player>();
 		
 		off_x = -Main.WIDTH/2f;
@@ -131,7 +140,7 @@ public class HexPanel extends JPanel {
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
 			}
-
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
@@ -149,37 +158,60 @@ public class HexPanel extends JPanel {
 						return;
 					}
 					switch(e.getType()) {
-						case Event.EVENT_END_TURN:
-							nextTurn(true);
-							break;
-						case Event.EVENT_START_PLAYER:
-							{
-								String[] split = e.getValue().split(",");
-								newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-
-								if (currentPlayer == null) {
-									currentPlayer = opponents.get(opponents.size()-1);
-								}
+					case Event.EVENT_END_TURN:
+						nextTurn(true);
+					break;
+					case Event.EVENT_START_PLAYER:
+						{
+							String[] split = e.getValue().split(",");
+							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+							
+							if (currentPlayer == null) {
+								currentPlayer = opponents.get(opponents.size()-1);
 							}
-							break;
-						case Event.EVENT_START_SEED:
-							createMap(Long.parseLong(e.getValue()));
-							break;
-						case Event.EVENT_START_PLAYER_END:
-							started = true;
-							player = new Player(map, hexLayout, getNextColor(), true);
+						}
+					break;
+					case Event.EVENT_START_SEED:
+						createMap(Long.parseLong(e.getValue()));
+					break;
+					case Event.EVENT_START_PLAYER_END:
+						started = true;
+						player = new Player(map, hexLayout, getNextColor(), true);
 							player_index = opponents.size();
 							Main.client.sendEvent(new Event(Event.EVENT_ADD_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
 							currentPlayer.yourTurn(true);
-							break;
-						case Event.EVENT_ADD_PLAYER: 
-							{
-								String[] split = e.getValue().split(",");
-								newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
-							}
-						default:
-							break;
-					}
+					break;
+					case Event.EVENT_ADD_PLAYER: 
+						{
+							String[] split = e.getValue().split(",");
+							newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+						}
+					break;
+					case Event.EVENT_CONNECTED_CHANGED:
+						String[] split = e.getValue().split(",");
+						connected = new ArrayList<>(Arrays.asList(split));
+						Main.getInstance().updateConnectedList(connected);
+					break;
+					case Event.EVENT_GET_CONNECTED:
+						System.out.println("here3");
+						Main.client.sendEvent(new Event(Event.EVENT_SEND_NAME, name));
+					break;
+					case Event.EVENT_SERVER_CLOSE:
+						JOptionPane.showMessageDialog(null, "Room closed by host.");
+						Main.getInstance().leaveGame();
+					break;
+					case Event.EVENT_GAME_START:
+						Main.getInstance().showGame();
+					break;
+					case Event.EVENT_ALREADY_STARTED:
+						if (!gameStarted) {
+							JOptionPane.showMessageDialog(null, "Game already started");
+							Main.getInstance().leaveGame();
+						}
+					break;
+					default:
+					break;
+				}
 				} catch(Exception e1) {
 					Main.handleException(e1);
 				}
@@ -194,22 +226,45 @@ public class HexPanel extends JPanel {
 					switch(e.getType()) {
 					case Event.EVENT_END_TURN:
 						nextTurn(true);
-						break;
+					break;
 					case Event.EVENT_JOIN:
-						Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
+						{
+							if (gameStarted) {
+								Main.client.sendEvent(new Event(Event.EVENT_ALREADY_STARTED, ""));
+								break;
+							}
 
-						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
-						for (int i = 0; i < opponents.size(); i++) {
-							Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, opponents.get(i).getPosition().q + "," + opponents.get(i).getPosition().r+","+opponents.get(i).getPosition().s));
+							String name = e.getValue();
+							connected.add(name);
+
+							Main.getInstance().updateConnectedList(connected);
+							Main.client.sendEvent(new Event(Event.EVENT_CONNECTED_CHANGED, String.join(",", connected)));
+							Main.client.sendEvent(new Event(Event.EVENT_START_SEED, map.getSeed()+""));
+							Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, player.getPosition().q + "," + player.getPosition().r+","+player.getPosition().s));
+
+							for (int i = 0; i < opponents.size(); i++) {
+								Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER, opponents.get(i).getPosition().q + "," + opponents.get(i).getPosition().r+","+opponents.get(i).getPosition().s));
+							}
+
+							Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER_END, ""));
 						}
-
-						Main.client.sendEvent(new Event(Event.EVENT_START_PLAYER_END, ""));
-						break;
+					break;
 					case Event.EVENT_ADD_PLAYER:
 						String[] split = e.getValue().split(",");
 						newPlayer(new Hex(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2])));
+					break;
+					case Event.EVENT_SEND_NAME:
+						{
+							System.out.println("here4");
+							String name = e.getValue();
+							connected.add(name);
+							Main.getInstance().updateConnectedList(connected);
+							Main.client.sendEvent(new Event(Event.EVENT_CONNECTED_CHANGED, String.join(",", connected)));
+							validate();
+						}
+					break;
 					default:
-						break;
+					break;
 					}
 				} catch(Exception e1) {
 					Main.handleException(e1);
@@ -223,8 +278,10 @@ public class HexPanel extends JPanel {
 			currentPlayer = player;
 			currentPlayer.yourTurn(true);
 			player_index = 0;
+			connected.add(name + " [HOST]");
+			Main.getInstance().updateConnectedList(connected);
 		} else {
-			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, ""));
+			Main.client.sendEvent(new Event(Client.Event.EVENT_JOIN, name));
 		}
 	}
 
@@ -247,6 +304,15 @@ public class HexPanel extends JPanel {
 	public void nextTurn() {
 		nextTurn(false);
 	}
+
+	public void disconnected() {
+		if (connected == null) connected = new ArrayList<>();
+		connected.removeAll(connected);
+		connected.add(name);
+		Main.client.sendEvent(new Event(Event.EVENT_GET_CONNECTED, ""));
+		Main.getInstance().updateConnectedList(connected);
+		validate();
+	}
 	
 	public void nextTurn(boolean fromEvent) {
 		currentPlayer.state = Player.STATE_OTHER_PLAYER;
@@ -268,6 +334,10 @@ public class HexPanel extends JPanel {
 		}
 
 		if (currentPlayer == player) player.yourTurn(false);
+	}
+
+	public void started() {
+		gameStarted = true;
 	}
 
 	@Override
