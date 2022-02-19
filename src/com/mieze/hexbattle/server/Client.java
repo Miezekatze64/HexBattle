@@ -87,7 +87,8 @@ public class Client {
     }
 
     public void sendEvent(Event e) {
-        out.println(e.getType() + "||" + e.getValue());
+        out.println((char)e.getType() + e.getValue());
+//        out.print(e.getValue()+'\n');
         log.println("CLIENT: Event sent! [Type: "+e.getType() + " | Value: " + e.getValue()+"]");
     }
 
@@ -95,7 +96,7 @@ public class Client {
         if (s != null) {
             byte type;
             String value = "";
-
+            if (s.length() == 0) throw new RuntimeException("!!!!");
             type = (byte)s.charAt(0);
             if (s.length() > 2) value = s.substring(1);
             
