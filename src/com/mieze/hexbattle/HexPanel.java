@@ -154,7 +154,7 @@ public class HexPanel extends JPanel {
 			public void newEvent(Event e) {
 				try {
 					if (currentPlayer != null) currentPlayer.newEvent(e);
-					if (e.getType().startsWith("start") && started) {
+					if (e.getType().startsWith < Event.START_ && started) {
 						return;
 					}
 					switch(e.getType()) {

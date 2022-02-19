@@ -93,11 +93,11 @@ public class Client {
 
     private void handleEvent(String s) {
         if (s != null) {
-            String type, value = "";
+            byte type;
+            String value = "";
 
-            String[] strings = s.split("\\|\\|");
-            type = strings[0];
-            if (strings.length > 1) value = strings[1];
+            type = (byte)s.charAt(0);
+            if (s.length() > 2) value = s.substring(1);
             
             log.println("CLIENT: Event received! [Type: " + type + " | Value: " + value +"]");
             if (hasEventListener()) getEventListener().newEvent(new Event(type, value));
@@ -117,41 +117,41 @@ public class Client {
     }
 
     public static class Event {
-        public static final String EVENT_JOIN = "join";
-        public static final String EVENT_ADD_PLAYER = "add_player";
+        public static final byte EVENT_JOIN = 0x01;
+        public static final byte EVENT_ADD_PLAYER = 0x02;
 
-        public static final String EVENT_CONNECTED_CHANGED  = "connected_changed";
+        public static final byte EVENT_CONNECTED_CHANGED  = 0x03;
         
-        public static final String EVENT_START = "start_start";
-        public static final String EVENT_START_PLAYER = "start_player";
-        public static final String EVENT_START_PLAYER_END = "start_player_end";
-        public static final String EVENT_START_SEED = "start_seed";
+        public static final byte EVENT_START = 0x04;
+        public static final byte EVENT_START_PLAYER = 0x05;
+        public static final byte EVENT_START_PLAYER_END = 0x06;
+        public static final byte EVENT_START_SEED = 0x07;
         
-        public static final String EVENT_GAME_START = "game_start";
-        public static final String EVENT_GAME_MOVE = "game_move";
-        public static final String EVENT_GAME_ATTACK = "game_attack";
-        public static final String EVENT_GAME_NEW_CHARACTER = "game_new_character";
-        public static final String EVENT_GAME_NEW_PORT = "game_new_port";
-        public static final String EVENT_GAME_CONQUER_CITY = "game_conquer_city";
-        public static final String EVENT_GAME_BUILD_MINE = "game_build_mine";
-        public static final String EVENT_GAME_CHOP_WOOD = "game_cop_wood";
-        public static final String EVENT_GAME_LEAVE_BOAT = "game_leave_boat";
+        public static final byte EVENT_GAME_START = 0x08;
+        public static final byte EVENT_GAME_MOVE = 0x09;
+        public static final byte EVENT_GAME_ATTACK = 0x0A;
+        public static final byte EVENT_GAME_NEW_CHARACTER = 0x0B;
+        public static final byte EVENT_GAME_NEW_PORT =0x0C;
+        public static final byte EVENT_GAME_CONQUER_CITY = 0x0D;
+        public static final byte EVENT_GAME_BUILD_MINE = 0x0E;
+        public static final byte EVENT_GAME_CHOP_WOOD = 0x0F;
+        public static final byte EVENT_GAME_LEAVE_BOAT = 0x10;
 
-        public static final String EVENT_END_TURN = "end_turn";
-        public static final String EVENT_GET_CONNECTED = "connected";
-        public static final String EVENT_SEND_NAME = "send_name";
-        public static final String EVENT_SERVER_CLOSE = "server_close";
-        public static final String EVENT_ALREADY_STARTED = "already_started";
+        public static final byte EVENT_END_TURN = 0x11;
+        public static final byte EVENT_GET_CONNECTED = 0x12;
+        public static final byte EVENT_SEND_NAME = 0x13;
+        public static final byte EVENT_SERVER_CLOSE = 0x14;
+        public static final byte EVENT_ALREADY_STARTED = 0x15;
 
-        private String type;
+        private byte type;
         private String value;
 
-        public Event(String type, String value) {
+        public Event(byte type, String value) {
             this.type = type;
             this.value = value;
         }
 
-        public String getType() {
+        public byte getType() {
             return type;
         }
 
