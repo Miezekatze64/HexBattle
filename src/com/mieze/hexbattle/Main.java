@@ -13,6 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
 
+
+/**
+ * <strong>Main class for Hexbattle </strong>
+ * <p>This class contains the game loop and the {@link Server} and {@link Client} objects.</p>
+ * extends {@link javax.swing.JFrame}
+ */
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static int FPS = 30;
@@ -33,6 +39,10 @@ public class Main extends JFrame {
 
 	private static Main instance;
 
+	/**
+	 * main method of Hexbattle
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		try {
             File logs = new File("./logs/");
@@ -45,6 +55,13 @@ public class Main extends JFrame {
 		}
 	}
 
+	/**
+	 * <p>A function to handle not caught Exceptions.</p>
+	 * <p>Full stack trace will be writen to log file</p>
+	 * <p>Error message will be shown in a {@link JOptionPane} message dialog
+	 * 
+	 * @param t the exception to handle
+	 */
 	public static void handleException(Throwable t) {
 		//show message box at error
 		if (t != null && !error) {
@@ -70,11 +87,21 @@ public class Main extends JFrame {
 		}
 	}
 
+	/**
+	 * Connect to a game server
+	 * 
+	 * @param ip IP-address to connect to
+	 * @throws IOException if an I/O error occures at server connection
+	 * @throws IllegalArgumentException if IP outside of range
+	 */
 	public void connect(String ip) throws IOException, IllegalArgumentException{
 		isHost = false;
 		client = new Client(ip, Server.PORT);
 	}
 
+	/**
+	 * Disconnect from current game server
+	*/
 	public void leaveGame() {
 		menu.leave();
 		isHost = false;
@@ -82,6 +109,11 @@ public class Main extends JFrame {
 		client = null;
 	}
 
+	/**
+	 * start game server
+	 * @throws IOException if an I/O error occures at server creation
+	 * @throws IllegalArgumentException if IP outside of range
+	 */
 	public void startServer() throws IOException, IllegalArgumentException {
 		isHost = true;
 		server = new Server();
