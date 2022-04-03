@@ -10,22 +10,6 @@
 git clone https://github.com/Miezekatze64/HexBattle.git
 ```
 
-### Windows
-- Go to source directory:
-```
-cd PROJECT_ROOT\src
-```
-
-- Compile using javac:
-```
-java com\mieze\hexbattle\**\*.java -d ..\bin\ -verbose
-```
-
-- Go to project root and run the game
-```
-cd ..
-java -classpath bin com.mieze.hexbattle.Main
-```
 
 ### Linux / Unix / MacOS
 - Compile using bash script:
@@ -43,4 +27,19 @@ java -classpath bin com.mieze.hexbattle.Main
 ```
 ./run.sh --recompile
 ```
+### Windows
+- Go to source directory:
+```
+cd PROJECT_ROOT\src
+```
 
+- Compile using javac:
+```
+java com\mieze\hexbattle\**\*.java -d ..\bin\ -verbose
+```
+
+- Go to project root and run the game
+```
+cd ..
+java -classpath bin com.mieze.hexbattle.Main
+```
