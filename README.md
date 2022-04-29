@@ -4,7 +4,7 @@
 [Java](https://www.oracle.com/java/technologies/) 1.8.0 or newer.
 
 ## Compile and run
-- Install a [Java Runtime Environment](https://www.oracle.com/java/technologies/downloads/) (version 1.8 or newer [Java 17 recommended])
+- Install a [Java Runtime Environment](https://www.oracle.com/java/technologies/downloads/) (version 1.8 or newer [Java 18 recommended])
 - Clone the repository
 ```
 git clone https://github.com/Miezekatze64/HexBattle.git
