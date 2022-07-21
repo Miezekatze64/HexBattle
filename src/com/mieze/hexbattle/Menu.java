@@ -20,7 +20,7 @@ import java.awt.GridBagConstraints;
 
 public class Menu extends JPanel {
     private static final long serialVersionUID = 1L;
-    
+
     private static final int STATE_MAIN_MENU = 0;
     private static final int STATE_CREATE_GAME = 1;
     private static final int STATE_JOIN_GAME = 2;
@@ -28,7 +28,7 @@ public class Menu extends JPanel {
     private int state = STATE_MAIN_MENU;
 
     private JPanel players;
-    
+
     public Menu() {
         showMainMenu();
     }
@@ -42,7 +42,7 @@ public class Menu extends JPanel {
 
         JLabel label = new JLabel("\nCreate new game");
         label.setFont(new Font(label.getFont().getName(), Font.BOLD, 36));
-        
+
         add(label, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
@@ -76,7 +76,7 @@ public class Menu extends JPanel {
                 updateState(STATE_MAIN_MENU);
             }
         }), gbc);
-        
+
         gbc.weighty = 1;
         add(buttons, gbc);
     }
@@ -90,7 +90,7 @@ public class Menu extends JPanel {
 
         JLabel label = new JLabel("\nWaiting for host to start game...");
         label.setFont(new Font(label.getFont().getName(), Font.BOLD, 36));
-        
+
         add(label, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
@@ -110,7 +110,7 @@ public class Menu extends JPanel {
                 updateState(STATE_MAIN_MENU);
             }
         }), gbc);
-        
+
         gbc.weighty = 1;
         add(buttons, gbc);
     }
@@ -124,7 +124,7 @@ public class Menu extends JPanel {
 
         JLabel label = new JLabel("\nHexbattle");
         label.setFont(new Font(label.getFont().getName(), Font.BOLD, 36));
-        
+
         add(label, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;

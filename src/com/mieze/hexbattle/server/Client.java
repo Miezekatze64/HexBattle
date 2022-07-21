@@ -113,8 +113,9 @@ public class Client {
         return eventListener;
     }
 
-    public abstract static class EventListener {
-        public abstract void newEvent(Event e);
+    @FunctionalInterface
+    public static interface EventListener {
+        public void newEvent(Event e);
     }
 
     public static class Event {

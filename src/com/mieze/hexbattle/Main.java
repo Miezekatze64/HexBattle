@@ -51,16 +51,16 @@ public class Main extends JFrame {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-	try {
-	    File logs = new File("./logs/");
-	    if (!logs.exists()) {
-		logs.mkdir();
-	    }
+        try {
+            File logs = new File("./logs/");
+            if (!logs.exists()) {
+                logs.mkdir();
+            }
 
-	    instance = new Main();
-	} catch (Throwable t) {
-	    handleException(t);
-	}
+            instance = new Main();
+        } catch (Throwable t) {
+            handleException(t);
+        }
     }
 
     /**
@@ -72,34 +72,34 @@ public class Main extends JFrame {
      * </p>
      * <p>
      * Error message will be shown in a {@link JOptionPane} message dialog
-     * 
+     *
      * @param t the exception to handle
      */
     public static void handleException(Throwable t) {
-	// show message box at error
-	if (t != null && !error) {
-	    error = true;
-	    javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in ./logs/err.log", "ERROR",
-						      JOptionPane.ERROR_MESSAGE);
+        // show message box at error
+        if (t != null && !error) {
+            error = true;
+            javax.swing.JOptionPane.showMessageDialog(null, t.toString() + "\n\nMore infos in ./logs/err.log", "ERROR",
+                                                      JOptionPane.ERROR_MESSAGE);
 
-	    // writing error to logs/error.log
-	    try {
-		FileWriter fstream = new FileWriter("logs/err.log", true);
-		BufferedWriter out = new BufferedWriter(fstream);
-		out.write(t.toString() + '\n');
-		out.close();
+            // writing error to logs/error.log
+            try {
+                FileWriter fstream = new FileWriter("logs/err.log", true);
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write(t.toString() + '\n');
+                out.close();
 
-		PrintStream stream = new PrintStream(new java.io.File("logs/err.log"));
-		t.printStackTrace(stream);
-		stream.close();
+                PrintStream stream = new PrintStream(new java.io.File("logs/err.log"));
+                t.printStackTrace(stream);
+                stream.close();
 
-	    } catch (Exception e) {
-		JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"
-					      + e.getClass() + ":\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-	    }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "An error occured during the save process of an error message:\n"
+                                              + e.getClass() + ":\n" + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
 
-	    System.exit(1);
-	}
+            System.exit(1);
+        }
     }
 
     /**
@@ -110,18 +110,18 @@ public class Main extends JFrame {
      * @throws IllegalArgumentException if IP outside of range
      */
     public void connect(String ip) throws IOException, IllegalArgumentException {
-	isHost = false;
-	client = new Client(ip, Server.PORT);
+        isHost = false;
+        client = new Client(ip, Server.PORT);
     }
 
     /**
      * Disconnect from current game server
      */
     public void leaveGame() {
-	menu.leave();
-	isHost = false;
-	client.close();
-	client = null;
+        menu.leave();
+        isHost = false;
+        client.close();
+        client = null;
     }
 
     /**
@@ -131,102 +131,102 @@ public class Main extends JFrame {
      * @throws IllegalArgumentException if IP outside of range
      */
     public void startServer() throws IOException, IllegalArgumentException {
-	isHost = true;
-	server = new Server();
-	server.start();
-	client = new Client(server.getIp(), Server.PORT);
+        isHost = true;
+        server = new Server();
+        server.start();
+        client = new Client(server.getIp(), Server.PORT);
     }
 
     public void stopServer() {
-	panel.connected.removeAll(panel.connected);
-	client.sendEvent(new Event(Event.EVENT_SERVER_CLOSE, ""));
-	isHost = false;
-	server.close();
-	server = null;
-	client.close();
-	client = null;
+        panel.connected.removeAll(panel.connected);
+        client.sendEvent(new Event(Event.EVENT_SERVER_CLOSE, ""));
+        isHost = false;
+        server.close();
+        server = null;
+        client.close();
+        client = null;
     }
 
     public void showGame() {
-	panel.started();
-	setContentPane(panel);
-	validate();
+        panel.started();
+        setContentPane(panel);
+        validate();
     }
 
     public void showMenu() {
-	setContentPane(menu);
-	validate();
+        setContentPane(menu);
+        validate();
     }
 
     public static Main getInstance() {
-	return instance;
+        return instance;
     }
 
     public Main() {
-	// creating JFrame
-	super("Hexbattle");
-	instance = this;
-	// initServer();
-
-	// add shutdown hook to close client and server streams at exit
-	Runtime.getRuntime().addShutdownHook(new Thread() {
-		public void run() {
-		    if (client != null)
-			client.close();
-		    if (server != null)
-			server.close();
-		}
-	    });
-
-	if (isHost)
-	    setTitle("Hexbattle [Host]");
-
-	menu = new Menu();
-
-	// creating main panel
-	panel = new HexPanel();
-
-	showMenu();
-
-	setDefaultCloseOperation(EXIT_ON_CLOSE);
-	// setExtendedState(JFrame.MAXIMIZED_BOTH);
-	// setUndecorated(true);
-
-	pack();
-	setSize(WIDTH, HEIGHT);
-	setVisible(true);
-
-	// creating game loop
-	Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                repaint();
-                
-                frameCount++;
-                if (frameCount % 50 == 0)
-                    calcFPS(System.currentTimeMillis());
-            }
-	    });
-    
-	gameLoop.start();
+        // creating JFrame
+        super("Hexbattle");
+        instance = this;
+        // initServer();
+        
+        // add shutdown hook to close client and server streams at exit
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+                public void run() {
+                    if (client != null)
+                        client.close();
+                    if (server != null)
+                        server.close();
+                }
+            });
+        
+        if (isHost)
+            setTitle("Hexbattle [Host]");
+        
+        menu = new Menu();
+        
+        // creating main panel
+        panel = new HexPanel();
+        
+        showMenu();
+        
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // setUndecorated(true);
+        
+        pack();
+        setSize(WIDTH, HEIGHT);
+        setVisible(true);
+        
+        // creating game loop
+        Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    repaint();
+                    
+                    frameCount++;
+                    if (frameCount % 50 == 0)
+                        calcFPS(System.currentTimeMillis());
+                }
+            });
+        
+        gameLoop.start();
     }
-
+    
     public static HexPanel getPanel() {
-	return panel;
+        return panel;
     }
 
     private void calcFPS(long time) {
-	// calculate current FPS
-
-	double fps = 1000.0 / (System.currentTimeMillis() - lastTime) * 50;
-	lastTime = System.currentTimeMillis();
-
-	panel.currentFPS((int) fps);
+        // calculate current FPS
+        
+        double fps = 1000.0 / (System.currentTimeMillis() - lastTime) * 50;
+        lastTime = System.currentTimeMillis();
+        
+        panel.currentFPS((int) fps);
     }
-
+    
     public void updateConnectedList(ArrayList<String> a) {
-	if (menu.isVisible()) {
-	    menu.updateConnectedList(a);
-	}
+        if (menu.isVisible()) {
+            menu.updateConnectedList(a);
+        }
     }
 }
