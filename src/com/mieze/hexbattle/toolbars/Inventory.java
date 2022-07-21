@@ -52,11 +52,11 @@ public class Inventory {
         imgCharPoints = toolkit.getImage("assets/item_character.png");
         imgCharPoints = imgCharPoints.getScaledInstance(w, h, Image.SCALE_DEFAULT);
 
-		tooltips[WOOD] = new Tooltip("Wood", "Can be got from an worker by chopping wood.\n\nUsed to build things like mines or ports.");
-		tooltips[COAL] = new Tooltip("Coal", "Not rare. Can be got from an worker by mining at a coal mine.\n\nUsed to upgrade citys and buy advanced characters.");
-		tooltips[CHARPOINTS] = new Tooltip("Character-Points", "You get 0.5 times the count of your citys per round.\n\nUsed to buy all characters.");
-		tooltips[IRON] = new Tooltip("Iron", "Medium rare. Can be got from an worker by mining at an iron mine.\n\nUsed to buy thing like battleships or knights.");
-		tooltips[DIAMONDS] = new Tooltip("Diamonds", "Very rare. Can be got from an worker by mining at a diamonds mine.\n\nUsed to buy advanced (and expensive) things like late city upgrades or advanced creatures.");
+		tooltips[WOOD] = new Tooltip("Wood", "Can be obtained from a worker by chopping wood.\n\nUsed to build things like mines or ports.");
+		tooltips[COAL] = new Tooltip("Coal", "Not rare. Can be obtained from a worker by mining at a coal mine.\n\nUsed to upgrade cities and buy advanced characters.");
+		tooltips[CHARPOINTS] = new Tooltip("Character-Points", "You get 0.5 times the count of your cities per round.\n\nUsed to buy all characters.");
+		tooltips[IRON] = new Tooltip("Iron", "Medium rare. Can be obtained from a worker by mining at a iron mine.\n\nUsed to buy thing like battleships or knights.");
+		tooltips[DIAMONDS] = new Tooltip("Diamonds", "Very rare. Can be obtained from a worker by mining at a diamond mine.\n\nUsed to buy advanced (and expensive) things like late city upgrades or advanced creatures.");
     }
 	
 	public Inventory() {

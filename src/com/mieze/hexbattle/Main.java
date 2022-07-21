@@ -27,7 +27,7 @@ import com.mieze.hexbattle.server.Server;
  */
 public class Main extends JFrame {
     private static final long serialVersionUID = 1L;
-    public static int FPS = 30;
+    public static int FPS = 60;
 
     public static final int WIDTH = 1200; // Toolkit.getDefaultToolkit().getScreenSize().width;
     public static final int HEIGHT = 800; // Toolkit.getDefaultToolkit().getScreenSize().height;
