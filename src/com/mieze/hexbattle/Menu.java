@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.awt.GridBagConstraints;
 
 public class Menu extends JPanel {
+    private static final long serialVersionUID = 1L;
+    
     private static final int STATE_MAIN_MENU = 0;
     private static final int STATE_CREATE_GAME = 1;
     private static final int STATE_JOIN_GAME = 2;

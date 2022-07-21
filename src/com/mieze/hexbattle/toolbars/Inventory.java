@@ -38,19 +38,19 @@ public class Inventory {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         
         imgWood = toolkit.getImage("assets/item_wood.png");
-        imgWood = imgWood.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+        imgWood = imgWood.getScaledInstance(w, h, Image.SCALE_DEFAULT);
         
         imgCoal= toolkit.getImage("assets/item_coal.png");
-        imgCoal = imgCoal.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+        imgCoal = imgCoal.getScaledInstance(w, h, Image.SCALE_DEFAULT);
         
         imgIron = toolkit.getImage("assets/item_iron.png");
-        imgIron = imgIron.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+        imgIron = imgIron.getScaledInstance(w, h, Image.SCALE_DEFAULT);
         
         imgDiamonds = toolkit.getImage("assets/item_diamond.png");
-        imgDiamonds = imgDiamonds.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+        imgDiamonds = imgDiamonds.getScaledInstance(w, h, Image.SCALE_DEFAULT);
         
         imgCharPoints = toolkit.getImage("assets/item_character.png");
-        imgCharPoints = imgCharPoints.getScaledInstance((int)w, (int)h, Image.SCALE_DEFAULT);
+        imgCharPoints = imgCharPoints.getScaledInstance(w, h, Image.SCALE_DEFAULT);
 
 		tooltips[WOOD] = new Tooltip("Wood", "Can be got from an worker by chopping wood.\n\nUsed to build things like mines or ports.");
 		tooltips[COAL] = new Tooltip("Coal", "Not rare. Can be got from an worker by mining at a coal mine.\n\nUsed to upgrade citys and buy advanced characters.");

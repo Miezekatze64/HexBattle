@@ -360,7 +360,7 @@ public class Player {
 			int top = (int) (point_y - h / 2);
 
 			g.setColor(Color.ORANGE);
-			((Graphics2D) g).fillOval(left, top, (int) w, (int) h);
+			g.fillOval(left, top, (int) w, (int) h);
 			g.setColor(Color.BLACK);
 		}
 		toolbar.render(g, map);

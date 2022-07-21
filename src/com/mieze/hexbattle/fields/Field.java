@@ -143,7 +143,7 @@ public abstract class Field {
 			}
 		}
 		
-		((Graphics2D) g).setStroke(new BasicStroke(1));
+		g.setStroke(new BasicStroke(1));
 		g.setColor(Color.black);
 		g.drawPolygon(point_x, point_y, point_x.length);
 		

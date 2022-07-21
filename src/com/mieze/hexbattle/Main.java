@@ -198,16 +198,16 @@ public class Main extends JFrame {
 
 	// creating game loop
 	Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-		    repaint();
-
-		    frameCount++;
-		    if (frameCount % 50 == 0)
-			calcFPS(System.currentTimeMillis());
-		}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                repaint();
+                
+                frameCount++;
+                if (frameCount % 50 == 0)
+                    calcFPS(System.currentTimeMillis());
+            }
 	    });
-
+    
 	gameLoop.start();
     }
 

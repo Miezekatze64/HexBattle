@@ -25,8 +25,8 @@ import javax.swing.*;
 
 public class HexPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Map map;
-	private Player player;
+	private transient Map map;
+	private transient Player player;
 	private ArrayList<Player> opponents;
 
 	private int last_x = 0, last_y = 0;
@@ -47,7 +47,7 @@ public class HexPanel extends JPanel {
 	private boolean started = false;
 	private boolean gameStarted = false;
 
-	private Player currentPlayer = null;
+	private transient Player currentPlayer = null;
 	protected ArrayList<String> connected = new ArrayList<>();
 	private String name = "";
 	

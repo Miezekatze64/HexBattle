@@ -37,11 +37,7 @@ public class Hex {
 	}
 
 	static public ArrayList<Hex> directions = new ArrayList<Hex>() {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
 		{
 			add(new Hex(1, 0, -1));
 			add(new Hex(1, -1, 0));
@@ -61,11 +57,7 @@ public class Hex {
 	}
 
 	static public ArrayList<Hex> diagonals = new ArrayList<Hex>() {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
-
 		{
 			add(new Hex(2, -1, -1));
 			add(new Hex(1, -2, 1));
@@ -81,7 +73,7 @@ public class Hex {
 	}
 
 	public int length() {
-		return (int) ((Math.abs(q) + Math.abs(r) + Math.abs(s)) / 2);
+		return (Math.abs(q) + Math.abs(r) + Math.abs(s)) / 2;
 	}
 
 	public int distance(Hex b) {
@@ -95,8 +87,16 @@ public class Hex {
 			Hex hex = (Hex)o;
 			return ((this.s == hex.s) && (this.q == hex.q) && (this.r == hex.r));
 		}
-	
 	}
+
+    public int hashCode() {
+        int prime1 = 31;
+        int prime2 = 19;
+        int prime3 = 37;
+        int hash = prime1 * q + prime2 * r + prime3 * s;
+
+        return hash;
+    }
 	
 	public String toString() {
 		return new StringBuilder().append("Hex: [Q = ").append(q).append(", R = ").append(r).append(", S = ").append(s).append("]").toString();
@@ -122,7 +122,7 @@ class DoubledCoord {
 
 	public Hex qdoubledToCube() {
 		int q = col;
-		int r = (int) ((row - col) / 2);
+		int r = (row - col) / 2;
 		int s = -q - r;
 		return new Hex(q, r, s);
 	}
@@ -134,35 +134,10 @@ class DoubledCoord {
 	}
 
 	public Hex rdoubledToCube() {
-		int q = (int) ((col - row) / 2);
+		int q = (col - row) / 2;
 		int r = row;
 		int s = -q - r;
 		return new Hex(q, r, s);
 	}
 
-}
-
-class Orientation {
-	public Orientation(double f0, double f1, double f2, double f3, double b0, double b1, double b2, double b3,
-			double start_angle) {
-		this.f0 = f0;
-		this.f1 = f1;
-		this.f2 = f2;
-		this.f3 = f3;
-		this.b0 = b0;
-		this.b1 = b1;
-		this.b2 = b2;
-		this.b3 = b3;
-		this.start_angle = start_angle;
-	}
-
-	public final double f0;
-	public final double f1;
-	public final double f2;
-	public final double f3;
-	public final double b0;
-	public final double b1;
-	public final double b2;
-	public final double b3;
-	public final double start_angle;
 }
