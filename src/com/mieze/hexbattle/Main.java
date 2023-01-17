@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import com.mieze.hexbattle.server.Client;
 import com.mieze.hexbattle.server.Client.Event;
@@ -55,6 +56,14 @@ public class Main extends JFrame {
             File logs = new File("./logs/");
             if (!logs.exists()) {
                 logs.mkdir();
+            }
+
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            } catch (Exception e) {
+                try {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.metal.MetalLookAndFeel");
+                } catch (Exception er) {}
             }
 
             instance = new Main();
@@ -180,22 +189,21 @@ public class Main extends JFrame {
         
         if (isHost)
             setTitle("Hexbattle [Host]");
-        
+
         menu = new Menu();
-        
+
         // creating main panel
         panel = new HexPanel();
-        
         showMenu();
-        
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         // setExtendedState(JFrame.MAXIMIZED_BOTH);
         // setUndecorated(true);
-        
+
         pack();
         setSize(WIDTH, HEIGHT);
         setVisible(true);
-        
+
         // creating game loop
         Timer gameLoop = new Timer(1000 / FPS, new ActionListener() {
                 @Override
@@ -207,7 +215,7 @@ public class Main extends JFrame {
                         calcFPS(System.currentTimeMillis());
                 }
             });
-        
+
         gameLoop.start();
     }
     

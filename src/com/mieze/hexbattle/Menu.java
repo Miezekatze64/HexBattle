@@ -221,7 +221,7 @@ public class Menu extends JPanel {
         
         btn.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
         btn.setFocusPainted(false);
-        btn.setContentAreaFilled(false);
+//        btn.setContentAreaFilled(false);
 
         btn.addActionListener(listner);
 

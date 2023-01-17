@@ -1,19 +1,20 @@
 package com.mieze.hexbattle.toolbars;
 
-import java.awt.Graphics;
 import java.awt.Font;
-import java.awt.Color;
 import java.awt.FontMetrics;
-
-import java.util.List;
+import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.UIManager;
 
 import com.mieze.hexbattle.Map;
 
 public class Tooltip {
     private String title, text;
-    private static final Font ftext = new Font(Font.MONOSPACED, Font.ITALIC, 14);
-    private static final Font ftitle = new Font(Font.DIALOG, Font.BOLD, 14);
+    private static final int FONT_SIZE = 14;
+    private static final Font ftext = new Font(Font.MONOSPACED, Font.PLAIN, FONT_SIZE);
+    private static final Font ftitle = new Font(Font.DIALOG, Font.BOLD, FONT_SIZE);
     private static final int w = 150;
     private boolean bottom = false;
     List<String> strings;
@@ -34,40 +35,36 @@ public class Tooltip {
         g.setFont(ftext);
         if (this.strings == null)
             this.strings = wrap(text, g.getFontMetrics(ftext), w - 10);
-        final int h = (strings.size() + 4) * 15;
+        final int h = (strings.size() + 4) * FONT_SIZE;
 
         int rx = x - w / 2;
         int ry = bottom ? y - h - 45 : y + 45;
 
-        g.setColor(Color.WHITE);
+        g.setColor(UIManager.getColor("ToolTip.background"));
         g.fillRect(rx, ry, w, h);
 
-        g.setColor(Color.RED);
+        g.setColor(UIManager.getColor("ToolBar.shadow"));
         g.drawRect(rx, ry, w, h);
 
-        g.setColor(Color.BLACK);
+        g.setColor(UIManager.getColor("ToolTip.foreground"));
         for (int i = 0; i < strings.size(); i++) {
-            g.drawString(strings.get(i), rx + 5, ry + (i + 4) * 15);
+            g.drawString(strings.get(i), rx + 5, ry + (i + 4) * FONT_SIZE);
         }
 
         g.setFont(ftitle);
         g.drawString(title, x - g.getFontMetrics(ftitle).stringWidth(title) / 2, ry + 30);
 
-        g.setColor(Color.RED);
-
+        g.setColor(UIManager.getColor("ToolBar.shadow"));
         g.setFont(save);
     }
 
     private List<String> wrap(String txt, FontMetrics fm, int maxWidth) {
-
         List<String> list = new ArrayList<String>();
         String line = "";
         String lineBeforeAppend = "";
 
         int pos = 0;
-
         while (pos < txt.length()) {
-
             char next = txt.charAt(pos);
             lineBeforeAppend = line;
             line += next;
@@ -78,7 +75,6 @@ public class Tooltip {
                 pos++;
                 continue;
             }
-
             int width = fm.stringWidth(line);
 
             if (width < maxWidth) {
@@ -107,6 +103,7 @@ public class Tooltip {
         if (line.length() > 0) {
             list.add(line);
         }
+
         return list;
     }
 }
