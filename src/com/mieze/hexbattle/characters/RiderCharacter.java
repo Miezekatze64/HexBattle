@@ -16,7 +16,7 @@ import com.mieze.hexbattle.fields.building.City;
 
 public class RiderCharacter extends GameCharacter {
 	public static final int PRICE = 3;
-    public static final int[] RESOURCES = new int[]{2, 0, 0, 0};
+    public static final int[] RESOURCES = new int[]{0, 0, 1, 0};
 	public static Image img;
 
 	static {

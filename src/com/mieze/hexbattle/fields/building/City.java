@@ -141,7 +141,7 @@ public class City extends Building {
 			});
 		}
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New rider")) {
-			toolbar.add(new ToolbarButton("New rider", RiderCharacter.img, "A character on a horse...\n\nCosts: "+RiderCharacter.RESOURCES[0]+" coal and "+RiderCharacter.PRICE+" character points.") {
+			toolbar.add(new ToolbarButton("New rider", RiderCharacter.img, "A character on a horse...\n\nCosts: "+RiderCharacter.RESOURCES[2]+" iron and "+RiderCharacter.PRICE+" character points.") {
 				@Override
 				public void onClick() {
 					Player player = field.getOwner();
