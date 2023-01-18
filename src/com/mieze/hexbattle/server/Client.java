@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class Client {
-
     private Socket socket = null;
     private PrintStream out;
     private EventListener eventListener = null;
@@ -30,6 +29,16 @@ public class Client {
         initServer(ip, port);
     }
 
+    private String readMessage(BufferedReader reader) throws IOException {
+        String s = "";
+        for (;;) {
+            char c = (char)reader.read();
+            if (c == '\0') break;
+            s += c;
+        }
+        return s;
+    }
+
     private void initServer(InetAddress ip, int port) throws IOException, IllegalArgumentException {
         socket = new Socket(ip, port);
         OutputStream output = socket.getOutputStream();
@@ -43,7 +52,7 @@ public class Client {
                 log.println("CLIENT: listening on" + ip);
                 try {
                     while (true) {
-                        String line = bufferedReader.readLine();
+                        String line = readMessage(bufferedReader);
                         if (line != null) {
                             log.println("CLIENT: got line: " + line);
                             handleEvent(line);
@@ -87,7 +96,8 @@ public class Client {
     }
 
     public void sendEvent(Event e) {
-        out.println((char)e.getType() + e.getValue());
+        out.print((char)e.getType() + e.getValue() + '\0');
+        out.flush();
 //        out.print(e.getValue()+'\n');
         log.println("CLIENT: Event sent! [Type: "+e.getType() + " | Value: " + e.getValue()+"]");
     }
@@ -96,7 +106,7 @@ public class Client {
         if (s != null) {
             byte type;
             String value = "";
-            if (s.length() == 0) throw new RuntimeException("!!!!");
+            if (s.length() == 0) throw new RuntimeException("got empty event");
             type = (byte)s.charAt(0);
             if (s.length() > 2) value = s.substring(1);
             

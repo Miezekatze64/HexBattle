@@ -29,54 +29,42 @@ public class Server {
     private PrintStream log;
 
     public Server() throws IOException {
-        //try {
+        //creating log stream and server
+        log = new PrintStream(new File("logs/server.log"));
+        server = new ServerSocket(PORT);
 
-            //creating log stream and server
-            log = new PrintStream(new File("logs/server.log"));
-            server = new ServerSocket(PORT);
-
-            try {
-                //get IP address to display
-                Enumeration<NetworkInterface> nics = NetworkInterface.getNetworkInterfaces();
-                while (nics.hasMoreElements()) {
-                    NetworkInterface nic = nics.nextElement();
-                    if (!nic.isLoopback()) {
-                        Enumeration<InetAddress> addrs = nic.getInetAddresses();
-                        while (addrs.hasMoreElements()) {
-                            InetAddress addr = addrs.nextElement();
-                            if (addr instanceof Inet4Address) this.ip = addr;
-                        }
+        try {
+            //get IP address to display
+            Enumeration<NetworkInterface> nics = NetworkInterface.getNetworkInterfaces();
+            while (nics.hasMoreElements()) {
+                NetworkInterface nic = nics.nextElement();
+                if (!nic.isLoopback()) {
+                    Enumeration<InetAddress> addrs = nic.getInetAddresses();
+                    while (addrs.hasMoreElements()) {
+                        InetAddress addr = addrs.nextElement();
+                        if (addr instanceof Inet4Address) this.ip = addr;
                     }
                 }
-
-            } catch (SocketException e) {
-                log.println("---SocketException---\n");
-                e.printStackTrace(log);
-                log.println("\n-----------------");
             }
-
-            if (this.ip == null) throw new RuntimeException("No network connection found...");
-/*        } catch (IOException e) {
-            log.println("---IOException---\n");
+        } catch (SocketException e) {
+            log.println("---SocketException---\n");
             e.printStackTrace(log);
             log.println("\n-----------------");
         }
-*/    }
 
+        if (this.ip == null) throw new RuntimeException("No network connection found...");
+    }
     public void start() {
-
         //server thread
         new Thread() {
             public void run() {
                 try {
                     while (true) {
-
                         //get new server connections
                         Socket socket = server.accept();
                         sockets.add(socket);
                         log.println("SERVER: New connection! ("+outputs.size()+")");
                         System.out.println("SERVER: New player joined! (ID "+outputs.size()+")");
-
                         outputs.add(new PrintStream(socket.getOutputStream()));
 
                         //client thread
@@ -88,17 +76,16 @@ public class Server {
                             public void run() {
                                 try {
                                     while (!socket.isClosed()) {
-                                        String line = in.readLine();
-                                        if (line != null) {
-                                            for (int i = 0; i < sockets.size(); i++) {
-                                                if (i != index) {
-                                                    //send events to other clients
-                                                    outputs.get(i).println(line);
-                                                    log.println("SERVER: Sent line to socket " + i + ": " + line);
-                                                }
+                                        char[] chars = new char[1];
+                                        in.read(chars);
+                                        char c = chars[0];
+                                        for (int i = 0; i < sockets.size(); i++) {
+                                            if (i != index) {
+                                                //send events to other clients
+                                                outputs.get(i).print(c);
+                                                outputs.get(i).flush();
+                                                log.println("SERVER: Sent char to socket " + i + ": " + c);
                                             }
-                                        } else  {
-                                            break;
                                         }
 
                                         //wait

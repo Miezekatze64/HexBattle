@@ -86,7 +86,6 @@ public class Mine extends Building {
 		this.amount = (int)(Math.random()*9+1);
 	}
 
-
 	@Override
 	public void render(Graphics g, double zoom) {
 		Map map = field.getOwner().map;
