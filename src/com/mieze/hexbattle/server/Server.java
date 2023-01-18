@@ -1,26 +1,22 @@
 package com.mieze.hexbattle.server;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import com.mieze.hexbattle.Main;
 
-import java.util.ArrayList;
-
-import java.io.File;
-import java.io.PrintStream;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.Inet4Address;
-
 public class Server {
-    
     public static final int PORT = 8462;
     private ServerSocket server;
     private InetAddress ip;
