@@ -201,7 +201,7 @@ public class Map {
 				return -1;
 			}
 			return Field.EMPTY;
-		} else if (type_val < 6) {
+		} else if (type_val < 5) {
 			// forests
 			return Field.FOREST;
 		} else if (type_val < 9) {

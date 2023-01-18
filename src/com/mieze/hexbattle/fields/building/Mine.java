@@ -87,7 +87,6 @@ public class Mine extends Building {
 	}
 
 
-
 	@Override
 	public void render(Graphics g, double zoom) {
 		Map map = field.getOwner().map;
