@@ -1,38 +1,20 @@
 package com.mieze.hexbattle.fields.building;
 
-import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import javax.swing.JOptionPane;
-
-import com.mieze.hexbattle.hex.Hex;
-import com.mieze.hexbattle.hex.Point;
-
-import com.mieze.hexbattle.server.Client.Event;
-
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
-
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Main;
-import com.mieze.hexbattle.Map;
-import com.mieze.hexbattle.Player;
-
-import com.mieze.hexbattle.characters.BuilderCharacter;
-import com.mieze.hexbattle.characters.GameCharacter;
-import com.mieze.hexbattle.characters.WorkerCharacter;
-import com.mieze.hexbattle.characters.SwordsmanCharacter;
-import com.mieze.hexbattle.characters.RiderCharacter;
-
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.toolbars.Toolbar;
 
 public class City extends Building {
 	private static final double SIZE = 50;
@@ -91,7 +73,8 @@ public class City extends Building {
 
 	@Override
 	public void onClick() {
-		Toolbar toolbar = field.getOwner().getToolbar();
+		Toolbar toolbar = Main.getClient().getWorldData().getToolbar();
+		/*
 		if (!(field.getOwner().state == Player.STATE_CHARACTER_CLICKED) && !toolbar.hasButton("New builder")) {
 			toolbar.add(new ToolbarButton("New builder", BuilderCharacter.img, "Used to build cities, ports, mine, and lots of other things...\n\nCosts: "+BuilderCharacter.PRICE+" character points.") {
 				@Override
@@ -101,7 +84,7 @@ public class City extends Building {
 						player.buyCharacter(field, GameCharacter.BUILDER);
 						
 						Hex hex = field.getHex();
-						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BUILDER));
+						Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.BUILDER));
 					} else {
 						JOptionPane.showMessageDialog(null, String.format("You need at least %d character points to buy this.", BuilderCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -117,7 +100,7 @@ public class City extends Building {
 						player.buyCharacter(field, GameCharacter.WORKER);
 						
 						Hex hex = field.getHex();
-						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.WORKER));
+						Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.WORKER));
 					} else {
 						JOptionPane.showMessageDialog(null, String.format("You need at least %d character points to buy this.", WorkerCharacter.PRICE), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -133,7 +116,7 @@ public class City extends Building {
 						player.buyCharacter(field, GameCharacter.SWORDSMAN);
 
 						Hex hex = field.getHex();
-						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.SWORDSMAN));
+						Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.SWORDSMAN));
 					} else {
 						JOptionPane.showMessageDialog(null, resourceMessage(SwordsmanCharacter.PRICE, SwordsmanCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -149,13 +132,15 @@ public class City extends Building {
 						player.buyCharacter(field, GameCharacter.RIDER);
 
 						Hex hex = field.getHex();
-						Main.client.sendEvent(new Event(Event.EVENT_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.RIDER));
+						Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_NEW_CHARACTER, hex.q+","+hex.r+","+hex.s+";"+GameCharacter.RIDER));
 					} else {
 						JOptionPane.showMessageDialog(null, resourceMessage(RiderCharacter.PRICE, RiderCharacter.RESOURCES), "Not enough resourses...", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
 		}
+		*/
+		throw new RuntimeException("TODO: rewrite this completely");
 	}
 
 	private String resourceMessage(double cp, int[] res) {
@@ -173,11 +158,17 @@ public class City extends Building {
 
 	@Override
 	public void render(Graphics g, double zoom) {
-		Map map = field.getOwner().map;
+//		throw new RuntimeException("TODO: here!");
+		ClientMap map = field.map;
 		Point pos = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(field.getHex()));
 		BufferedImage dyed = dye(img[lvl - 1], field.getOwner().getColor());
 
 		g.drawImage(dyed, (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
 				(int) (SIZE * zoom), null);
+	}
+
+	@Override
+	public String getID() {
+		return "city";
 	}
 }

@@ -4,11 +4,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import com.mieze.hexbattle.Map;
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.hex.Point;
 
 public class Inventory {
-	
 	public static final int WOOD = 0;
 	public static final int COAL = 1;
 	public static final int IRON = 2;
@@ -119,7 +118,7 @@ public class Inventory {
 		}
 	}
 	
-	public void render(Graphics g, Map m) {
+	public void render(Graphics g, ClientMap m) {
 		g.drawImage(imgWood, (int)(m.getWidth()*0.17), 20, 40, 40, null);
 		g.drawString(new StringBuilder().append(wood).toString(), (int)(m.getWidth()*0.17)+20-g.getFontMetrics(g.getFont()).stringWidth(new StringBuilder().append(wood).toString())/2, 80);
 		
@@ -164,7 +163,7 @@ public class Inventory {
 		this.characterPoints = characterPoints;
 	}
 
-	public void mouseMoved(Point point, Map m) {
+	public void mouseMoved(Point point, ClientMap m) {
 		if (point.y > 20 && point.y < 60) {
 			if (point.x > m.getWidth()*0.17 && point.x < m.getWidth()*0.17+40) {
 				hover = true;

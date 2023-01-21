@@ -5,10 +5,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import com.mieze.hexbattle.HexPanel;
-import com.mieze.hexbattle.Map;
-
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.fields.Field;
-
 import com.mieze.hexbattle.hex.Point;
 
 public class Village extends Building {
@@ -32,10 +30,15 @@ public class Village extends Building {
 
 	@Override
 	public void render(Graphics g, double zoom) {
-		Map map = field.map;
+		ClientMap map = field.map;
 		Point pos = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(field.getHex()));
 
 		g.drawImage(img, (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
 				(int) (SIZE * zoom), null);
+	}
+
+	@Override
+	public String getID() {
+		return "village";
 	}
 }

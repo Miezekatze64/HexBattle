@@ -3,20 +3,21 @@ package com.mieze.hexbattle.hex;
 import java.util.ArrayList;
 
 public class Layout {
-	
+	public final Orientation orientation;
+	public final Point size;
+	public final Point origin;
+
+	static public Orientation pointy = new Orientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
+			Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
+	static public Orientation flat = new Orientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0,
+			0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
+
+
 	public Layout(Orientation orientation, Point size, Point origin) {
 		this.orientation = orientation;
 		this.size = size;
 		this.origin = origin;
 	}
-
-	public final Orientation orientation;
-	public final Point size;
-	public final Point origin;
-	static public Orientation pointy = new Orientation(Math.sqrt(3.0), Math.sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0,
-			Math.sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5);
-	static public Orientation flat = new Orientation(3.0 / 2.0, 0.0, Math.sqrt(3.0) / 2.0, Math.sqrt(3.0), 2.0 / 3.0,
-			0.0, -1.0 / 3.0, Math.sqrt(3.0) / 3.0, 0.0);
 
 	public Point hexToPixel(Hex h) {
 		Orientation M = orientation;

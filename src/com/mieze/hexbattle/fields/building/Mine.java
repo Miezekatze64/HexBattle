@@ -2,22 +2,18 @@ package com.mieze.hexbattle.fields.building;
 
 import java.awt.Graphics;
 import java.awt.Image;
-
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import com.mieze.hexbattle.hex.Point;
-
-import com.mieze.hexbattle.toolbars.Inventory;
+import javax.management.RuntimeErrorException;
 
 import com.mieze.hexbattle.HexPanel;
-import com.mieze.hexbattle.Map;
-
 import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.hex.Point;
+import com.mieze.hexbattle.toolbars.Inventory;
+import com.mieze.hexbattle.client.ClientMap;
 
 public class Mine extends Building {
 	public static final int MINE_COAL = 0;
@@ -88,11 +84,13 @@ public class Mine extends Building {
 
 	@Override
 	public void render(Graphics g, double zoom) {
-		Map map = field.getOwner().map;
+		throw new RuntimeException("TODO: here");
+/*		Map map = field.getOwner().map;
 		Point pos = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(field.getHex()));
 
 		g.drawImage(img[type], (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
 				(int) (SIZE * zoom), null);
+*/
 	}
 
 	@Override
@@ -110,5 +108,10 @@ public class Mine extends Building {
 
 	public String getTypeString() {
 		return type == MINE_COAL?"coal":type==MINE_DIAMOND?"diamonds":"iron";
+	}
+
+	@Override
+	public String getID() {
+		return "mine";
 	}
 }

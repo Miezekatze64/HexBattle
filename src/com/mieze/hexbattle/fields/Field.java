@@ -1,21 +1,22 @@
 package com.mieze.hexbattle.fields;
 
-import java.awt.Graphics2D;
 import java.awt.BasicStroke;
-import java.awt.Stroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.lang.reflect.InvocationTargetException;
 
+import com.mieze.hexbattle.HexPanel;
+import com.mieze.hexbattle.Main;
 import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.Map;
-
+import com.mieze.hexbattle.Registry;
+import com.mieze.hexbattle.characters.GameCharacter;
+import com.mieze.hexbattle.client.ClientMap;
+import com.mieze.hexbattle.client.ClientPlayer;
+import com.mieze.hexbattle.fields.building.Building;
 import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Layout;
-
 import com.mieze.hexbattle.hex.Point;
-
-import com.mieze.hexbattle.characters.GameCharacter;
-
-import com.mieze.hexbattle.fields.building.Building;
 
 public abstract class Field {
 	protected Hex hex;
@@ -28,17 +29,19 @@ public abstract class Field {
 
 	private Building building = null;
 
-	public Map map;
+	public ClientMap map;
 	private GameCharacter character = null;
 
 	private Player owner = null;
 	private Color color = null;
 
-	public Field(Hex hex, Map map) {
-		this.hexLayout = Map.getLayout();
+	public Field(Hex hex, ClientMap map) {
+		this.hexLayout = ClientMap.getLayout();
 		this.hex = hex;
 		this.map = map;
 	}
+
+	public abstract String getID();
 
 	public Hex toHex(Point p) {
 		return hexLayout.pixelToHex(p).hexRound();
@@ -64,6 +67,30 @@ public abstract class Field {
 	public void setCharacter(GameCharacter character) {
 		this.character = character;
 	}
+
+	public void spawnCharacter(String id, Player owner) {
+		try {
+			this.character = new GameCharacter(this,
+											   hexLayout,
+											   owner,
+											   Registry.CHARACTERS.get(id).getDeclaredConstructor().newInstance()
+											   );
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.handleException(e);
+			return;
+		}
+	}
+
+	public void spawnBuilding(String id) {
+		try {
+			this.building = Registry.BUILDINGS.get(id).getDeclaredConstructor(Field.class).newInstance(this);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			Main.handleException(e);
+			return;
+		}
+    }
 
 	public void removeCharacter() {
 		this.character = null;
@@ -166,5 +193,9 @@ public abstract class Field {
 
 	public Hex getHex() {
 		return hex;
+	}
+
+    public boolean isWalkable() {
+		return true;
 	}
 }

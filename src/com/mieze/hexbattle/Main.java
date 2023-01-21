@@ -8,20 +8,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
-import com.mieze.hexbattle.server.Client;
-import com.mieze.hexbattle.server.Client.Event;
+import com.mieze.hexbattle.client.Client;
+import com.mieze.hexbattle.net.ClientConnection;
+import com.mieze.hexbattle.net.Event;
+import com.mieze.hexbattle.net.ServerConnection;
 import com.mieze.hexbattle.server.Server;
 
 /**
  * <strong>Main class for Hexbattle </strong>
  * <p>
- * This class contains the game loop and the {@link Server} and {@link Client}
+ * This class contains the game loop and the {@link Server} and {@link ClientConnection}
  * objects.
  * </p>
  * extends {@link javax.swing.JFrame}
@@ -36,19 +39,19 @@ public class Main extends JFrame {
     private long lastTime;
     private long frameCount = 0;
     private static HexPanel panel;
+    private static Client client;
     private static Menu menu;
 
     private static boolean error = false;
 
     public static boolean isHost = false;
-    public static Server server = null;
-    public static Client client;
+    public static Server server = new Server();
 
     private static Main instance;
 
     /**
      * main method of Hexbattle
-     * 
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {
@@ -108,19 +111,22 @@ public class Main extends JFrame {
             }
 
             System.exit(1);
+        } else {
+            t.printStackTrace();
+            System.exit(2);
         }
     }
 
     /**
      * Connect to a game server
-     * 
+     *
      * @param ip IP-address to connect to
      * @throws IOException              if an I/O error occures at server connection
      * @throws IllegalArgumentException if IP outside of range
      */
     public void connect(String ip) throws IOException, IllegalArgumentException {
         isHost = false;
-        client = new Client(ip, Server.PORT);
+        client.connect(ip, ServerConnection.PORT);
     }
 
     /**
@@ -129,35 +135,32 @@ public class Main extends JFrame {
     public void leaveGame() {
         menu.leave();
         isHost = false;
-        client.close();
-        client = null;
+        client.getConnection().close();
     }
 
     /**
      * start game server
-     * 
+     *
      * @throws IOException              if an I/O error occures at server creation
      * @throws IllegalArgumentException if IP outside of range
      */
     public void startServer() throws IOException, IllegalArgumentException {
         isHost = true;
-        server = new Server();
-        server.start();
-        client = new Client(server.getIp(), Server.PORT);
+        server.connect();
+        server.getConnection().start();
+        client.connect(server.getConnection().getIp().getCanonicalHostName(), ServerConnection.PORT);
     }
 
     public void stopServer() {
         panel.connected.removeAll(panel.connected);
-        client.sendEvent(new Event(Event.EVENT_SERVER_CLOSE, ""));
+        client.getConnection().sendEvent(new Event(Event.C_CLOSE, ""));
         isHost = false;
-        server.close();
-        server = null;
-        client.close();
-        client = null;
+        server.getConnection().close();
+        client.getConnection().close();
     }
 
     public void showGame() {
-        panel.started();
+//        panel.started();
         setContentPane(panel);
         validate();
     }
@@ -180,10 +183,10 @@ public class Main extends JFrame {
         // add shutdown hook to close client and server streams at exit
         Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
-                    if (client != null)
-                        client.close();
-                    if (server != null)
-                        server.close();
+                    if (client.getConnection() != null)
+                        client.getConnection().close();
+                    if (server.getConnection() != null)
+                        server.getConnection().close();
                 }
             });
         
@@ -192,8 +195,16 @@ public class Main extends JFrame {
 
         menu = new Menu();
 
+        // initialize registry
+        Registry.init();
+
+        // initializing client
+        client = new Client();
+
         // creating main panel
         panel = new HexPanel();
+
+
         showMenu();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -232,9 +243,17 @@ public class Main extends JFrame {
         panel.currentFPS((int) fps);
     }
     
-    public void updateConnectedList(ArrayList<String> a) {
+    public void updateConnectedList(List<String> a) {
         if (menu.isVisible()) {
             menu.updateConnectedList(a);
         }
+    }
+
+    public static Client getClient() {
+        return Main.client;
+    }
+
+    public static Server getServer() {
+        return Main.server;
     }
 }

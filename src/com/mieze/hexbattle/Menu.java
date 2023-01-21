@@ -1,22 +1,21 @@
 package com.mieze.hexbattle;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.mieze.hexbattle.server.Client.Event;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-
-import java.awt.GridBagLayout;
-import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.GridBagConstraints;
+import com.mieze.hexbattle.net.Event;
 
 public class Menu extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -51,7 +50,7 @@ public class Menu extends JPanel {
         JPanel buttons = new JPanel(new GridBagLayout());
         JPanel ip = new JPanel();
         ip.setLayout(new BoxLayout(ip, BoxLayout.Y_AXIS));
-        ip.add(getLabel("Your IP is: " + Main.server.getIp().getHostAddress()));
+        ip.add(getLabel("Your IP is: " + Main.server.getConnection().getIp().getHostAddress()));
         buttons.add(ip, gbc);
 
         players = new JPanel();
@@ -63,8 +62,7 @@ public class Menu extends JPanel {
         buttons.add(getButton("Start", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.client.sendEvent(new Event(Event.EVENT_GAME_START, ""));
-                Main.getInstance().showGame();
+                Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_START, ""));
                 //updateState(STATE_MAIN_MENU);
             }
         }), gbc);
@@ -143,6 +141,7 @@ public class Menu extends JPanel {
                     while (name == null || name.length() == 0 || name.contains(",")) {
                         name = JOptionPane.showInputDialog(null, "Invalid name!\nEnter name:");
                     }
+                    Main.getClient().getConnection().sendEvent(new Event(Event.S_JOIN, name));
                     Main.getPanel().init(name);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Error during server startup", JOptionPane.ERROR_MESSAGE);
@@ -160,6 +159,7 @@ public class Menu extends JPanel {
                     String name = JOptionPane.showInputDialog(null, "Enter name:");
                     Main.getPanel().init(name);
                     updateState(STATE_JOIN_GAME);
+                    Main.getClient().getConnection().sendEvent(new Event(Event.S_JOIN, name));
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Error during connection", JOptionPane.ERROR_MESSAGE);
                 }
@@ -190,8 +190,8 @@ public class Menu extends JPanel {
         validate();
     }
 
-    public void updateConnectedList(ArrayList<String> list) {
-        if ( ( state == STATE_CREATE_GAME || state == STATE_JOIN_GAME ) && players != null) {
+    public void updateConnectedList(List<String> list) {
+        if (( state == STATE_CREATE_GAME || state == STATE_JOIN_GAME ) && players != null) {
             players.removeAll();
 
             players.add(getLabel("Players connected: "));

@@ -4,17 +4,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import com.mieze.hexbattle.Player;
-
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.hex.Layout;
-
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
 
-import com.mieze.hexbattle.fields.Field;
-
-import com.mieze.hexbattle.fields.building.City;
-
-public class RiderCharacter extends GameCharacter {
+public class RiderCharacter implements CharacterData {
 	public static final int PRICE = 3;
     public static final int[] RESOURCES = new int[]{0, 0, 1, 0};
 	public static Image img;
@@ -25,15 +21,20 @@ public class RiderCharacter extends GameCharacter {
 		toolkit.getImage("assets/city_1.png");
 	}
 
-	public RiderCharacter(Field field, Layout hexLayout, Player player) {
+	/*public RiderCharacter(Field field, Layout hexLayout, Player player) {
 		super(field, hexLayout, player);
+	}*/
+
+	@Override
+	public Image getImage() {
+		return RiderCharacter.img;
 	}
 
 	@Override
 	public int getMovementLength() {
 		return 2;
 	}
-
+/*
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
 		Field field = map.getField(position);
@@ -50,7 +51,7 @@ public class RiderCharacter extends GameCharacter {
 			}
 		}
 	}
-
+*/
 	@Override
 	public int getInitialLife() {
 		return 7;
@@ -64,5 +65,10 @@ public class RiderCharacter extends GameCharacter {
 	@Override
 	public int getDefenceScore() {
 		return 1;
+	}
+
+	@Override
+	public String getID() {
+		return "rider";
 	}
 }

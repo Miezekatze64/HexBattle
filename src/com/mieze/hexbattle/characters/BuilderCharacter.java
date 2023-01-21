@@ -1,32 +1,9 @@
 package com.mieze.hexbattle.characters;
 
-import java.awt.Toolkit;
 import java.awt.Image;
+import java.awt.Toolkit;
 
-import javax.swing.JOptionPane;
-
-import com.mieze.hexbattle.Main;
-import com.mieze.hexbattle.Player;
-
-import com.mieze.hexbattle.hex.Hex;
-import com.mieze.hexbattle.hex.Layout;
-
-import com.mieze.hexbattle.server.Client.Event;
-
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
-
-import com.mieze.hexbattle.fields.Field;
-import com.mieze.hexbattle.fields.MountainField;
-
-import com.mieze.hexbattle.fields.building.City;
-import com.mieze.hexbattle.fields.building.Village;
-import com.mieze.hexbattle.fields.building.Mine;
-
-import com.mieze.hexbattle.toolbars.Inventory;
-
-
-public class BuilderCharacter extends GameCharacter {
+public class BuilderCharacter implements CharacterData {
 	private static Image build_city;
 	private static Image build_mine;
 	public static final int PRICE = 2;
@@ -35,21 +12,25 @@ public class BuilderCharacter extends GameCharacter {
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/builder.png");
-				
+
 		build_city = toolkit.getImage("assets/city_1.png");
-		
 		build_mine = toolkit.getImage("assets/mine.png");
 	}
 
-	public BuilderCharacter(Field field, Layout hexLayout, Player player) {
-		super(field, hexLayout, player);
+	@Override
+	public Image getImage() {
+		return BuilderCharacter.img;
 	}
+
+/*	public BuilderCharacter(Field field, Layout hexLayout, Player player) {
+		super(field, hexLayout, player);
+	}*/
 
 	@Override
 	public int getMovementLength() {
 		return 1;
 	}
-
+/*
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
 		Field field = map.getField(position);
@@ -95,7 +76,7 @@ public class BuilderCharacter extends GameCharacter {
 			});
 		}
 	}
-
+*/
 	@Override
 	public int getInitialLife() {
 		return 5;
@@ -109,5 +90,10 @@ public class BuilderCharacter extends GameCharacter {
 	@Override
 	public int getDefenceScore() {
 		return 1;
+	}
+
+	@Override
+	public String getID() {
+		return "builder";
 	}
 }

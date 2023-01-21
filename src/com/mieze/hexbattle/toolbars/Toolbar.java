@@ -5,10 +5,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 
-import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.Main;
-import com.mieze.hexbattle.Map;
-
+import com.mieze.hexbattle.client.Client;
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.hex.Point;
 
 public class Toolbar {
@@ -16,7 +14,7 @@ public class Toolbar {
     private boolean isStandard = true;
 
     private static Image nextTurnImage;
-    private Player player;
+    private Client client;
 
     static {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -28,8 +26,8 @@ public class Toolbar {
         img = img.getScaledInstance((int) w, (int) h, Image.SCALE_DEFAULT);
     }
 
-    public Toolbar(Player player) {
-        this.player = player;
+    public Toolbar(Client client) {
+        this.client = client;
         initToolbar();
     }
 
@@ -43,8 +41,10 @@ public class Toolbar {
         buttons.add(new ToolbarButton("Next Turn", nextTurnImage, "Click to end your turn.") {
             @Override
             public void onClick() {
-                if (player.state != Player.STATE_OTHER_PLAYER)
-                    Main.getPanel().nextTurn();
+                if (client.isTurn()) {
+                    throw new RuntimeException("TODO: implement next turn");
+                }
+//                    Main.getPanel().nextTurn();
             }
         });
     }
@@ -57,7 +57,7 @@ public class Toolbar {
         initToolbar();
     }
 
-    public boolean onClick(int x, int y, Map m) {
+    public boolean onClick(int x, int y, ClientMap m) {
         boolean rt = false;
 
         int w = 60;
@@ -75,11 +75,11 @@ public class Toolbar {
         return rt;
     }
 
-    public void render(Graphics g, Map m) {
+    public void render(Graphics g, ClientMap m) {
         for (int i = 0; i < buttons.size(); i++) {
             int x = (int) ((((double) (i + 1) / ((double) (buttons.size() + 1)) * .75) + .125) * m.getWidth());
             int y = m.getHeight() - 60;
-            buttons.get(i).render(g, m, x, y, player);
+            buttons.get(i).render(g, m, x, y, client);
         }
     }
 
@@ -92,7 +92,7 @@ public class Toolbar {
         return false;
     }
 
-    public void mouseMoved(Point point, Map m) {
+    public void mouseMoved(Point point, ClientMap m) {
 
         for (int i = 0; i < buttons.size(); i++) {
             int x = (int) ((((double) (i + 1) / ((double) (buttons.size() + 1)) * .75) + .125) * m.getWidth())

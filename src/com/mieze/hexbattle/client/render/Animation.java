@@ -1,21 +1,23 @@
-package com.mieze.hexbattle;
+package com.mieze.hexbattle.client.render;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import com.mieze.hexbattle.HexPanel;
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Point;
 
 public abstract class Animation {
-    private Map map;
+    private ClientMap map;
     private float rel_pos = 0;
     private Point startPoint;
     private Point endPoint;
     private double length;
 
-    public Animation(final Hex start, final Hex end, final long duration, final Map map) {
+    public Animation(final Hex start, final Hex end, final long duration, final ClientMap map) {
         this.map = map;
         startPoint = HexPanel.hexLayout.hexToPixel(start);
         endPoint = HexPanel.hexLayout.hexToPixel(end);

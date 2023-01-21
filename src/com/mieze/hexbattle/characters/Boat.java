@@ -3,15 +3,7 @@ package com.mieze.hexbattle.characters;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.hex.Hex;
-import com.mieze.hexbattle.hex.Layout;
-import com.mieze.hexbattle.toolbars.Toolbar;
-import com.mieze.hexbattle.toolbars.ToolbarButton;
-import com.mieze.hexbattle.fields.Field;
-import com.mieze.hexbattle.fields.WaterField;
-
-public class Boat extends GameCharacter {
+public class Boat implements CharacterData {
 	public static final int PRICE = 2;
     public static final int[] RESOURCES = new int[]{2, 2, 1, 0};
 	public static Image img;
@@ -22,9 +14,14 @@ public class Boat extends GameCharacter {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		img = toolkit.getImage("assets/boat.png");
 	}
-
+	/*
 	public Boat(Field field, Layout hexLayout, Player player) {
 		super(field, hexLayout, player);
+	}*/
+
+	@Override
+	public Image getImage() {
+		return Boat.img;
 	}
 
 	public void setCharacter(GameCharacter ch) {
@@ -43,7 +40,7 @@ public class Boat extends GameCharacter {
 		this.character = null;
 	}
 
-	@Override
+/*	@Override
 	public void setPossibleFields(Hex h, int count) {
 		if (count < getMovementLength()) {
 			for (int n = 0; n < 6; n++) {
@@ -61,13 +58,13 @@ public class Boat extends GameCharacter {
 			}
 		}
 	}
-
+*/
 	@Override
 	public int getMovementLength() {
 		return 2;
 	}
 
-	@Override
+/*	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
 		if (hasCharacter()) {
 			if (!toolbar.hasButton("Leave boat"))
@@ -78,7 +75,7 @@ public class Boat extends GameCharacter {
 				}
 			});
 		}
-	}
+*/
 
 	@Override
 	public int getInitialLife() {
@@ -87,13 +84,18 @@ public class Boat extends GameCharacter {
 	
 	@Override
 	public int getAttackScore() {
-		if (hasCharacter()) return getCharacter().getAttackScore();
+		if (hasCharacter()) return getCharacter().getData().getAttackScore();
 		return 0;
 	}
 		
 	@Override
 	public int getDefenceScore() {
-		if (hasCharacter()) return getCharacter().getDefenceScore();
+		if (hasCharacter()) return getCharacter().getData().getDefenceScore();
 		return 1;
+	}
+
+	@Override
+	public String getID() {
+		return "boat";
 	}
 }

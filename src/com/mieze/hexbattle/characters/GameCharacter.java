@@ -1,31 +1,27 @@
 package com.mieze.hexbattle.characters;
 
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.Image;
+import java.awt.Toolkit;
 
-import com.mieze.hexbattle.Player;
-import com.mieze.hexbattle.Animation;
 import com.mieze.hexbattle.Map;
-
+import com.mieze.hexbattle.Player;
+import com.mieze.hexbattle.client.ClientMap;
+import com.mieze.hexbattle.client.render.Animation;
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.WaterField;
+import com.mieze.hexbattle.fields.building.Port;
 import com.mieze.hexbattle.hex.Hex;
 import com.mieze.hexbattle.hex.Layout;
 import com.mieze.hexbattle.hex.Point;
 
-import com.mieze.hexbattle.toolbars.Toolbar;
-
-import com.mieze.hexbattle.fields.Field;
-import com.mieze.hexbattle.fields.WaterField;
-import com.mieze.hexbattle.fields.building.Port;
-
-public abstract class GameCharacter {
+public class GameCharacter {
 	public static final int BUILDER = 0;
 	public static final int WORKER = 1;
 	public static final int SWORDSMAN = 2;
 	public static final int RIDER = 3;
 	public static final int BOAT = 4;
 
-	protected Hex position;
 	protected Layout hexLayout;
 	protected Field field;
 	protected Player player;
@@ -37,32 +33,43 @@ public abstract class GameCharacter {
 	protected boolean animating;
 	protected double health = 0;
 
-	public static int SIZE = 48;
-
+	public static int IMAGE_SIZE = 48;
 	protected Animation animation;
+
+	private CharacterData data;
 
 	static {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		conquer_city = toolkit.getImage("assets/city_1.png");
 	}
 
-	public GameCharacter(Field field, Layout hexLayout, Player player) {
-		this.map = player.map;
+	public GameCharacter(Field field, Layout hexLayout, Player player, CharacterData data) {
+		this.data = data;
+		this.map = player.getMap();
 		if (field == null) {
-			throw new RuntimeException("Player is on unexisting field!");
+			throw new RuntimeException("Player is on non-existend field!");
 		} else {
 			field.setCharacter(this);
 		}
 
 		this.field = field;
-		this.position = field.getHex();
 		this.hexLayout = hexLayout;
 		this.player = player;
-		this.health = getInitialLife();
+		this.health = data.getInitialLife();
 	}
 
+	public void setField(Field end_field) {
+		this.field.removeCharacter();
+		end_field.setCharacter(this);
+		field = end_field;
+    }
+
 	public Hex getPosition() {
-		return position;
+		return field.getHex();
+	}
+
+	public CharacterData getData() {
+		return this.data;
 	}
 	
     public void setHealth(double health) {
@@ -73,24 +80,17 @@ public abstract class GameCharacter {
 	}
 	
 	private void die() {
-		map.getField(position).setCharacter(null);
-		player.removeCharacter(this);
+		throw new RuntimeException("TODO: move to event");
+		// map.getField(position).setCharacter(null);
+		// player.removeCharacter(this);
 	}
 	
 	public double getHealth()  {
 		return this.health;
 	}
 
-	abstract public int getMovementLength();
-
-	abstract public int getInitialLife();
-	
-	abstract public int getAttackScore();
-
-	abstract public int getDefenceScore();
-
 	public void setPossibleFields() {
-		setPossibleFields(position, 0);
+		setPossibleFields(getPosition(), 0);
 	}
 
 	public boolean isFromPlayer(Player player) {
@@ -106,17 +106,19 @@ public abstract class GameCharacter {
 	}
 
 	public void setPossibleFields(Hex h, int count) {
-		if (count < getMovementLength()) {
+		if (count < data.getMovementLength()) {
 			for (int n = 0; n < 6; n++) {
-				if (!h.neighbor(n).equals(position)) {
+				if (!h.neighbor(n).equals(getPosition())) {
 					if (map.getField(h.neighbor(n)) instanceof WaterField) {
-						if (map.getField(h.neighbor(n)).hasBuilding() && map.getField(h.neighbor(n)).getBuilding() instanceof Port && map.getField(h.neighbor(n)).hasCharacter() && map.getField(h.neighbor(n)).getCharacter() instanceof Boat) {
-							player.activate(h.neighbor(n));
-							continue;
+						if (map.getField(h.neighbor(n)).hasBuilding() && map.getField(h.neighbor(n)).getBuilding() instanceof Port && map.getField(h.neighbor(n)).hasCharacter() && map.getField(h.neighbor(n)).getCharacter().getData() instanceof Boat) {
+							throw new RuntimeException("TODO: move this to ClientRenderer [+make it declarative]");
+//							player.activate(h.neighbor(n));
+//							continue;
 						}
 						continue;
 					}
-					player.activate(h.neighbor(n));
+					throw new RuntimeException("TODO: move this to ClientRenderer [+make it declarative]");
+//					player.activate(h.neighbor(n));
 				}
 			}
 			count++;
@@ -129,45 +131,36 @@ public abstract class GameCharacter {
     public void render(Graphics g, double zoom) {
     	Point pos;
     	if (!animating) {
-    		pos = map.hexToDisplay(hexLayout.hexToPixel(position));
+    		pos = ((ClientMap)map).hexToDisplay(hexLayout.hexToPixel(getPosition()));
     	} else {
     		pos = animation.getPosition();
+			System.out.printf("Animation pos: %s\n", pos);
     	}
-		Image img;
-		if (this instanceof BuilderCharacter)
-			img = BuilderCharacter.img;
-		else if (this instanceof WorkerCharacter)
-			img = WorkerCharacter.img;
-		else if (this instanceof SwordsmanCharacter)
-			img = SwordsmanCharacter.img;
-		else if (this instanceof RiderCharacter)
-			img = RiderCharacter.img;
-		else if (this instanceof Boat)
-			img = Boat.img;
-		else
-			throw new IllegalStateException("Character class not implemented: " + this.getClass().getCanonicalName());
+		Image img = data.getImage();
 
-        g.drawImage(img, (int)(pos.x - (SIZE*zoom)/2), (int)(pos.y - (SIZE*zoom)/2), (int)(SIZE*zoom), (int)(SIZE*zoom), null);
-
+        g.drawImage(img, (int)(pos.x - (IMAGE_SIZE*zoom)/2), (int)(pos.y - (IMAGE_SIZE*zoom)/2), (int)(IMAGE_SIZE*zoom), (int)(IMAGE_SIZE*zoom), null);
 		g.setColor(player.getColor());
-		g.fillRect((int)(pos.x - (SIZE*zoom)/3), (int)(pos.y - (SIZE*zoom)/2-(10*zoom)), (int)(SIZE*zoom*(2.0/3.0)*(health/getInitialLife())), (int)(5*zoom));
+		g.fillRect((int)(pos.x - (IMAGE_SIZE*zoom)/3), (int)(pos.y - (IMAGE_SIZE*zoom)/2-(10*zoom)), (int)(IMAGE_SIZE*zoom*(2.0/3.0)*(health/data.getInitialLife())), (int)(5*zoom));
     }
 
 	public void moveTo(Field f) {
-		this.animating = true;
-		animation = new Animation(position, f.getHex(), 200, map) {
+		this.animation = new Animation(getPosition(), f.getHex(), 200, (ClientMap)map) {
 			@Override
 			public void animationFinished() {
 				animating = false;
 				animation = null;
-				position = f.getHex();
+				setField(f);
 			}
 		};
+		this.animating = true;
+		System.out.println("animation active!!");
 	}
-
-	public abstract void checkAndAddTools(Toolbar toolbar);
 
 	public Player getPlayer() {
 		return player;
 	}
+
+    public boolean canWalkOn(Field field) {
+        return data.canWalkOn(field);
+    }
 }

@@ -3,7 +3,6 @@ package com.mieze.hexbattle.hex;
 import java.util.ArrayList;
 
 public class Hex {
-	
 	public Hex(int q, int r, int s) {
 		this.q = q;
 		this.r = r;

@@ -1,20 +1,16 @@
 package com.mieze.hexbattle.fields.building;
 
 import java.awt.Graphics;
-
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.mieze.hexbattle.hex.Point;
-
 import com.mieze.hexbattle.HexPanel;
-import com.mieze.hexbattle.Map;
-
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.hex.Point;
 
 public class Forest extends Building {
 	private static final double SIZE = 50;
@@ -48,10 +44,16 @@ public class Forest extends Building {
 	
 	@Override
 	public void render(Graphics g, double zoom) {
-		Map map = field.map;
+//		throw new RuntimeException("TODO: here!!");
+		ClientMap map = field.map;
 		Point pos = map.hexToDisplay(HexPanel.hexLayout.hexToPixel(field.getHex()));
 
 		g.drawImage(img[trees-1], (int) (pos.x - (SIZE * zoom) / 2), (int) (pos.y - (SIZE * zoom) / 2), (int) (SIZE * zoom),
-				(int) (SIZE * zoom), null);
+					(int) (SIZE * zoom), null);
+	}
+
+	@Override
+	public String getID() {
+		return "forest";
 	}
 }

@@ -3,12 +3,11 @@ package com.mieze.hexbattle.fields;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.mieze.hexbattle.client.ClientMap;
 import com.mieze.hexbattle.hex.Hex;
 
-import com.mieze.hexbattle.Map;
-
 public class MountainField extends Field {
-	public MountainField(Hex hex, Map map) {
+	public MountainField(Hex hex, ClientMap map) {
 		super(hex, map);
 	}
 
@@ -17,4 +16,8 @@ public class MountainField extends Field {
 		renderHex(g, map.zoom, Color.decode("#7f7f7f"));
 	}
 
+	@Override
+	public String getID() {
+		return "mountain";
+	}
 }

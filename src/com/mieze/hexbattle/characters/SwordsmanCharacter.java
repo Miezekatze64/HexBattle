@@ -4,17 +4,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 
 import com.mieze.hexbattle.Player;
-
+import com.mieze.hexbattle.fields.Field;
+import com.mieze.hexbattle.fields.building.City;
 import com.mieze.hexbattle.hex.Layout;
-
 import com.mieze.hexbattle.toolbars.Toolbar;
 import com.mieze.hexbattle.toolbars.ToolbarButton;
 
-import com.mieze.hexbattle.fields.Field;
-
-import com.mieze.hexbattle.fields.building.City;
-
-public class SwordsmanCharacter extends GameCharacter {
+public class SwordsmanCharacter implements CharacterData {
 	public static final int PRICE = 4;
     public static final int[] RESOURCES = new int[]{0, 0, 1, 0};
 	public static Image img;
@@ -25,15 +21,16 @@ public class SwordsmanCharacter extends GameCharacter {
 		toolkit.getImage("assets/city_1.png");
 	}
 
-	public SwordsmanCharacter(Field field, Layout hexLayout, Player player) {
+	/*public SwordsmanCharacter(Field field, Layout hexLayout, Player player) {
 		super(field, hexLayout, player);
-	}
+	}*/
 
 	@Override
 	public int getMovementLength() {
 		return 1;
 	}
 
+	/*
 	@Override
 	public void checkAndAddTools(Toolbar toolbar) {
 		Field field = map.getField(position);
@@ -50,6 +47,12 @@ public class SwordsmanCharacter extends GameCharacter {
 			}
 		}
 	}
+	*/
+
+	@Override
+	public Image getImage() {
+		return SwordsmanCharacter.img;
+	}
 
 	@Override
 	public int getInitialLife() {
@@ -65,5 +68,10 @@ public class SwordsmanCharacter extends GameCharacter {
 	@Override
 	public int getDefenceScore() {
 		return 2;
+	}
+
+	@Override
+	public String getID() {
+		return "swordsman";
 	}
 }

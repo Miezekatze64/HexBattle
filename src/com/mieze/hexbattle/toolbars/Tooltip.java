@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-import com.mieze.hexbattle.Map;
+import com.mieze.hexbattle.client.ClientMap;
 
 public class Tooltip {
     private String title, text;
@@ -29,7 +29,7 @@ public class Tooltip {
         this(title, text, false);
     }
 
-    public void render(Graphics g, Map m, int x, int y) {
+    public void render(Graphics g, ClientMap m, int x, int y) {
         Font save = g.getFont();
 
         g.setFont(ftext);

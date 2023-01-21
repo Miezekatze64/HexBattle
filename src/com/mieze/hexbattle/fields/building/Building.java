@@ -7,8 +7,7 @@ import com.mieze.hexbattle.fields.Field;
 
 public abstract class Building {
 	public static Image img;
-
-	Field field;
+	protected Field field;
 
 	public Building(Field f) {
 		this.field = f;
@@ -19,7 +18,6 @@ public abstract class Building {
 	}
 
 	public abstract void onClick();
-
 	public abstract void render(Graphics g, double zoom);
-
+    public abstract String getID();
 }
