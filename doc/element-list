@@ -1,7 +1,10 @@
 com.mieze.hexbattle
 com.mieze.hexbattle.characters
+com.mieze.hexbattle.client
+com.mieze.hexbattle.client.render
 com.mieze.hexbattle.fields
 com.mieze.hexbattle.fields.building
 com.mieze.hexbattle.hex
+com.mieze.hexbattle.net
 com.mieze.hexbattle.server
 com.mieze.hexbattle.toolbars
