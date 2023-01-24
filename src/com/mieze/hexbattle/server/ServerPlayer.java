@@ -549,12 +549,12 @@ public class ServerPlayer implements Player {
         }
     }
 */
-    public void attack(GameCharacter attacker, GameCharacter target, boolean fromEvent) {
-        if (!fromEvent)
+    public void attack(GameCharacter attacker, GameCharacter target) {
+/*        if (!fromEvent)
             Main.getClient().getConnection().sendEvent(new Event(Event.S_GAME_ATTACK,
                     attacker.getPosition().q + "," + attacker.getPosition().r + "," + attacker.getPosition().s + ";"
                             + target.getPosition().q + "," + target.getPosition().r + "," + target.getPosition().s));
-
+*/
         double attack = attacker.getData().getAttackScore() * (attacker.getHealth() / attacker.getData().getInitialLife());
         double defense = target.getData().getDefenceScore() * (target.getHealth() / target.getData().getInitialLife());
         double damage = attack + defense;

@@ -14,5 +14,6 @@ public interface CharacterData {
     public default boolean canWalkOn(Field field) {
         return field.isWalkable();
     }
+
     public String getID();
 }

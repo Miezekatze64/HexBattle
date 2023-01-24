@@ -44,6 +44,7 @@ public class Server {
                 System.out.println("[server] Got player: " + new String(e.getValue()));
                 var player = new ServerPlayer(new String(e.getValue()), worldData.getMap(), Color.RED, idx);
                 worldData.addPlayer(player);
+                connection.setPlayer(idx, player);
 
                 // send updated player list to all clients (join/leave event could lead to weird side-effect at packet loss)
                 ArrayList<Byte> bytes = new ArrayList<>();
@@ -144,10 +145,18 @@ public class Server {
                 }
 
                 GameCharacter character = start_field.getCharacter();
+                if (character.getPlayer() != connection.getPlayer(idx)) {
+                    System.err.printf("[server, ERR] tried to move character from other player [%s, %s]",
+                                       character.getPlayer().getName(),
+                                       connection.getPlayer(idx).getName());
+                    return;
+                }
+
                 if (! worldData.getMap().canMoveTo(character, end_pos)) {
                     System.out.printf("[server, ERR] tried to move character to unreachable field. (%s) -> (%s)\n",
                                       start_pos,
                                       end_pos);
+                    return;
                 }
 
                 character.setField(end_field);
@@ -176,6 +185,44 @@ public class Server {
                 });
 
                 exploreSurroundings(character.getPlayer(), end_pos);
+            });
+
+            this.connection.setEventListener(Event.S_GAME_ATTACK, (e, idx) -> {
+                var buf = ByteBuffer.wrap(e.getValue());
+                Hex start_pos = new Hex(buf.getInt(), buf.getInt(), buf.getInt());
+                Hex end_pos = new Hex(buf.getInt(), buf.getInt(), buf.getInt());
+                System.out.printf("attack from %s to %s\n", start_pos, end_pos);
+
+                Field start_field = worldData.getMap().getField(start_pos);
+                Field end_field = worldData.getMap().getField(end_pos);
+
+                if (! start_field.hasCharacter()) {
+                    System.out.printf("[server, ERR] tried to attack with character from empty field. (%s)\n", start_pos);
+                    return;
+                }
+
+                if (! end_field.hasCharacter()) {
+                    System.out.printf("[server, ERR] tried to attack non-existing character. (%s)\n", end_pos);
+                    return;
+                }
+
+                GameCharacter attacker = start_field.getCharacter();
+                GameCharacter attacked = end_field.getCharacter();
+                if (attacker.getPlayer() != connection.getPlayer(idx)) {
+                    System.err.printf("[server, ERR] tried to attack with character from other player [%s, %s]",
+                                       attacker.getPlayer().getName(),
+                                       connection.getPlayer(idx).getName());
+                    return;
+                }
+
+                if (! attacker.canAttack(attacked)) {
+                    System.out.printf("[server, ERR] cannot attack character. (%s) -> (%s)\n",
+                                      start_pos,
+                                      end_pos);
+                    return;
+                }
+
+                ((ServerPlayer)attacker.getPlayer()).attack(attacker, attacked);
             });
 
         } catch (IOException e) {

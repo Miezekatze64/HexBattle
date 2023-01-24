@@ -141,8 +141,10 @@ public class Menu extends JPanel {
                     while (name == null || name.length() == 0 || name.contains(",")) {
                         name = JOptionPane.showInputDialog(null, "Invalid name!\nEnter name:");
                     }
+
+                    Main.getClient().setPlayer(name);
                     Main.getClient().getConnection().sendEvent(new Event(Event.S_JOIN, name));
-                    Main.getPanel().init(name);
+                    Main.getPanel().init();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Error during server startup", JOptionPane.ERROR_MESSAGE);
                 }
@@ -157,7 +159,9 @@ public class Menu extends JPanel {
                 try {
                     Main.getInstance().connect(ip);
                     String name = JOptionPane.showInputDialog(null, "Enter name:");
-                    Main.getPanel().init(name);
+                    Main.getPanel().init();
+
+                    Main.getClient().setPlayer(name);
                     updateState(STATE_JOIN_GAME);
                     Main.getClient().getConnection().sendEvent(new Event(Event.S_JOIN, name));
                 } catch (Exception ex) {

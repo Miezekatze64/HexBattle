@@ -129,7 +129,7 @@ public class ServerConnection {
                                     }
                                     log.println("SERVER: Socket " + index + " disconnected!");
                                     System.out.println("SERVER: Player disconnected! (ID "+index+")");
-                                    Main.getPanel().disconnected();
+//                                    Main.getPanel().disconnected();
                                 } catch(SocketException e) {
                                     // socket closing (interrupt)
                                 } catch (IOException e) {

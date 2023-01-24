@@ -43,7 +43,6 @@ public class HexPanel extends JPanel {
 
 //    private transient Player currentPlayer = null;
     protected ArrayList<String> connected = new ArrayList<>();
-    private String name = "";
 
     static {
         hexLayout = new Layout(Layout.pointy, new Point(40, 40), new Point(0, 0));
@@ -134,9 +133,7 @@ public class HexPanel extends JPanel {
         });
     }
 
-    public void init(String name) {
-        this.name = name;
-//        opponents = new ArrayList<Player>();
+    public void init() {
     }
 /*
     public void newPlayer(Hex hex) {
@@ -152,6 +149,7 @@ public class HexPanel extends JPanel {
         nextTurn(false);
     }
 */
+    /*
     public void disconnected() {
         if (connected == null)
             connected = new ArrayList<>();
@@ -162,7 +160,7 @@ public class HexPanel extends JPanel {
         Main.getInstance().updateConnectedList(connected);
         validate();
     }
-
+    */
     /*public void nextTurn(boolean fromEvent) {
         currentPlayer.state = Player.STATE_OTHER_PLAYER;
         if (!fromEvent)

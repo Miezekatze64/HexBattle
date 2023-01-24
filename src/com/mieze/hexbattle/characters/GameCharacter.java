@@ -163,4 +163,8 @@ public class GameCharacter {
     public boolean canWalkOn(Field field) {
         return data.canWalkOn(field);
     }
+
+    public boolean canAttack(GameCharacter character) {
+        return character.getPlayer() != this.getPlayer();
+    }
 }

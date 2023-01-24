@@ -4,13 +4,10 @@ import java.awt.Color;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.mieze.hexbattle.HexPanel;
 import com.mieze.hexbattle.Main;
-import com.mieze.hexbattle.characters.GameCharacter;
 import com.mieze.hexbattle.client.render.ClientRenderer;
 import com.mieze.hexbattle.fields.Field;
 import com.mieze.hexbattle.hex.Hex;
@@ -23,6 +20,7 @@ public class Client {
     private ClientWorldData worldData;
     private boolean isTurn = true;
     private ClientRenderer renderer;
+    private String playerName = null;
 
     public Client() {
         this.worldData = new ClientWorldData(this);
@@ -109,7 +107,10 @@ public class Client {
             buffer.get(nameBytes);
 
             System.out.printf("Spawned character: (%d, %d, %d), %s\n", q, r, s, new String(idBytes));
-            this.worldData.getMap().getField(new Hex(q, r, s)).spawnCharacter(new String(idBytes), worldData.getPlayer(new String(nameBytes)));
+            this.worldData
+                .getMap()
+                .getField(new Hex(q, r, s))
+                .spawnCharacter(new String(idBytes), worldData.getPlayer(new String(nameBytes)));
         });
 
         connection.setEventListener(Event.C_SPAWN_BUILDING, e -> {
@@ -188,7 +189,26 @@ public class Client {
         Field f = worldData.getMap().getField(hex);
 
         if (f == null) return;
-        if (renderer.getClickedCharacter() != null && worldData.getMap().canMoveTo(renderer.getClickedCharacter(), hex)) {
+        if (renderer.getClickedCharacter() != null
+            && worldData.getMap().canMoveTo(renderer.getClickedCharacter(), hex)) {
+            if (f.hasCharacter()) {
+                if (renderer.getClickedCharacter().canAttack(f.getCharacter())) {
+                    Hex startPos = renderer.getClickedCharacter().getPosition();
+                    Hex destPos = hex;
+
+                    byte[] bytes = ByteBuffer.allocate(2 * (3 * 4))
+                        .putInt(startPos.q)
+                        .putInt(startPos.r)
+                        .putInt(startPos.s)
+                        .putInt(destPos.q)
+                        .putInt(destPos.r)
+                        .putInt(destPos.s)
+                        .array();
+
+                    getConnection().sendEvent(new Event(Event.S_GAME_ATTACK, bytes));
+                }
+            }
+
             Hex startPos = renderer.getClickedCharacter().getPosition();
             Hex destPos = hex;
 
@@ -202,7 +222,6 @@ public class Client {
                 .array();
 
             getConnection().sendEvent(new Event(Event.S_GAME_MOVE, bytes));
-
             return;
         }
 
@@ -215,6 +234,7 @@ public class Client {
             return;
         }
 
+        if (f.getCharacter().getPlayer() != this.getWorldData().getPlayer(this.playerName)) return;
         renderer.setClickedCharacter(f.getCharacter());
 /*
         switch (state) {
@@ -346,5 +366,9 @@ public class Client {
             break;
         }
         */
+    }
+
+    public void setPlayer(String name) {
+        this.playerName = name;
     }
 }
